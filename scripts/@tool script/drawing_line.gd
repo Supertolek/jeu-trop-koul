@@ -12,7 +12,6 @@ extends Node2D
 @export var primary_lines: Color = Color(0, 0, 0)
 @export var secondary_lines: Color
 @export var middle_lines: Color
-@export var rooms_around: int = 2
 
 
 
