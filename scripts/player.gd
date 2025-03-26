@@ -8,8 +8,8 @@ var friction: int = 3 * player_scale
 
 func _physics_process(delta: float) -> void:
 	var direction: Vector2 = Vector2(
-		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
-		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up"),
+		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
+		Input.get_action_strength("move_down") - Input.get_action_strength("move_up"),
 	).normalized()
 	
 	var lerp_weight = delta * (acceleration if direction else friction)
