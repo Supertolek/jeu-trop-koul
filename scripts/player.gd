@@ -16,3 +16,4 @@ func _physics_process(delta: float) -> void:
 	velocity = lerp(velocity, max_speed * direction, lerp_weight)
 	
 	move_and_slide()
+	

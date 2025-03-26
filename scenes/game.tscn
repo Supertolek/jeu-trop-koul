@@ -80,10 +80,11 @@ tile_set = SubResource("TileSet_28crv")
 player_node = NodePath("../Player")
 
 [node name="Player" parent="." instance=ExtResource("2_3vnji")]
+position = Vector2(143, 110)
 
 [node name="CameraSnapPreview" type="Node2D" parent="." node_paths=PackedStringArray("source_tilemap", "source_camera")]
 script = ExtResource("4_pt8f2")
 source_tilemap = NodePath("../Level")
 source_camera = NodePath("../RoomCamera")
 primary_lines = Color(0.556953, 0.556953, 0.556953, 1)
-secondary_lines = Color(0.673359, 0.742983, 0.811597, 1)
+secondary_lines = Color(0.821706, 0.578708, 1.92523e-07, 1)
