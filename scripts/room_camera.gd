@@ -3,7 +3,7 @@ class_name RoomCamera
 
 @onready var screen_size: Vector2 = get_viewport_rect().size / zoom
 @export var player_node: CharacterBody2D
-@export var offset_size: int = 75
+@export var offset_size: int = 96
 
 func _ready() -> void:
 	set_screen_position()
