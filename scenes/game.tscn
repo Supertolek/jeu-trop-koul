@@ -77,7 +77,7 @@ tile_map_data = PackedByteArray("AAAAAAAAAAAFAAEAAAAAAAEAAAAFAAEAAAAAAAIAAAAFAAE
 tile_set = SubResource("TileSet_iywne")
 
 [node name="Player" parent="." instance=ExtResource("2_3vnji")]
-position = Vector2(632, 295)
+position = Vector2(986, 576)
 
 [node name="RoomCamera" parent="." node_paths=PackedStringArray("player_node") instance=ExtResource("3_f06ig")]
 editor_draw_screen = false
@@ -90,3 +90,4 @@ source_camera = NodePath("../RoomCamera")
 primary_lines = Color(0, 1, 0, 0.313726)
 secondary_lines = Color(1, 1, 0, 1)
 middle_lines = Color(1, 0, 0, 0.627451)
+display = null
