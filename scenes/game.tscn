@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://ce1mqmq0qc6cn" path="res://assets/tilemap_barebones.png" id="1_m54kn"]
 [ext_resource type="PackedScene" uid="uid://d0wegsgalj7fw" path="res://scenes/player.tscn" id="2_3vnji"]
-[ext_resource type="PackedScene" path="res://scenes/room_camera.tscn" id="3_f06ig"]
-[ext_resource type="Script" path="res://scripts/@tool script/drawing_line.gd" id="4_pt8f2"]
+[ext_resource type="PackedScene" uid="uid://bdny2th5or8qi" path="res://scenes/room_camera.tscn" id="3_f06ig"]
+[ext_resource type="Script" uid="uid://bs4pnq7b4me3p" path="res://scripts/@tool script/drawing_line.gd" id="4_pt8f2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qeq3w"]
 texture = ExtResource("1_m54kn")
