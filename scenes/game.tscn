@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=4 uid="uid://b5y5loopfw4he"]
+[gd_scene load_steps=9 format=4 uid="uid://b5y5loopfw4he"]
 
 [ext_resource type="Texture2D" uid="uid://ce1mqmq0qc6cn" path="res://assets/tilemap_barebones.png" id="1_m54kn"]
 [ext_resource type="PackedScene" uid="uid://d0wegsgalj7fw" path="res://scenes/player.tscn" id="2_3vnji"]
 [ext_resource type="PackedScene" uid="uid://bdny2th5or8qi" path="res://scenes/room_camera.tscn" id="3_f06ig"]
+[ext_resource type="Script" uid="uid://ceq6dctjx0epd" path="res://item.gd" id="3_iywne"]
 [ext_resource type="Script" uid="uid://bs4pnq7b4me3p" path="res://scripts/@tool script/drawing_line.gd" id="4_pt8f2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lbhrr"]
@@ -70,6 +71,15 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_lbhrr")
 
+[sub_resource type="Resource" id="Resource_p57ef"]
+script = ExtResource("3_iywne")
+name = ""
+description = ""
+FORCE = Dictionary[int, int]({})
+DEFENSE = Dictionary[int, int]({})
+HEALTH = Dictionary[int, int]({})
+metadata/_custom_type_script = "uid://ceq6dctjx0epd"
+
 [node name="Game" type="Node2D"]
 
 [node name="Level" type="TileMapLayer" parent="."]
@@ -78,6 +88,7 @@ tile_set = SubResource("TileSet_iywne")
 
 [node name="Player" parent="." instance=ExtResource("2_3vnji")]
 position = Vector2(986, 576)
+item_list = Array[ExtResource("3_iywne")]([SubResource("Resource_p57ef")])
 
 [node name="RoomCamera" parent="." node_paths=PackedStringArray("player_node") instance=ExtResource("3_f06ig")]
 editor_draw_screen = false
@@ -90,4 +101,3 @@ source_camera = NodePath("../RoomCamera")
 primary_lines = Color(0, 1, 0, 0.313726)
 secondary_lines = Color(1, 1, 0, 1)
 middle_lines = Color(1, 0, 0, 0.627451)
-display = null

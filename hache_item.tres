@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://d02eeh27fqm47"]
+
+[ext_resource type="Script" uid="uid://ceq6dctjx0epd" path="res://item.gd" id="1_8d81n"]
+
+[resource]
+script = ExtResource("1_8d81n")
+name = "Hache"
+description = "Ceci est une hache"
+stats_modification = Dictionary[int, int]({
+0: 10,
+1: -5,
+2: 0
+})
+metadata/_custom_type_script = "uid://ceq6dctjx0epd"

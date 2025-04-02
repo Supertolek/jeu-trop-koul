@@ -1,0 +1,14 @@
+extends Node
+
+# Stats
+enum STATS {
+	FORCE,
+	DEFENSE,
+	HEALTH
+}
+
+enum MODIFICATION_TYPE {
+	ADDITIVE,
+	MULTIPLICATIVE,
+	PERCENT,
+}
