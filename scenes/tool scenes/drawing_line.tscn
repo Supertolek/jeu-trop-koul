@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b5nyd8kj7nfuk"]
 
-[ext_resource type="Script" path="res://scripts/@tool script/drawing_line.gd" id="1_38oqy"]
+[ext_resource type="Script" uid="uid://bs4pnq7b4me3p" path="res://scripts/@tool script/drawing_line.gd" id="1_38oqy"]
 
 [node name="Drawing Line" type="Node2D"]
 script = ExtResource("1_38oqy")
