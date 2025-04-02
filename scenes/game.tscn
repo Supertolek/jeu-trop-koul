@@ -87,10 +87,15 @@ tile_map_data = PackedByteArray("AAAAAAAAAAAFAAEAAAAAAAEAAAAFAAEAAAAAAAIAAAAFAAE
 tile_set = SubResource("TileSet_iywne")
 
 [node name="Player" parent="." instance=ExtResource("2_3vnji")]
+<<<<<<< HEAD
 position = Vector2(986, 576)
 item_list = Array[ExtResource("3_iywne")]([SubResource("Resource_p57ef")])
+=======
+position = Vector2(786, 351)
+>>>>>>> 0167ed4933c92a9a22869fa4625dd563861ec0b4
 
 [node name="RoomCamera" parent="." node_paths=PackedStringArray("player_node") instance=ExtResource("3_f06ig")]
+position = Vector2(576, 320)
 editor_draw_screen = false
 player_node = NodePath("../Player")
 
@@ -101,3 +106,7 @@ source_camera = NodePath("../RoomCamera")
 primary_lines = Color(0, 1, 0, 0.313726)
 secondary_lines = Color(1, 1, 0, 1)
 middle_lines = Color(1, 0, 0, 0.627451)
+<<<<<<< HEAD
+=======
+metadata/_edit_lock_ = true
+>>>>>>> 0167ed4933c92a9a22869fa4625dd563861ec0b4

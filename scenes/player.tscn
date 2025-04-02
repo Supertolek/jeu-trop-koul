@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [gd_scene load_steps=8 format=3 uid="uid://d0wegsgalj7fw"]
 
 [ext_resource type="Script" uid="uid://d20ltlucj3eq4" path="res://scripts/player.gd" id="1_6uy16"]
@@ -36,13 +37,80 @@ stats_modification = Dictionary[int, int]({
 2: 10
 })
 metadata/_custom_type_script = "uid://ceq6dctjx0epd"
+=======
+[gd_scene load_steps=9 format=3 uid="uid://d0wegsgalj7fw"]
+
+[ext_resource type="Script" uid="uid://d20ltlucj3eq4" path="res://scripts/player.gd" id="1_6uy16"]
+[ext_resource type="Texture2D" uid="uid://b5fotoplifegi" path="res://assets/placeholders/blue_square.png" id="2_g2els"]
+[ext_resource type="Texture2D" uid="uid://cl3bufnempisd" path="res://assets/attack_sweap.png" id="3_qhqgy"]
+>>>>>>> 0167ed4933c92a9a22869fa4625dd563861ec0b4
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qhqgy"]
 size = Vector2(32, 64)
 
-[node name="Player" type="CharacterBody2D"]
+[sub_resource type="Animation" id="Animation_dqkch"]
+resource_name = "sweap_attack"
+length = 0.5
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_attack_end"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../WeaponGroup/Area2D/CollisionShape2D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+
+[sub_resource type="Animation" id="Animation_qlg0r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../WeaponGroup/Area2D/CollisionShape2D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tuyoq"]
+_data = {
+&"RESET": SubResource("Animation_qlg0r"),
+&"sweap_attack": SubResource("Animation_dqkch")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qhqgy"]
+radius = 8.0
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("weapon_group", "sweapAttackSprite")]
 script = ExtResource("1_6uy16")
+<<<<<<< HEAD
 item_list = Array[ExtResource("2_qhqgy")]([SubResource("Resource_qhqgy"), SubResource("Resource_dqkch"), SubResource("Resource_qlg0r")])
+=======
+weapon_group = NodePath("WeaponGroup")
+sweapAttackSprite = NodePath("WeaponGroup/sweapAttackSprite")
+>>>>>>> 0167ed4933c92a9a22869fa4625dd563861ec0b4
 
 [node name="Sprite" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 1)
@@ -50,3 +118,27 @@ texture = ExtResource("2_g2els")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_qhqgy")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+root_node = NodePath("../CollisionShape2D")
+libraries = {
+&"": SubResource("AnimationLibrary_tuyoq")
+}
+
+[node name="WeaponGroup" type="Node2D" parent="."]
+scale = Vector2(2, 2)
+
+[node name="sweapAttackSprite" type="Sprite2D" parent="WeaponGroup"]
+visible = false
+position = Vector2(16, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_qhqgy")
+
+[node name="Area2D" type="Area2D" parent="WeaponGroup"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponGroup/Area2D"]
+position = Vector2(19, 0)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_qhqgy")
+debug_color = Color(1, 0.00392157, 0.0705882, 0.658824)

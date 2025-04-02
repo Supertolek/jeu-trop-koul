@@ -12,7 +12,7 @@ extends Node2D
 @export var primary_lines: Color = Color(0, 0, 0)
 @export var secondary_lines: Color
 @export var middle_lines: Color
-@export var display:bool = false
+@export var show_in_game:bool = false
 
 
 	
@@ -22,8 +22,13 @@ func _process(delta: float) -> void:
 	if position:
 		position = Vector2.ZERO
 	queue_redraw()
+			
+		
 
 func _draw() -> void:
+	if not Engine.is_editor_hint():
+		if not show_in_game:
+			return
 	var camera_offset := source_camera.offset_size
 	var camera_offset_vect := Vector2(camera_offset,camera_offset)
 	#var camera_size := room_size * source_tilemap.scale * 32 / source_camera.zoom
