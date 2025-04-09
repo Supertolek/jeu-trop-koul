@@ -18,7 +18,8 @@ func _process(delta: float) -> void:
 	set_screen_position()
 
 func set_screen_position() -> void:
-	var player_pos = player_node.global_position - Vector2(offset_size, offset_size)
+	#var player_pos = player_node.global_position - Vector2(offset_size, offset_size)
+	var player_pos = Vector2.ZERO - Vector2(offset_size, offset_size)
 	var x = floor(player_pos.x / (screen_size.x - 2*offset_size)) * (screen_size.x - 2*offset_size) + screen_size.x/2
 	var y = floor(player_pos.y / (screen_size.y - 2*offset_size)) * (screen_size.y - 2*offset_size) + screen_size.y/2
 	#global_position = Vector2(x,y)

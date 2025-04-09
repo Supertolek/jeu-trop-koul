@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://dnm6aq70dd74w"]
+
+[node name="Home" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.239216, 0.258824, 0.294118, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 31.0
+offset_right = 131.0
+offset_bottom = 54.0
+text = "TITRE DU JEU"
+
+[node name="ItemList" type="ItemList" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -370.0
+offset_right = 407.0
+grow_vertical = 0
+allow_search = false
+item_count = 3
+item_0/text = "New game"
+item_1/text = "Continue"
+item_2/text = "Options"
