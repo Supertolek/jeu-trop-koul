@@ -18,6 +18,7 @@ var character_collision : CollisionShape2D
 		character_collision_shape = value
 		if character_collision:
 			character_collision.shape = value
+@export var health : float
 
 func _ready():
 	character_sprite = Sprite2D.new()
