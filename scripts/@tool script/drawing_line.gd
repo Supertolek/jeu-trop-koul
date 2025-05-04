@@ -33,7 +33,7 @@ func _draw() -> void:
 	var camera_size := room_size
 	var inside_camera_size := camera_size - 2 * camera_offset_vect
 	
-	var mouse_pos := get_global_mouse_position() - inside_camera_size/2
+	var mouse_pos := get_global_mouse_position() - inside_camera_size/2 - camera_offset_vect
 	var clamped_mouse_pos = round((mouse_pos)/inside_camera_size) * inside_camera_size
 	
 	draw_rect(Rect2(clamped_mouse_pos, camera_size), primary_lines, false, 4)

@@ -1,0 +1,19 @@
+extends Node
+
+enum STATS_CATEGORIES {
+	HEALTH,
+	ATTACK,
+	SPELL,
+	MISC,
+}
+
+enum MATH_OPERATIONS {
+	PLUS,
+	MINUS,
+	MULT,
+	DIV,
+	MAX,
+	MIN,
+	LIST_APPEND,
+	LIST_REMOVE,
+	}
