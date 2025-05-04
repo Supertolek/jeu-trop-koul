@@ -1,0 +1,363 @@
+[gd_scene load_steps=11 format=3 uid="uid://b7qmhhnly8h3a"]
+
+[ext_resource type="Texture2D" uid="uid://cfa3dfpr1gxx" path="res://assets/UI/inventory_bg.png" id="1_uae8j"]
+[ext_resource type="PackedScene" uid="uid://ckrr6cdh6r0or" path="res://scenes/inventory_slot.tscn" id="2_s887n"]
+[ext_resource type="Texture2D" uid="uid://n03000wa4a8v" path="res://assets/UI/All.png" id="3_g71ie"]
+[ext_resource type="Texture2D" uid="uid://c0vpkwetdur5u" path="res://assets/UI/Weapon.png" id="4_sr8g6"]
+[ext_resource type="Texture2D" uid="uid://bpvmg21e2mo7c" path="res://assets/UI/Armor.png" id="5_p7iul"]
+[ext_resource type="Texture2D" uid="uid://do4cioy7krmvx" path="res://assets/UI/Item_modifier.png" id="6_td2ew"]
+[ext_resource type="FontFile" uid="uid://eruvc81au5m0" path="res://assets/fonts/MinecraftRegular-Bmg3.otf" id="7_p7iul"]
+[ext_resource type="FontFile" uid="uid://n86h3178836i" path="res://assets/fonts/MinecraftItalic-R8Mo.otf" id="8_td2ew"]
+[ext_resource type="FontFile" uid="uid://dkqsygkyiswkm" path="res://assets/fonts/MinecraftBoldItalic-1y1e.otf" id="9_ylenm"]
+[ext_resource type="FontFile" uid="uid://7blsmj3oxjxo" path="res://assets/fonts/MinecraftBold-nMK1.otf" id="10_0df5h"]
+
+[node name="Inventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackGround Texture" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_uae8j")
+expand_mode = 3
+flip_v = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InventoryHeader" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InventoryBody" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 7.0
+
+[node name="EquipedItemsMarginContainer" type="MarginContainer" parent="VBoxContainer/InventoryBody"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="EquipedItemSpliter" type="VBoxContainer" parent="VBoxContainer/InventoryBody/EquipedItemsMarginContainer"]
+layout_mode = 2
+
+[node name="EquipedArmorContainer" type="Control" parent="VBoxContainer/InventoryBody/EquipedItemsMarginContainer/EquipedItemSpliter"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EquipedArmorSlot" parent="VBoxContainer/InventoryBody/EquipedItemsMarginContainer/EquipedItemSpliter/EquipedArmorContainer" instance=ExtResource("2_s887n")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+slot_type = 0
+
+[node name="EquipedWeaponContainer" type="Control" parent="VBoxContainer/InventoryBody/EquipedItemsMarginContainer/EquipedItemSpliter"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EquipedWeaponSlot" parent="VBoxContainer/InventoryBody/EquipedItemsMarginContainer/EquipedItemSpliter/EquipedWeaponContainer" instance=ExtResource("2_s887n")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+slot_type = 0
+
+[node name="MainInventoryMarginContainer" type="MarginContainer" parent="VBoxContainer/InventoryBody"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer"]
+layout_mode = 2
+
+[node name="CategoryTabContainer" type="HBoxContainer" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AllItemCategoryButton" type="Button" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer/AllItemCategoryButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_g71ie")
+stretch_mode = 4
+
+[node name="WeaponItemCategoryButton" type="Button" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer/WeaponItemCategoryButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_sr8g6")
+stretch_mode = 4
+
+[node name="ArmorItemCategoryButton" type="Button" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer/ArmorItemCategoryButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_p7iul")
+stretch_mode = 4
+
+[node name="ItemModifierItemCategoryButton" type="Button" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer/ItemModifierItemCategoryButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_td2ew")
+stretch_mode = 4
+
+[node name="SpaceSeparator10px" type="Control" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="InventoryScrollContainer" type="ScrollContainer" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 12.0
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/InventoryScrollContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+current_tab = 0
+tabs_visible = false
+
+[node name="AllItemsInventoryContainer" type="GridContainer" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/InventoryScrollContainer/TabContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 3
+metadata/_tab_index = 0
+
+[node name="WeaponInventoryContainer" type="GridContainer" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/InventoryScrollContainer/TabContainer"]
+unique_name_in_owner = true
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 3
+metadata/_tab_index = 1
+
+[node name="ArmorInventoryContainer" type="GridContainer" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/InventoryScrollContainer/TabContainer"]
+unique_name_in_owner = true
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 3
+metadata/_tab_index = 2
+
+[node name="ItemModifierInventoryContainer" type="GridContainer" parent="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/InventoryScrollContainer/TabContainer"]
+unique_name_in_owner = true
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 3
+metadata/_tab_index = 3
+
+[node name="ItemForgeMarginContainer" type="MarginContainer" parent="VBoxContainer/InventoryBody"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer"]
+layout_mode = 2
+
+[node name="ItemForgeInformationVContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 4.5
+theme_override_constants/separation = 10
+
+[node name="CurrentItemNameMarginContainer" type="MarginContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeInformationVContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+
+[node name="ModifiedItemName" type="RichTextLabel" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeInformationVContainer/CurrentItemNameMarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("7_p7iul")
+theme_override_fonts/italics_font = ExtResource("8_td2ew")
+theme_override_fonts/bold_italics_font = ExtResource("9_ylenm")
+theme_override_fonts/bold_font = ExtResource("10_0df5h")
+
+[node name="CurrentItemDescriptionMarginContainer" type="MarginContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeInformationVContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+
+[node name="ModifiedItemDescription" type="RichTextLabel" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeInformationVContainer/CurrentItemDescriptionMarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("7_p7iul")
+theme_override_fonts/italics_font = ExtResource("8_td2ew")
+theme_override_fonts/bold_italics_font = ExtResource("9_ylenm")
+theme_override_fonts/bold_font = ExtResource("10_0df5h")
+
+[node name="ItemForgeModifiedItemContainer" type="HBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeModifiedItemContainer"]
+layout_mode = 2
+
+[node name="ModifiedItemInventorySlot" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeModifiedItemContainer/VBoxContainer" instance=ExtResource("2_s887n")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ItemForgeItemModifierTabContainer" type="TabContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+current_tab = 1
+tabs_visible = false
+
+[node name="ItemForgeItemModifierHContainer" type="HBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+size_flags_stretch_ratio = 1.5
+theme_override_constants/separation = 30
+metadata/_tab_index = 0
+
+[node name="FirstItemModifierContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer"]
+layout_mode = 2
+
+[node name="FirstItemModifierSlotySlot" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer/FirstItemModifierContainer" instance=ExtResource("2_s887n")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="SecondItemModifierContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="SecondItemModifierSlotySlot" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer/SecondItemModifierContainer" instance=ExtResource("2_s887n")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ThirdItemModifierContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer"]
+layout_mode = 2
+
+[node name="ThirdItemModifierSlotySlot" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer/ThirdItemModifierContainer" instance=ExtResource("2_s887n")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ItemForgeItemModifierMarginControl" type="Control" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_stretch_ratio = 1.5
+metadata/_tab_index = 1
+
+[node name="ItemForgeBottomMargin" type="Control" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+size_flags_vertical = 3

@@ -29,6 +29,23 @@ enum TYPE_OF_ITEMS {
 	ARMOR,
 	ITEM_MODIFIER,
 }
+
+func is_item(item):
+	if !item: return false
+	match item.class_type:
+		TYPE_OF_ITEMS.NONE:
+			return false
+		TYPE_OF_ITEMS.STATS_SHEET:
+			return false
+		TYPE_OF_ITEMS.WEAPON:
+			return true
+		TYPE_OF_ITEMS.ARMOR:
+			return true
+		TYPE_OF_ITEMS.ITEM_MODIFIER:
+			return true
+		_:
+			return false
+
 func display_stats_sheet(statssheet:StatsSheet):
 	for stat in statssheet.stats:
 		print(stat.display_name + ' -> ' + str(statssheet.stats[stat]))
