@@ -14,7 +14,7 @@ extends Node2D
 @export var middle_lines: Color
 @export var show_in_game:bool = false
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# Force the posistion of the node which had the tool script to be stick to the center
 	if position:
 		position = Vector2.ZERO

@@ -16,7 +16,7 @@ func _ready() -> void:
 	#position_smoothing_enabled = true
 	#position_smoothing_speed = 7.0
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	set_screen_position()
 
 func set_screen_position() -> void:

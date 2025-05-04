@@ -21,6 +21,7 @@ func _ready() -> void:
 	#new_player.device_id = 1
 	#players.append(new_player)
 
+	@warning_ignore("int_as_enum_without_cast")
 	var player_count: PLAYER_COUNT = len(players)-1
 	
 	match  player_count:

@@ -7,6 +7,9 @@ var friction: int = 8 * player_scale
 
 var device_id: int = -2
 
+func _ready() -> void:
+	calculate_all_stats(true)
+	
 func _physics_process(delta: float) -> void:
 	var direction: Vector2
 	if device_id  == -2:
@@ -27,3 +30,39 @@ func _physics_process(delta: float) -> void:
 	velocity = lerp(velocity, max_speed * direction, lerp_weight)
 	
 	move_and_slide()
+
+var inventory_storage: Dictionary = {
+	"equiped_weapon" : load("res://Resources/Items/Weapon/test_sword.tres").duplicate(),
+	"equiped_armor": load("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
+	"inventory": [
+		ItemModifier.new(),
+		ItemModifier.new(),
+		ItemModifier.new(),
+		Weapon.new(),
+		Armor.new()
+	]
+}
+
+var player_stats: StatsSheet = StatsSheet.new()
+
+func calculate_all_stats(display_in_console:bool = false):
+	var equipements = [GlobalItemsMgmt.default_player_stats]
+	var current_armor: Armor = inventory_storage['equiped_armor']
+	equipements.append(current_armor)
+	var current_weapon: Weapon = inventory_storage['equiped_weapon']
+	equipements.append(current_weapon)
+	var calculated_stats: StatsSheet = StatsSheet.new()
+	for equipement  in equipements:
+		match equipement.class_type:
+			GlobalItemsMgmt.TYPE_OF_ITEMS.WEAPON:
+				if display_in_console: print(equipement.name.to_upper())
+				calculated_stats = GlobalItemsMgmt.merge_stats_sheet(calculated_stats,equipement.calculate_stats(display_in_console),display_in_console)
+			GlobalItemsMgmt.TYPE_OF_ITEMS.ARMOR:
+				if display_in_console: print(equipement.name.to_upper())
+				calculated_stats = GlobalItemsMgmt.merge_stats_sheet(calculated_stats,equipement.calculate_stats(display_in_console),display_in_console)
+
+			GlobalItemsMgmt.TYPE_OF_ITEMS.STATS_SHEET:
+				if display_in_console: print('Base Stats'.to_upper())
+				calculated_stats = GlobalItemsMgmt.merge_stats_sheet(calculated_stats,equipement,display_in_console)
+	GlobalItemsMgmt.display_stats_sheet(calculated_stats)
+	player_stats = calculated_stats
