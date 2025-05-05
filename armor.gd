@@ -29,13 +29,16 @@ var weapon_stats: StatsSheet = StatsSheet.new()
 @export var second_item_modifier: ItemModifier
 @export var third_item_modifier: ItemModifier
 
-func get_item_modifiers() -> Array[ItemModifier]:
+func get_item_modifiers(fill:bool=false) -> Array[ItemModifier]:
 	var item_modifiers: Array[ItemModifier] = []
 	for property in get_property_list():
 		if property['name'].ends_with('_item_modifier'):
 			var item_modifier = get(property['name'])
 			if item_modifier:
 				item_modifiers.append(item_modifier)
+			elif fill:
+				item_modifiers.append(null)
+				
 	return item_modifiers
 
 

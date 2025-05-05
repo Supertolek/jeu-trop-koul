@@ -278,7 +278,6 @@ theme_override_constants/separation = 10
 
 [node name="CurrentItemNameMarginContainer" type="MarginContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeInformationVContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 10
 
 [node name="ModifiedItemName" type="RichTextLabel" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeInformationVContainer/CurrentItemNameMarginContainer"]
 unique_name_in_owner = true
@@ -287,10 +286,13 @@ theme_override_fonts/normal_font = ExtResource("7_p7iul")
 theme_override_fonts/italics_font = ExtResource("8_td2ew")
 theme_override_fonts/bold_italics_font = ExtResource("9_ylenm")
 theme_override_fonts/bold_font = ExtResource("10_0df5h")
+theme_override_font_sizes/normal_font_size = 40
+text = "Forge"
+fit_content = true
+horizontal_alignment = 1
 
 [node name="CurrentItemDescriptionMarginContainer" type="MarginContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeInformationVContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 20
 
 [node name="ModifiedItemDescription" type="RichTextLabel" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeInformationVContainer/CurrentItemDescriptionMarginContainer"]
 unique_name_in_owner = true
@@ -299,6 +301,9 @@ theme_override_fonts/normal_font = ExtResource("7_p7iul")
 theme_override_fonts/italics_font = ExtResource("8_td2ew")
 theme_override_fonts/bold_italics_font = ExtResource("9_ylenm")
 theme_override_fonts/bold_font = ExtResource("10_0df5h")
+theme_override_font_sizes/normal_font_size = 20
+fit_content = true
+horizontal_alignment = 1
 
 [node name="ItemForgeModifiedItemContainer" type="HBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 100)
@@ -322,6 +327,7 @@ current_tab = 1
 tabs_visible = false
 
 [node name="ItemForgeItemModifierHContainer" type="HBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer"]
+unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 130)
 layout_mode = 2
