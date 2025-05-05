@@ -58,8 +58,8 @@ var inventory_tab_index: int = 0
 
 func _ready() -> void:
 	display_items()
-	#update_inventory_tabContainer()
-	#_resize_TabContainer()
+	update_inventory_tabContainer()
+	_resize_TabContainer()
 	
 	modified_item_inventory_slot.slot_pressed.connect(start_dragging)
 	modified_item_inventory_slot.slot_released.connect(stop_dragging)
@@ -86,6 +86,7 @@ func display_ui(_inventory_data):
 	equiped_armor_inventory_slot.item = inventory_data['equiped_armor']
 	equiped_weapon_inventory_slot.item = inventory_data['equiped_weapon']
 	display_items()
+	_resize_TabContainer()
 	update_inventory_tabContainer()
 
 func hide_ui():
@@ -277,6 +278,9 @@ func stop_dragging(initial_slot: InventorySlot):
 	dragged_slot = null
 	
 	
+func _on_resized() -> void:
+	if scene_is_ready:
+		_resize_TabContainer()
 
 func _input(_event:InputEvent) -> void:
 	
@@ -285,10 +289,6 @@ func _input(_event:InputEvent) -> void:
 	if Input.is_action_just_pressed("move_ui_left") or Input.is_action_just_pressed("move_ui_right"):
 		inventory_tab_index = posmod(inventory_tab_index + menu_dir, category_tab_container.get_child_count())
 		update_inventory_tabContainer()
-	if Input.is_action_just_pressed("ui_accept"):
-		display_ui(a)
-	elif Input.is_action_just_pressed('ui_cancel'):
-		a = hide_ui()
 
 func _on_all_item_category_button_pressed() -> void:
 	inventory_tab_index = 0
@@ -307,11 +307,30 @@ func update_inventory_tabContainer():
 	# Set the current tab to the value stored internaly
 	tab_container.current_tab = inventory_tab_index
 	
+	# Resize the new tab
+	_resize_TabContainer()
+	
 	# For each Category button, set the alpha to 0.25 except for the selected one.
 	for child: Button in category_tab_container.get_children():
 		child.modulate.a = 0.25
 	category_tab_container.get_child(inventory_tab_index).modulate.a = 1
 
+func _resize_TabContainer():
+	await get_tree().create_timer(0.01).timeout
+	
+	var inventory_slot = inventorySlot.instantiate()
+	var item_slot_size: int = inventory_slot.custom_minimum_size.x
+	inventory_slot.queue_free()
+	
+	var selected_tab: GridContainer = tab_container.get_child(inventory_tab_index)
+	var item_slot_separation: int = selected_tab.get("theme_override_constants/h_separation")
+	var number_of_columns: int = 2
+	var inventory_scroll_container_size: float = inventory_scroll_container.size.x
+	
+	while number_of_columns * (item_slot_size + item_slot_separation) < inventory_scroll_container_size:
+		number_of_columns += 1
+	selected_tab.columns = number_of_columns - 1
+	
 enum TAB_CONTAINER_PARTS {
 	ALL_ITEMS,
 	WEAPON,

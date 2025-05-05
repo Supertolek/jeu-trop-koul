@@ -269,6 +269,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 30
 
 [node name="ItemForgeInformationVContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -337,6 +338,7 @@ metadata/_tab_index = 0
 
 [node name="FirstItemModifierContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="FirstItemModifierInventorySlot" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer/FirstItemModifierContainer" instance=ExtResource("2_s887n")]
 unique_name_in_owner = true
@@ -347,6 +349,7 @@ slot_type = 1
 
 [node name="SecondItemModifierContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 alignment = 2
 
 [node name="SecondItemModifierInventorySlot" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer/SecondItemModifierContainer" instance=ExtResource("2_s887n")]
@@ -358,6 +361,7 @@ slot_type = 1
 
 [node name="ThirdItemModifierContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="ThirdItemModifierInventorySlot" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer/ThirdItemModifierContainer" instance=ExtResource("2_s887n")]
 unique_name_in_owner = true
@@ -384,6 +388,7 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
+[connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="pressed" from="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer/AllItemCategoryButton" to="." method="_on_all_item_category_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer/WeaponItemCategoryButton" to="." method="_on_weapon_item_category_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer/ArmorItemCategoryButton" to="." method="_on_armor_item_category_button_pressed"]

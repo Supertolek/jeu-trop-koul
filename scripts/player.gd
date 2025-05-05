@@ -35,11 +35,20 @@ var inventory_storage: Dictionary = {
 	"equiped_weapon" : load("res://Resources/Items/Weapon/test_sword.tres").duplicate(),
 	"equiped_armor": load("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
 	"inventory": [
-		ItemModifier.new(),
-		ItemModifier.new(),
-		ItemModifier.new(),
-		Weapon.new(),
-		Armor.new()
+		preload("res://Resources/Items/Items_Modifiers/ham.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/attack_of_some.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/bread.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/attack_of_some.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/attack_of_some.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/ham.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/bread.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/bread.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/ham.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/attack_of_some.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/pile_of_coin.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/ham.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/attack_of_some.tres").duplicate(),
+		preload("res://Resources/Items/Items_Modifiers/bread.tres").duplicate(),
 	]
 }
 
