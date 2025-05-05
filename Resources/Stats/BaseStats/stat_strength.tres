@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="StatsResource" load_steps=2 format=3 uid="uid://dbnumkhnjais1"]
+
+[ext_resource type="Script" uid="uid://cp2g7vxmyi4mm" path="res://StatsResource.gd" id="1_uc57n"]
+
+[resource]
+script = ExtResource("1_uc57n")
+display_name = "Strength"
+description = ""
+category = 1
+add_operation = 2
+remove_operation = 3
+is_internal = false
+metadata/_custom_type_script = "uid://cp2g7vxmyi4mm"

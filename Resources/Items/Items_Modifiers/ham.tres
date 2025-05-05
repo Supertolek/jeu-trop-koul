@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="ItemModifier" load_steps=5 format=3 uid="uid://cmi8xo3b5ihde"]
+
+[ext_resource type="Texture2D" uid="uid://dopauvieiu6kp" path="res://assets/Items/fb486.png" id="1_lbbph"]
+[ext_resource type="Script" uid="uid://qtr7q26kgqb7" path="res://item_modifier.gd" id="2_x7srw"]
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://stats_sheet.gd" id="3_3mx3p"]
+
+[sub_resource type="Resource" id="Resource_fpxeo"]
+script = ExtResource("3_3mx3p")
+stat_defense = 10.0
+stat_health_regeneration = 5.0
+stat_max_health = 20.0
+stat_attack = 0.0
+stat_attack_speed = 0.0
+stat_crit_chance = 0.0
+stat_crit_damage = 0.0
+stat_strength = 1.0
+stat_speed = 0.0
+metadata/_custom_type_script = "uid://dhts3bimb3vsb"
+
+[resource]
+script = ExtResource("2_x7srw")
+name = "Ham"
+icon = ExtResource("1_lbbph")
+rarity = 0
+description = "Yeah it's just ham.
+Good for health."
+stats_modifier = SubResource("Resource_fpxeo")
+metadata/_custom_type_script = "uid://qtr7q26kgqb7"

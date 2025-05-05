@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="StatsResource" load_steps=2 format=3 uid="uid://cykjjtsswl2bt"]
+
+[ext_resource type="Script" uid="uid://cp2g7vxmyi4mm" path="res://StatsResource.gd" id="1_0otff"]
+
+[resource]
+script = ExtResource("1_0otff")
+display_name = "Attack Speed"
+description = ""
+category = 1
+add_operation = 0
+remove_operation = 1
+is_internal = false
+metadata/_custom_type_script = "uid://cp2g7vxmyi4mm"

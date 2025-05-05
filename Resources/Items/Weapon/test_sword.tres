@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=7 format=3 uid="uid://bu3rkv8n2sde0"]
+
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://stats_sheet.gd" id="1_nypfk"]
+[ext_resource type="Texture2D" uid="uid://b4tlmo1s3pjdm" path="res://assets/Items/fb1777.png" id="2_1hpjb"]
+[ext_resource type="Resource" uid="uid://cmi8xo3b5ihde" path="res://Resources/Items/Items_Modifiers/ham.tres" id="2_xxt4o"]
+[ext_resource type="Script" uid="uid://dxcu0te7mf7ou" path="res://weapon.gd" id="3_xxt4o"]
+[ext_resource type="Resource" uid="uid://cyvgpqu5sqjik" path="res://Resources/Items/Items_Modifiers/bread.tres" id="5_6spdw"]
+
+[sub_resource type="Resource" id="Resource_6spdw"]
+script = ExtResource("1_nypfk")
+stat_defense = 10.0
+stat_health_regeneration = 0.0
+stat_max_health = 10.0
+stat_attack = 10.0
+stat_attack_speed = 0.0
+stat_crit_chance = 0.0
+stat_crit_damage = 0.0
+stat_strength = 2.0
+stat_speed = -5.0
+metadata/_custom_type_script = "uid://dhts3bimb3vsb"
+
+[resource]
+script = ExtResource("3_xxt4o")
+name = "Test Sword"
+icon = ExtResource("2_1hpjb")
+rarity = 0
+description = ""
+base_stats = SubResource("Resource_6spdw")
+first_item_modifier = ExtResource("2_xxt4o")
+second_item_modifier = ExtResource("5_6spdw")
+metadata/_custom_type_script = "uid://dxcu0te7mf7ou"

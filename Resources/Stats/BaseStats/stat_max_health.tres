@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="StatsResource" load_steps=2 format=3 uid="uid://1bnr1ky2ysxa"]
+
+[ext_resource type="Script" uid="uid://cp2g7vxmyi4mm" path="res://StatsResource.gd" id="1_nqfig"]
+
+[resource]
+script = ExtResource("1_nqfig")
+display_name = "Max Health"
+description = ""
+category = 0
+add_operation = 0
+remove_operation = 1
+is_internal = false
+metadata/_custom_type_script = "uid://cp2g7vxmyi4mm"
