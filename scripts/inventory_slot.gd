@@ -78,10 +78,10 @@ func _on_gui_input(event: InputEvent) -> void:
 
 func _on_mouse_entered() -> void:
 	if item == null: return
-	#Popups.ItemPopup(Rect2(global_position,size),item)
-	pass
+	Popups.ItemPopup(Rect2(global_position,size),item)
+	#pass
 
 
 func _on_mouse_exited() -> void:
-	#Popups.HideItemPopup()
-	pass
+	Popups.HideItemPopup()
+	#pass

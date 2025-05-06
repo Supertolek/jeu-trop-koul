@@ -30,6 +30,8 @@ enum TYPE_OF_ITEMS {
 	ITEM_MODIFIER,
 }
 
+const STATS_COLOR: Dictionary = {"positive":"75F94C","negative":"EB3223","null":"FFFFFF"}
+
 func is_item(item):
 	if !item: return false
 	match item.class_type:

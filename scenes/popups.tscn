@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://dtmukfajo7k3v"]
+
+[ext_resource type="Script" uid="uid://cs45x13v2oowb" path="res://scripts/popups.gd" id="1_fk52g"]
+[ext_resource type="FontFile" uid="uid://eruvc81au5m0" path="res://assets/fonts/MinecraftRegular-Bmg3.otf" id="2_201id"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jha0h"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.215686, 0.215686, 0.215686, 0.615686)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.243137)
+shadow_size = 2
+shadow_offset = Vector2(1, 1)
+
+[node name="Popups" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_fk52g")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="ItemPopup" type="PanelContainer" parent="CanvasLayer"]
+unique_name_in_owner = true
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_jha0h")
+
+[node name="InnerText" type="VBoxContainer" parent="CanvasLayer/ItemPopup"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ItemName" type="Label" parent="CanvasLayer/ItemPopup/InnerText"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_201id")
+theme_override_font_sizes/font_size = 40
+text = "Item Name"
+
+[node name="StatsContainerTitle" type="Label" parent="CanvasLayer/ItemPopup/InnerText"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_201id")
+theme_override_font_sizes/font_size = 30
+text = "Stats:"

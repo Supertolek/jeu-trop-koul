@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=4 uid="uid://b5y5loopfw4he"]
+[gd_scene load_steps=8 format=4 uid="uid://b5y5loopfw4he"]
 
 [ext_resource type="Texture2D" uid="uid://ce1mqmq0qc6cn" path="res://assets/tilemap_barebones.png" id="1_m54kn"]
 [ext_resource type="Script" uid="uid://bgg6fu1qeeca3" path="res://scripts/game.gd" id="1_p57ef"]
 [ext_resource type="PackedScene" uid="uid://bdny2th5or8qi" path="res://scenes/room_camera.tscn" id="3_f06ig"]
 [ext_resource type="Script" uid="uid://bs4pnq7b4me3p" path="res://scripts/@tool script/drawing_line.gd" id="4_pt8f2"]
+[ext_resource type="PackedScene" uid="uid://b7qmhhnly8h3a" path="res://scenes/inventory.tscn" id="5_iywne"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lbhrr"]
 texture = ExtResource("1_m54kn")
@@ -90,3 +91,9 @@ primary_lines = Color(0, 1, 0, 0.313726)
 secondary_lines = Color(1, 1, 0, 1)
 middle_lines = Color(1, 0, 0, 0.627451)
 metadata/_edit_lock_ = true
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Inventory" parent="UI" instance=ExtResource("5_iywne")]
+unique_name_in_owner = true
+visible = false
