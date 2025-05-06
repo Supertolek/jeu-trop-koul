@@ -7,6 +7,7 @@ var friction: int = 8 * player_scale
 
 var device_id: int = -2
 
+
 func _ready() -> void:
 	calculate_all_stats(true)
 	

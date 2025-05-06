@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Global="*res://scripts/GlobalScript/global.gd"
-GlobalItemsMgmt="*res://scripts/GlobalScript/GlobalItemsMgmt.gd"
+Global="*res://scripts/global_scripts/global.gd"
+GlobalItemsMgmt="*res://scripts/global_scripts/GlobalItemsMgmt.gd"
 Popups="*res://scenes/popups.tscn"
 
 [display]
