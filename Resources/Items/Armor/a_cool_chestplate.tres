@@ -1,13 +1,13 @@
 [gd_resource type="Resource" script_class="Armor" load_steps=7 format=3 uid="uid://c35wknc0cjs84"]
 
-[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://stats_sheet.gd" id="1_mi1re"]
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://Resources/scripts/stats_sheet.gd" id="1_2xqgu"]
 [ext_resource type="Resource" uid="uid://c5ow7706rkwbh" path="res://Resources/Items/Items_Modifiers/pile_of_coin.tres" id="2_2xqgu"]
 [ext_resource type="Texture2D" uid="uid://qgxdjbxshghe" path="res://assets/Items/fb1925.png" id="2_snvqu"]
 [ext_resource type="Script" uid="uid://cjx5oiekdpbg3" path="res://armor.gd" id="3_2xqgu"]
 [ext_resource type="Resource" uid="uid://d27e7cw2mbrc8" path="res://Resources/Items/Items_Modifiers/attack_of_some.tres" id="5_dk6i8"]
 
 [sub_resource type="Resource" id="Resource_dk6i8"]
-script = ExtResource("1_mi1re")
+script = ExtResource("1_2xqgu")
 stat_defense = 40.0
 stat_health_regeneration = 0.0
 stat_max_health = 25.0

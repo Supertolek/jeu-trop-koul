@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="ItemModifier" load_steps=5 format=3 uid="uid://cyvgpqu5sqjik"]
 
 [ext_resource type="Texture2D" uid="uid://dnwrg8ueeyo8y" path="res://assets/Items/fb513.png" id="1_3m7i2"]
-[ext_resource type="Script" uid="uid://qtr7q26kgqb7" path="res://item_modifier.gd" id="2_mcfiq"]
-[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://stats_sheet.gd" id="3_r0ij6"]
+[ext_resource type="Script" uid="uid://qtr7q26kgqb7" path="res://Resources/scripts/item_modifier.gd" id="2_3m7i2"]
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://Resources/scripts/stats_sheet.gd" id="3_mcfiq"]
 
 [sub_resource type="Resource" id="Resource_fpxeo"]
-script = ExtResource("3_r0ij6")
+script = ExtResource("3_mcfiq")
 stat_defense = 0.0
 stat_health_regeneration = 0.0
 stat_max_health = 10.0
@@ -18,7 +18,7 @@ stat_speed = 2.0
 metadata/_custom_type_script = "uid://dhts3bimb3vsb"
 
 [resource]
-script = ExtResource("2_mcfiq")
+script = ExtResource("2_3m7i2")
 name = "Bread"
 icon = ExtResource("1_3m7i2")
 rarity = 0

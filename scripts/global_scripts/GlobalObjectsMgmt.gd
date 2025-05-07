@@ -1,0 +1,43 @@
+extends Node
+
+enum COIN_COLOR {
+	BROWN,
+	GREY,
+	GOLDEN,
+	BLUE,
+	GREEN,
+	RED
+}
+
+enum DOOR_TYPE {
+	WALL,
+	METAL,
+	WOODEN
+}
+
+enum DIRECTION {
+	LEFT,
+	RIGHT,
+}
+
+enum VASE_COLOR {
+	LIGHT,
+	DARK,
+	BLUE
+}
+
+enum KEY_COLOR {
+	RED,
+	BLUE,
+	GREEN,
+	GOLDEN,
+	SILVER,
+}
+
+enum STAR_COLOR {
+	SILVER,
+	GOLDEN,
+	BLUE,
+	PINK,
+	GREEN,
+}
