@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://d0wegsgalj7fw"]
 
-[ext_resource type="Script" uid="uid://d20ltlucj3eq4" path="res://scripts/_player.gd" id="1_6uy16"]
+[ext_resource type="Script" uid="uid://b71jm1s376ygx" path="res://scripts/entities/player.gd" id="1_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://b5fotoplifegi" path="res://assets/placeholders/blue_square.png" id="2_g2els"]
 [ext_resource type="Texture2D" uid="uid://cl3bufnempisd" path="res://assets/attack_sweap.png" id="3_qhqgy"]
 
@@ -62,10 +62,8 @@ _data = {
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qhqgy"]
 radius = 8.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("weapon_group", "sweapAttackSprite")]
-script = ExtResource("1_6uy16")
-weapon_group = NodePath("WeaponGroup")
-sweapAttackSprite = NodePath("WeaponGroup/sweapAttackSprite")
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_qhqgy")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 1)
@@ -82,6 +80,7 @@ libraries = {
 }
 
 [node name="WeaponGroup" type="Node2D" parent="."]
+visible = false
 scale = Vector2(2, 2)
 
 [node name="sweapAttackSprite" type="Sprite2D" parent="WeaponGroup"]

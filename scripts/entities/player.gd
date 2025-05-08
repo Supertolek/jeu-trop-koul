@@ -9,7 +9,7 @@ var device_id: int = -2
 
 
 func _ready() -> void:
-	calculate_all_stats(true)
+	calculate_all_stats(false)
 	
 func _physics_process(delta: float) -> void:
 	var direction: Vector2
