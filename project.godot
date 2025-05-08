@@ -19,7 +19,10 @@ config/icon="res://icon.svg"
 
 Global="*res://scripts/global_scripts/global.gd"
 GlobalItemsMgmt="*res://scripts/global_scripts/GlobalItemsMgmt.gd"
+GlobalObjectsMgmt="*res://scripts/global_scripts/GlobalObjectsMgmt.gd"
 Popups="*res://scenes/popups.tscn"
+GameController="*res://scripts/global_scripts/GameController.gd"
+SignalBus="*res://scripts/global_scripts/SignalBus.gd"
 
 [display]
 

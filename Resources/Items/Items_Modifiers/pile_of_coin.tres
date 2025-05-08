@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="ItemModifier" load_steps=5 format=3 uid="uid://c5ow7706rkwbh"]
 
 [ext_resource type="Texture2D" uid="uid://h825p07kp1il" path="res://assets/Items/fb136.png" id="1_kxycg"]
-[ext_resource type="Script" uid="uid://qtr7q26kgqb7" path="res://item_modifier.gd" id="2_h8o37"]
-[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://stats_sheet.gd" id="3_sl7yx"]
+[ext_resource type="Script" uid="uid://qtr7q26kgqb7" path="res://Resources/scripts/item_modifier.gd" id="2_kxycg"]
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://Resources/scripts/stats_sheet.gd" id="3_h8o37"]
 
 [sub_resource type="Resource" id="Resource_fpxeo"]
-script = ExtResource("3_sl7yx")
+script = ExtResource("3_h8o37")
 stat_defense = 5.0
 stat_health_regeneration = 5.0
 stat_max_health = 5.0
@@ -18,7 +18,7 @@ stat_speed = 5.0
 metadata/_custom_type_script = "uid://dhts3bimb3vsb"
 
 [resource]
-script = ExtResource("2_h8o37")
+script = ExtResource("2_kxycg")
 name = "Pile of Coins"
 icon = ExtResource("1_kxycg")
 rarity = 0

@@ -75,6 +75,7 @@ sources/0 = SubResource("TileSetAtlasSource_lbhrr")
 script = ExtResource("1_p57ef")
 
 [node name="RoomCamera" parent="." instance=ExtResource("3_f06ig")]
+visible = false
 position = Vector2(576, 320)
 editor_draw_screen = false
 offset_size = 100

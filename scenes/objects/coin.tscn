@@ -1,0 +1,84 @@
+[gd_scene load_steps=7 format=3 uid="uid://de2lnrytwrsnv"]
+
+[ext_resource type="Texture2D" uid="uid://bj1vlqass2eba" path="res://assets/Objects/coins.png" id="1_npg62"]
+[ext_resource type="Script" uid="uid://b0vhpam2gvw37" path="res://scripts/objects/coin.gd" id="1_xxg5f"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bpm70"]
+radius = 5.0
+height = 14.0
+
+[sub_resource type="Animation" id="Animation_v6le6"]
+resource_name = "collect"
+step = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation_x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [9, 10, 11, 12, 13]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_5towm"]
+length = 1.00001
+loop_mode = 1
+step = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation_x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v6le6"]
+_data = {
+&"collect": SubResource("Animation_v6le6"),
+&"spin": SubResource("Animation_5towm")
+}
+
+[node name="Coin" type="Area2D"]
+script = ExtResource("1_xxg5f")
+coin_color = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_bpm70")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+&"": SubResource("AnimationLibrary_v6le6")
+}
+autoplay = "spin"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+texture = ExtResource("1_npg62")
+hframes = 14
+vframes = 12
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

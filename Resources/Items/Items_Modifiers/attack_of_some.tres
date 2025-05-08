@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="ItemModifier" load_steps=5 format=3 uid="uid://d27e7cw2mbrc8"]
 
 [ext_resource type="Texture2D" uid="uid://dbvtswslpcdnc" path="res://assets/Items/fb216.png" id="1_3hoac"]
-[ext_resource type="Script" uid="uid://qtr7q26kgqb7" path="res://item_modifier.gd" id="2_ajex8"]
-[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://stats_sheet.gd" id="3_1xtsn"]
+[ext_resource type="Script" uid="uid://qtr7q26kgqb7" path="res://Resources/scripts/item_modifier.gd" id="2_3hoac"]
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://Resources/scripts/stats_sheet.gd" id="3_ajex8"]
 
 [sub_resource type="Resource" id="Resource_fpxeo"]
-script = ExtResource("3_1xtsn")
+script = ExtResource("3_ajex8")
 stat_defense = 0.0
 stat_health_regeneration = 0.0
 stat_max_health = 0.0
@@ -18,7 +18,7 @@ stat_speed = 0.0
 metadata/_custom_type_script = "uid://dhts3bimb3vsb"
 
 [resource]
-script = ExtResource("2_ajex8")
+script = ExtResource("2_3hoac")
 name = "Attack of Some"
 icon = ExtResource("1_3hoac")
 rarity = 1
