@@ -100,7 +100,6 @@ _data = {
 
 [node name="Door" type="StaticBody2D"]
 script = ExtResource("1_ctypd")
-spike_enabled_default = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true

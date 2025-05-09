@@ -286,7 +286,7 @@ _data = {
 
 [node name="Door" type="StaticBody2D"]
 script = ExtResource("1_yar34")
-door_type = 2
+door_type = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true
@@ -310,7 +310,6 @@ libraries = {
 
 [node name="wall_door" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-visible = false
 position = Vector2(0, -8)
 texture = ExtResource("3_w0irj")
 hframes = 7
@@ -324,6 +323,7 @@ libraries = {
 
 [node name="wooden_door" type="Sprite2D" parent="."]
 unique_name_in_owner = true
+visible = false
 position = Vector2(0, -16)
 texture = ExtResource("4_vedx6")
 hframes = 8

@@ -1,15 +1,19 @@
+
 class_name Player
 extends Character 
 
-var max_speed: int = 55 * player_scale
-var acceleration: int = 5 * player_scale
-var friction: int = 8 * player_scale
-
+var max_speed: int = 45 * player_scale
+var acceleration: int = 7 * player_scale
+var friction: int = 10 * player_scale
+var is_moving: bool = false
 var device_id: int = -2
+@onready var sprite: Sprite2D = %Sprite
+@onready var attack_manager: Node2D = %AttackManager
 
+@export_enum('Blue','Green','Black','Red') var color: String = 'Blue'
 
 func _ready() -> void:
-	calculate_all_stats(true)
+	calculate_all_stats(false)
 	
 func _physics_process(delta: float) -> void:
 	var direction: Vector2
@@ -25,12 +29,33 @@ func _physics_process(delta: float) -> void:
 		)
 		if direction.length() <= 0.15:
 			direction = Vector2.ZERO
-		
+	if attack_manager.is_holding_long_enought:
+		direction = Vector2.ZERO
+	if direction:
+		is_moving = true
+	else:
+		is_moving = false
 	
 	var lerp_weight = delta * (acceleration if direction else friction)
 	velocity = lerp(velocity, max_speed * direction, lerp_weight)
 	
 	move_and_slide()
+
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("attack"):
+		attack_manager.attack_pressed()
+	if Input.is_action_pressed("attack"):
+		attack_manager.attack_keep_pressed()
+	if Input.is_action_just_released("attack"):
+		attack_manager.attack_released()
+
+
+
+
+
+
+
+
 
 var inventory_storage: Dictionary = {
 	"equiped_weapon" : load("res://Resources/Items/Weapon/test_sword.tres").duplicate(),

@@ -7,13 +7,15 @@ enum PLAYER_COUNT {
 	FOUR,
 }
 
-var players: Array[Player] = []
+const PLAYER = preload("res://scenes/player.tscn")
+
+var players: Array[Player] = [PLAYER.instantiate()]
 
 func _ready() -> void:
 	
-	var new_player = Player.new()
-	new_player.device_id = -2
-	players.append(new_player)
+	#var new_player = Player.new()
+	#new_player.device_id = -2
+	#players.append(new_player)
 	#new_player = Player.new()
 	#new_player.device_id = 0
 	#players.append(new_player)

@@ -9,6 +9,7 @@ func _ready() -> void:
 	for _player in Global.players:
 		player = _player
 		add_child(player)
+		print(player.position)
 		player.global_position = Vector2(576,320)
 
 

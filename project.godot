@@ -27,6 +27,7 @@ SignalBus="*res://scripts/global_scripts/SignalBus.gd"
 [display]
 
 window/size/viewport_height=640
+window/stretch/mode="viewport"
 
 [input]
 
