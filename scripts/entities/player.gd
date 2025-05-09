@@ -9,6 +9,7 @@ var is_moving: bool = false
 var device_id: int = -2
 @onready var sprite: Sprite2D = %Sprite
 @onready var attack_manager: Node2D = %AttackManager
+
 @export_enum('Blue','Green','Black','Red') var color: String = 'Blue'
 
 func _ready() -> void:
@@ -28,6 +29,8 @@ func _physics_process(delta: float) -> void:
 		)
 		if direction.length() <= 0.15:
 			direction = Vector2.ZERO
+	if attack_manager.is_holding_long_enought:
+		direction = Vector2.ZERO
 	if direction:
 		is_moving = true
 	else:
@@ -40,7 +43,11 @@ func _physics_process(delta: float) -> void:
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("attack"):
-		attack_manager.attack()
+		attack_manager.attack_pressed()
+	if Input.is_action_pressed("attack"):
+		attack_manager.attack_keep_pressed()
+	if Input.is_action_just_released("attack"):
+		attack_manager.attack_released()
 
 
 

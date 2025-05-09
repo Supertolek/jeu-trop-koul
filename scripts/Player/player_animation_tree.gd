@@ -39,10 +39,10 @@ func _process(_delta: float) -> void:
 			direction = '_up'
 		elif -135 <= angle and angle < -45:
 			direction = '_left'
-		if attack_manager.current_combo == 0:
+		if !attack_manager.is_attacking:
 			state = 'run'
 	else:
-		if attack_manager.current_combo == 0:
+		if !attack_manager.is_attacking:
 			state = "idle"
 		
 		

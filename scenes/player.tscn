@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://d0wegsgalj7fw"]
+[gd_scene load_steps=51 format=3 uid="uid://d0wegsgalj7fw"]
 
 [ext_resource type="Script" uid="uid://b71jm1s376ygx" path="res://scripts/entities/player.gd" id="1_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://di16o7owigvc3" path="res://assets/Player/Blue/blue_player_animation.png" id="2_qlg0r"]
@@ -310,7 +310,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_i4ail"]
 resource_name = "charged_attack_1_down"
-length = 2.0
+length = 1.1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -319,10 +319,10 @@ tracks/0/path = NodePath("%Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(5.96046e-08, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467]
+"values": [457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 0]
 }
 
 [sub_resource type="Animation" id="Animation_a38lo"]
@@ -588,6 +588,297 @@ tracks/0/keys = {
 "values": [376, 377, 378, 379, 380, 381, 382, 383, 36]
 }
 
+[sub_resource type="Animation" id="Animation_bj30b"]
+resource_name = "start_charge_attack_1_down"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [448]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("%AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"charge_attack_1_down"],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_jc3p3"]
+resource_name = "charge_attack_1_down"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [449, 450, 451, 452, 453, 454, 455, 456]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("%AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+
+[sub_resource type="Animation" id="Animation_hax0n"]
+resource_name = "start_charge_attack_1_left"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [484]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("%AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"charge_attack_1_left"],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_t4otl"]
+resource_name = "start_charge_attack_1_up"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [556]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("%AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"charge_attack_1_up"],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_j2b1d"]
+resource_name = "start_charge_attack_1_right"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [520]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("%AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"charge_attack_1_right"],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_cs1tg"]
+resource_name = "charge_attack_1_left"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [485, 486, 487, 488, 489, 490, 491, 492]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("%AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+
+[sub_resource type="Animation" id="Animation_2dvfe"]
+resource_name = "charge_attack_1_up"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [557, 558, 559, 560, 561, 562, 563, 564]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("%AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+
+[sub_resource type="Animation" id="Animation_giy8y"]
+resource_name = "charge_attack_1_right"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [521, 522, 523, 524, 525, 526, 527, 528]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("%AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+
+[sub_resource type="Animation" id="Animation_fdfoy"]
+resource_name = "charged_attack_1_left"
+length = 1.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 108]
+}
+
+[sub_resource type="Animation" id="Animation_hhpqf"]
+resource_name = "charged_attack_1_up"
+length = 1.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 72]
+}
+
+[sub_resource type="Animation" id="Animation_g5jhy"]
+resource_name = "charged_attack_1_right"
+length = 1.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 36]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tuyoq"]
 _data = {
 &"RESET": SubResource("Animation_qlg0r"),
@@ -603,7 +894,14 @@ _data = {
 &"attack_3_left": SubResource("Animation_gl8cc"),
 &"attack_3_right": SubResource("Animation_md1ol"),
 &"attack_3_up": SubResource("Animation_487ah"),
+&"charge_attack_1_down": SubResource("Animation_jc3p3"),
+&"charge_attack_1_left": SubResource("Animation_cs1tg"),
+&"charge_attack_1_right": SubResource("Animation_giy8y"),
+&"charge_attack_1_up": SubResource("Animation_2dvfe"),
 &"charged_attack_1_down": SubResource("Animation_i4ail"),
+&"charged_attack_1_left": SubResource("Animation_fdfoy"),
+&"charged_attack_1_right": SubResource("Animation_g5jhy"),
+&"charged_attack_1_up": SubResource("Animation_hhpqf"),
 &"charged_attack_2_down": SubResource("Animation_a38lo"),
 &"charged_attack_3_down": SubResource("Animation_4ni07"),
 &"combo_attack_1_down": SubResource("Animation_ujl30"),
@@ -617,6 +915,10 @@ _data = {
 &"run_left": SubResource("Animation_d2wvv"),
 &"run_right": SubResource("Animation_oprun"),
 &"run_up": SubResource("Animation_qfm1y"),
+&"start_charge_attack_1_down": SubResource("Animation_bj30b"),
+&"start_charge_attack_1_left": SubResource("Animation_hax0n"),
+&"start_charge_attack_1_right": SubResource("Animation_j2b1d"),
+&"start_charge_attack_1_up": SubResource("Animation_t4otl"),
 &"walk_down": SubResource("Animation_ur7pv"),
 &"walk_left": SubResource("Animation_tuyoq"),
 &"walk_right": SubResource("Animation_fjrip"),
@@ -701,8 +1003,20 @@ unique_name_in_owner = true
 wait_time = 0.6
 one_shot = true
 
+[node name="ChargedAttack1ChargeTimer" type="Timer" parent="AttackManager"]
+unique_name_in_owner = true
+wait_time = 0.9
+one_shot = true
+
+[node name="ChargedAttack1CooldownTimer" type="Timer" parent="AttackManager"]
+unique_name_in_owner = true
+wait_time = 1.1
+one_shot = true
+
 [connection signal="timeout" from="AttackManager/Attack1CooldownTimer" to="AttackManager" method="_on_attack_1_cooldown_timer_timeout"]
 [connection signal="timeout" from="AttackManager/Attack2CooldownTimer" to="AttackManager" method="_on_attack_2_cooldown_timer_timeout"]
 [connection signal="timeout" from="AttackManager/Attack3CooldownTimer" to="AttackManager" method="_on_attack_3_cooldown_timer_timeout"]
 [connection signal="timeout" from="AttackManager/Attack1ComboTimer" to="AttackManager" method="_on_attack_1_combo_timer_timeout"]
 [connection signal="timeout" from="AttackManager/Attack2ComboTimer" to="AttackManager" method="_on_attack_2_combo_timer_timeout"]
+[connection signal="timeout" from="AttackManager/ChargedAttack1ChargeTimer" to="AttackManager" method="_on_charged_attack_1_charge_timer_timeout"]
+[connection signal="timeout" from="AttackManager/ChargedAttack1CooldownTimer" to="AttackManager" method="_on_charged_attack_1_cooldown_timer_timeout"]
