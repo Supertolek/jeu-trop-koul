@@ -1,10 +1,11 @@
-[gd_scene load_steps=50 format=3 uid="uid://d0wegsgalj7fw"]
+[gd_scene load_steps=55 format=3 uid="uid://d0wegsgalj7fw"]
 
 [ext_resource type="Script" uid="uid://b71jm1s376ygx" path="res://scripts/entities/player.gd" id="1_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://di16o7owigvc3" path="res://assets/Player/Blue/blue_player_animation.png" id="2_qlg0r"]
 [ext_resource type="Script" uid="uid://joqox6ucrsxk" path="res://Player/scripts/sprite.gd" id="3_qlg0r"]
 [ext_resource type="Script" uid="uid://cqohgdxcvdpea" path="res://Player/scripts/player_animation_tree.gd" id="4_qlg0r"]
 [ext_resource type="Script" uid="uid://dfhps0n71514o" path="res://Player/scripts/attack_manager.gd" id="5_qlg0r"]
+[ext_resource type="Script" uid="uid://7466sm4n7pi5" path="res://Player/scripts/player_hit_box_area.gd" id="6_tuyoq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qhqgy"]
 size = Vector2(22, 9)
@@ -913,15 +914,29 @@ _data = {
 &"walk_up": SubResource("Animation_smehm")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_smehm"]
+size = Vector2(30, 35)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qlg0r"]
+size = Vector2(64, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tuyoq"]
+size = Vector2(64, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fjrip"]
+size = Vector2(28, 37)
+
 [node name="Player" type="CharacterBody2D"]
-collision_layer = 0
+collision_layer = 2
 script = ExtResource("1_qhqgy")
+color = null
+health = null
 
 [node name="SpriteReflexion" type="Sprite2D" parent="."]
 unique_name_in_owner = true
 self_modulate = Color(1, 1, 1, 0.313726)
 z_index = -1
-position = Vector2(0, 32)
+position = Vector2(0, 16)
 scale = Vector2(2, 2)
 texture = ExtResource("2_qlg0r")
 flip_v = true
@@ -931,6 +946,7 @@ frame = 288
 
 [node name="Sprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
+position = Vector2(0, -16)
 scale = Vector2(2, 2)
 texture = ExtResource("2_qlg0r")
 hframes = 36
@@ -938,7 +954,8 @@ vframes = 36
 script = ExtResource("3_qlg0r")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 13.5)
+visible = false
+position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_qhqgy")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -970,7 +987,7 @@ one_shot = true
 
 [node name="Attack3CooldownTimer" type="Timer" parent="AttackManager"]
 unique_name_in_owner = true
-wait_time = 0.8
+wait_time = 0.7
 one_shot = true
 
 [node name="Attack1ComboTimer" type="Timer" parent="AttackManager"]
@@ -989,8 +1006,107 @@ one_shot = true
 
 [node name="ChargedAttack1CooldownTimer" type="Timer" parent="AttackManager"]
 unique_name_in_owner = true
-wait_time = 1.1
+wait_time = 0.7
 one_shot = true
+
+[node name="player_hit_box_area" type="Area2D" parent="AttackManager"]
+unique_name_in_owner = true
+visible = false
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("6_tuyoq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackManager/player_hit_box_area"]
+position = Vector2(0, -16.5)
+shape = SubResource("RectangleShape2D_smehm")
+
+[node name="attack_1_area" type="Area2D" parent="AttackManager"]
+unique_name_in_owner = true
+visible = false
+position = Vector2(0, -10)
+collision_layer = 4
+collision_mask = 2
+
+[node name="down" type="CollisionShape2D" parent="AttackManager/attack_1_area"]
+position = Vector2(0, 16)
+shape = SubResource("RectangleShape2D_qlg0r")
+disabled = true
+
+[node name="right" type="CollisionShape2D" parent="AttackManager/attack_1_area"]
+position = Vector2(21, -5)
+rotation = -1.57079
+shape = SubResource("RectangleShape2D_qlg0r")
+disabled = true
+
+[node name="up" type="CollisionShape2D" parent="AttackManager/attack_1_area"]
+position = Vector2(0, -25)
+shape = SubResource("RectangleShape2D_qlg0r")
+disabled = true
+
+[node name="left" type="CollisionShape2D" parent="AttackManager/attack_1_area"]
+position = Vector2(-21, -5)
+rotation = -1.57079
+shape = SubResource("RectangleShape2D_qlg0r")
+disabled = true
+
+[node name="attack_2_area" type="Area2D" parent="AttackManager"]
+unique_name_in_owner = true
+visible = false
+position = Vector2(0, -10)
+collision_layer = 4
+collision_mask = 2
+
+[node name="down" type="CollisionShape2D" parent="AttackManager/attack_2_area"]
+position = Vector2(0, 16)
+shape = SubResource("RectangleShape2D_tuyoq")
+disabled = true
+
+[node name="right" type="CollisionShape2D" parent="AttackManager/attack_2_area"]
+position = Vector2(21, -5)
+rotation = 1.57079
+shape = SubResource("RectangleShape2D_tuyoq")
+disabled = true
+
+[node name="up" type="CollisionShape2D" parent="AttackManager/attack_2_area"]
+position = Vector2(0, -25)
+shape = SubResource("RectangleShape2D_tuyoq")
+disabled = true
+
+[node name="left" type="CollisionShape2D" parent="AttackManager/attack_2_area"]
+position = Vector2(-21, -5)
+rotation = 1.57079
+shape = SubResource("RectangleShape2D_tuyoq")
+disabled = true
+
+[node name="attack_3_area" type="Area2D" parent="AttackManager"]
+unique_name_in_owner = true
+visible = false
+position = Vector2(0, -10)
+collision_layer = 4
+collision_mask = 2
+
+[node name="down" type="CollisionShape2D" parent="AttackManager/attack_3_area"]
+position = Vector2(0, 29)
+shape = SubResource("RectangleShape2D_fjrip")
+disabled = true
+
+[node name="right" type="CollisionShape2D" parent="AttackManager/attack_3_area"]
+position = Vector2(33, -1)
+rotation = -1.57079
+shape = SubResource("RectangleShape2D_fjrip")
+disabled = true
+
+[node name="up" type="CollisionShape2D" parent="AttackManager/attack_3_area"]
+position = Vector2(0, -36)
+rotation = -3.14159
+shape = SubResource("RectangleShape2D_fjrip")
+disabled = true
+
+[node name="left" type="CollisionShape2D" parent="AttackManager/attack_3_area"]
+position = Vector2(-33, 0)
+rotation = -1.57079
+shape = SubResource("RectangleShape2D_fjrip")
+disabled = true
 
 [node name="HealthRegenerationTimer" type="Timer" parent="."]
 unique_name_in_owner = true
@@ -1004,4 +1120,7 @@ autostart = true
 [connection signal="timeout" from="AttackManager/Attack2ComboTimer" to="AttackManager" method="_on_attack_2_combo_timer_timeout"]
 [connection signal="timeout" from="AttackManager/ChargedAttack1ChargeTimer" to="AttackManager" method="_on_charged_attack_1_charge_timer_timeout"]
 [connection signal="timeout" from="AttackManager/ChargedAttack1CooldownTimer" to="AttackManager" method="_on_charged_attack_1_cooldown_timer_timeout"]
+[connection signal="area_entered" from="AttackManager/attack_1_area" to="AttackManager" method="_on_attack_1_area_area_entered"]
+[connection signal="area_entered" from="AttackManager/attack_2_area" to="AttackManager" method="_on_attack_2_area_area_entered"]
+[connection signal="area_entered" from="AttackManager/attack_3_area" to="AttackManager" method="_on_attack_3_area_area_entered"]
 [connection signal="timeout" from="HealthRegenerationTimer" to="." method="_on_health_regeneration_timer_timeout"]

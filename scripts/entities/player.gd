@@ -9,6 +9,15 @@ var is_moving: bool = false
 var device_id: int
 @onready var sprite: Sprite2D = %Sprite
 @onready var attack_manager: Node2D = %AttackManager
+@onready var player_animation: Node2D = %PlayerAnimation
+
+
+var direction: String = 'down':
+	set(value):
+		if value != direction:
+			var actual_time = player_animation.animation_player.current_animation_position
+			direction = value
+			player_animation.play(player_animation.state,actual_time)
 
 @onready var health_regeneration_timer: Timer = %HealthRegenerationTimer
 
@@ -38,8 +47,8 @@ func _physics_process(delta: float) -> void:
 		).normalized()
 		if direction.length() <= 0.3:
 			direction = Vector2.ZERO
-	if attack_manager.is_holding_long_enought:
-		direction = Vector2.ZERO
+	if attack_manager.charged_attack_1_is_charged:
+		direction /= 4
 	if direction:
 		is_moving = true
 	else:
@@ -68,7 +77,7 @@ func _input(event: InputEvent) -> void:
 		attack_manager.attack_pressed()
 	if event.is_action_released("attack"):
 		hold_actions.erase("attack")
-		hit_player(enemy)
+		#hit_player(enemy)
 		attack_manager.attack_released()
 	if event.is_action_pressed("right_click"):
 		hit(-1)
@@ -79,17 +88,18 @@ func _input(event: InputEvent) -> void:
 
 
 
-func hit(damage: float):
+func hit(damage: float, damage_mult:float = 1):
 	var damage_reduction: float = 0
+	damage *= damage_mult
 	if damage > 0:
 		damage_reduction = (player_stats.stat_defense * damage) / (player_stats.stat_defense + 50)
 	var effective_damage = snappedf(damage - damage_reduction,0.1)
 	player_stats.stat_effective_health = clamp(player_stats.stat_effective_health - effective_damage, 0, player_stats.stat_max_health)
-	#print(player_stats.stat_effective_health,'/',player_stats.stat_max_health)
+
 	GameController.health_change(self)
 	
-func hit_player(target_player: Player):
-	target_player.hit(GlobalItemsMgmt.calculate_damage(player_stats))
+func hit_player(target_player: Player, damage_mult:float = 1):
+	target_player.hit(GlobalItemsMgmt.calculate_damage(player_stats), damage_mult)
 
 
 

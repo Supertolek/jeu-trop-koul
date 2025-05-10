@@ -5,7 +5,10 @@ class_name DoorObjects
 
 @export var door_type: GlobalObjectsMgmt.DOOR_TYPE = GlobalObjectsMgmt.DOOR_TYPE.METAL:
 	set(value):
+
 		door_type = value
+		if !Engine.is_editor_hint(): return
+		#if !is_scene_ready: return
 		metal_door.visible = false
 		wall_door.visible = false
 		wooden_door.visible = false
@@ -31,7 +34,6 @@ class_name DoorObjects
 @export_group('Internal')
 @export_tool_button("Open") var open_button = open_door
 @export_tool_button("Close") var close_button = close_door
-
 @onready var metal_door: Sprite2D = %metal_door
 @onready var wall_door: Sprite2D = %wall_door
 @onready var wooden_door: Sprite2D = %wooden_door
@@ -40,23 +42,27 @@ class_name DoorObjects
 @onready var wall_animation_player: AnimationPlayer = %wall_animation_player
 @onready var wooden_animation_player: AnimationPlayer = %wooden_animation_player
 @onready var open: bool = door_open_default
+var is_scene_ready: bool = false
 
-
+func _ready() -> void:
+	is_scene_ready = true
 
 func open_door():
+	if !is_scene_ready: return
 	if open: return
 	match door_type:
-			GlobalObjectsMgmt.DOOR_TYPE.METAL:
-				metal_animation_player.play('open')
-			GlobalObjectsMgmt.DOOR_TYPE.WALL:
-				wall_animation_player.play('open')
-			GlobalObjectsMgmt.DOOR_TYPE.WOODEN:
-				wooden_animation_player.play('open')
+		GlobalObjectsMgmt.DOOR_TYPE.METAL:
+			metal_animation_player.play('open')
+		GlobalObjectsMgmt.DOOR_TYPE.WALL:
+			wall_animation_player.play('open')
+		GlobalObjectsMgmt.DOOR_TYPE.WOODEN:
+			wooden_animation_player.play('open')
 	door_open_default = true
 	open = true
 				
 		
 func close_door():
+	if !is_scene_ready: return
 	if !open: return
 	match door_type:
 			GlobalObjectsMgmt.DOOR_TYPE.METAL:

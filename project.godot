@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 Global="*res://scripts/global_scripts/global.gd"
 GlobalItemsMgmt="*res://scripts/global_scripts/GlobalItemsMgmt.gd"
 GlobalObjectsMgmt="*res://scripts/global_scripts/GlobalObjectsMgmt.gd"
+GlobalPlayerMgmt="*res://scripts/global_scripts/GlobalPlayerMgmt.gd"
 Popups="*res://scenes/popups.tscn"
 GameController="*res://scripts/global_scripts/GameController.gd"
 SignalBus="*res://scripts/global_scripts/SignalBus.gd"
@@ -99,6 +100,12 @@ open_inventory={
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":20,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
+
+[layer_names]
+
+2d_physics/layer_1="Wall"
+2d_physics/layer_2="Player"
+2d_physics/layer_3="Attacks"
 
 [rendering]
 

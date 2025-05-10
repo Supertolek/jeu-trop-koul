@@ -14,13 +14,6 @@ var state: String = 'idle':
 		state = value
 
 var last_facing_direction: Vector2 = Vector2(0,-1)
-var direction: String = '_down':
-	set(value):
-		if value != direction:
-			var actual_time = animation_player.current_animation_position
-			direction = value
-			play(state,actual_time)
-			
 		
 var attack_direction: String
 
@@ -31,15 +24,18 @@ func _ready() -> void:
 func _process(_delta: float) -> void: 
 
 	if player.velocity.length()>=0.3:
+		if attack_manager.is_holding_long_enought and !attack_manager.charged_attack_1_is_charged: return
+		if attack_manager.is_attack_animation_playing() and !attack_manager.charged_attack_1_is_charged:
+			state = 'run'
 		var angle = rad_to_deg(atan2(player.velocity.x, player.velocity.y))
 		if -45 <= angle and angle < 45:
-			direction = '_down'
+			player.direction = 'down'
 		elif 45 <= angle and angle < 135:
-			direction = '_right'
+			player.direction = 'right'
 		elif 135 <= angle or angle < -135:
-			direction = '_up'
+			player.direction = 'up'
 		elif -135 <= angle and angle < -45:
-			direction = '_left'
+			player.direction = 'left'
 		if !attack_manager.is_attacking:
 			state = 'run'
 	else:
@@ -53,22 +49,22 @@ func get_attack_direction():
 	var angle = rad_to_deg(atan2(mouse_coord.x, mouse_coord.y))
 	
 	if -45 <= angle and angle < 45:
-		return '_down'
+		return 'down'
 	elif 45 <= angle and angle < 135:
-		return '_right'
+		return 'right'
 	elif 135 <= angle or angle < -135:
-		return '_up'
+		return 'up'
 	elif -135 <= angle and angle < -45:
-		return '_left'
+		return 'left'
 	
 
 func play(animation:String, start_time=-1):
 	if animation in ["falling","raising","standby"]:
 		animation_player.play(animation)
 	elif animation.contains('attack'):
-		animation_player.play_section(animation + direction,start_time)
+		animation_player.play_section(animation + '_' + player.direction,start_time)
 	else:
-		animation_player.play_section(animation + direction,start_time)
+		animation_player.play_section(animation + '_' + player.direction,start_time)
 		
 		
 	if start_time != -1:
