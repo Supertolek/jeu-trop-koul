@@ -57,8 +57,14 @@ var attack_2_combo_in_cooldown: bool = false:
 
 
 func attack_keep_pressed():
-	pass
-		
+	if current_combo == 0:
+		is_attacking = true
+		is_holding = true
+		current_combo = -1
+		charged_attack_1_charge_timer.start()
+		player_animation.state = 'start_charge_attack_1'
+		await get_tree().create_timer(0.2).timeout
+		is_holding_long_enought = true
 
 func attack_pressed():
 	
@@ -78,38 +84,47 @@ func attack_released():
 		charged_attack_1_cooldown_timer.start()
 		player_animation.state = 'charged_attack_1'
 		charged_attack_1_is_charged = false
-		is_holding_long_enought = false
 		is_holding = false
 		return
 		
 	match current_combo:
+		-1:
+			attack_1_in_cooldown = true
+			attack_1_combo_in_cooldown = true
+			current_combo = 1
+			is_holding_long_enought = true
 		0:
 			attack_1_in_cooldown = true
 			attack_1_combo_in_cooldown = true
 			current_combo = 1
+			is_holding_long_enought = true
 		1:
 			attack_2_in_cooldown = true
 			attack_2_combo_in_cooldown = true
 			current_combo = 2
+			is_holding_long_enought = true
 		2:
 			attack_3_in_cooldown = true
 			current_combo = 3
+			is_holding_long_enought = true
 	player_animation.state = 'attack_'+str(current_combo)
 	is_holding = false
-	is_holding_long_enought = false
 
 
 
 func _on_attack_1_cooldown_timer_timeout() -> void:
 	attack_1_in_cooldown = false
+	is_holding_long_enought = false
 
 
 func _on_attack_2_cooldown_timer_timeout() -> void:
 	attack_2_in_cooldown = false
+	is_holding_long_enought = false
 
 
 func _on_attack_3_cooldown_timer_timeout() -> void:
 	attack_3_in_cooldown = false
+	is_holding_long_enought = false
 	current_combo = 0
 	is_attacking = false
 
@@ -134,4 +149,6 @@ func _on_charged_attack_1_charge_timer_timeout() -> void:
 
 
 func _on_charged_attack_1_cooldown_timer_timeout() -> void:
+	current_combo = 0
 	is_attacking = false
+	is_holding_long_enought = false

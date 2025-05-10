@@ -6,14 +6,23 @@ var max_speed: int = 45 * player_scale
 var acceleration: int = 7 * player_scale
 var friction: int = 10 * player_scale
 var is_moving: bool = false
-var device_id: int = -2
+var device_id: int
 @onready var sprite: Sprite2D = %Sprite
 @onready var attack_manager: Node2D = %AttackManager
 
+@onready var health_regeneration_timer: Timer = %HealthRegenerationTimer
+
 @export_enum('Blue','Green','Black','Red') var color: String = 'Blue'
+var enemy: Player
+
+var hold_actions:Array[String] = []
+
+
 
 func _ready() -> void:
 	calculate_all_stats(false)
+	player_stats.stat_effective_health = player_stats.stat_max_health
+	
 	
 func _physics_process(delta: float) -> void:
 	var direction: Vector2
@@ -26,8 +35,8 @@ func _physics_process(delta: float) -> void:
 		direction = Vector2(
 			Input.get_joy_axis(device_id, JOY_AXIS_LEFT_X),
 			Input.get_joy_axis(device_id, JOY_AXIS_LEFT_Y),
-		)
-		if direction.length() <= 0.15:
+		).normalized()
+		if direction.length() <= 0.3:
 			direction = Vector2.ZERO
 	if attack_manager.is_holding_long_enought:
 		direction = Vector2.ZERO
@@ -42,12 +51,45 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("attack"):
-		attack_manager.attack_pressed()
-	if Input.is_action_pressed("attack"):
+	if "attack" in hold_actions:
 		attack_manager.attack_keep_pressed()
-	if Input.is_action_just_released("attack"):
+		
+		
+func _input(event: InputEvent) -> void:
+	# Gros if statement pour séparer les inputs des joueurs
+	if (!(event is InputEventKey or event is InputEventMouse) and device_id == -2) or\
+	 ((event is InputEventKey or event is InputEventMouse) and device_id >=0) or\
+	(device_id >= 0 and event.device != device_id): return
+	
+	# Mettre les Inputs ici
+	
+	if event.is_action_pressed("attack"):
+		hold_actions.append("attack")
+		attack_manager.attack_pressed()
+	if event.is_action_released("attack"):
+		hold_actions.erase("attack")
+		hit_player(enemy)
 		attack_manager.attack_released()
+	if event.is_action_pressed("right_click"):
+		hit(-1)
+		
+		
+			
+		
+
+
+
+func hit(damage: float):
+	var damage_reduction: float = 0
+	if damage > 0:
+		damage_reduction = (player_stats.stat_defense * damage) / (player_stats.stat_defense + 50)
+	var effective_damage = snappedf(damage - damage_reduction,0.1)
+	player_stats.stat_effective_health = clamp(player_stats.stat_effective_health - effective_damage, 0, player_stats.stat_max_health)
+	#print(player_stats.stat_effective_health,'/',player_stats.stat_max_health)
+	GameController.health_change(self)
+	
+func hit_player(target_player: Player):
+	target_player.hit(GlobalItemsMgmt.calculate_damage(player_stats))
 
 
 
@@ -57,9 +99,19 @@ func _process(_delta: float) -> void:
 
 
 
+
+
+
+
+
+
+
+
+
+var is_inventory_open: bool = false
 var inventory_storage: Dictionary = {
-	"equiped_weapon" : load("res://Resources/Items/Weapon/test_sword.tres").duplicate(),
-	"equiped_armor": load("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
+	"equiped_weapon" :null,# load("res://Resources/Items/Weapon/test_sword.tres").duplicate(),
+	"equiped_armor":null,# load("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
 	"inventory": [
 		preload("res://Resources/Items/Items_Modifiers/ham.tres").duplicate(),
 		preload("res://Resources/Items/Items_Modifiers/attack_of_some.tres").duplicate(),
@@ -88,6 +140,8 @@ func calculate_all_stats(display_in_console:bool = false):
 	equipements.append(current_weapon)
 	var calculated_stats: StatsSheet = StatsSheet.new()
 	for equipement  in equipements:
+		if equipement == null:
+			continue
 		match equipement.class_type:
 			GlobalItemsMgmt.TYPE_OF_ITEMS.WEAPON:
 				if display_in_console: print(equipement.name.to_upper())
@@ -99,5 +153,14 @@ func calculate_all_stats(display_in_console:bool = false):
 			GlobalItemsMgmt.TYPE_OF_ITEMS.STATS_SHEET:
 				if display_in_console: print('Base Stats'.to_upper())
 				calculated_stats = GlobalItemsMgmt.merge_stats_sheet(calculated_stats,equipement,display_in_console)
+			
 	GlobalItemsMgmt.display_stats_sheet(calculated_stats)
 	player_stats = calculated_stats
+	apply_stat()
+
+func apply_stat():
+	health_regeneration_timer.wait_time = -log(clamp(player_stats.stat_health_regeneration,0,100))/3 + 2
+	print(health_regeneration_timer.wait_time)
+
+func _on_health_regeneration_timer_timeout() -> void:
+	hit(-player_stats.stat_max_health/50)
