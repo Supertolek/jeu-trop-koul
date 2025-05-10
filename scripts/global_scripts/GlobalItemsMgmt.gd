@@ -73,14 +73,30 @@ func merge_stats_sheet(first_SS:StatsSheet, second_SS:StatsSheet, display_in_con
 						merged_SS[stat_name] = first_SS[stat_name]
 	if display_in_console: print()
 	return merged_SS
+	
+	
 
 var default_player_stats: StatsSheet = StatsSheet.new()
 func _ready() -> void:
-	default_player_stats.stat_max_health = 10
-	default_player_stats.stat_defense = 5
-	default_player_stats.stat_attack = 10
+	default_player_stats.stat_max_health = 20
+	default_player_stats.stat_defense = 0
+	default_player_stats.stat_health_regeneration = 1  # 0 signifie aucune régénération 
+	default_player_stats.stat_attack = 1
 	default_player_stats.stat_strength = 1
 	default_player_stats.stat_crit_chance = 0
 	default_player_stats.stat_crit_damage = 0
 	default_player_stats.stat_attack_speed = 1
 	default_player_stats.stat_speed = 10
+
+func calculate_crit_damage(player_stats_sheet:StatsSheet):
+	var crit_chance = clamp(player_stats_sheet.stat_crit_chance,0,100)
+	var crit_damage = clamp(player_stats_sheet.stat_crit_damage,0,400)
+	if randi_range(0,99) < crit_chance:
+		return 1+(crit_damage/100)
+	else:
+		return 1
+
+func calculate_damage(player_stats_sheet:StatsSheet) -> float:
+	var attack = clamp(player_stats_sheet.stat_attack,1,100)
+	var strength = clamp(player_stats_sheet.stat_strength,0.05,10)
+	return attack * strength * calculate_crit_damage(player_stats_sheet)

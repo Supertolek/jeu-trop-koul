@@ -23,17 +23,30 @@ var attack_1_in_cooldown: bool = false:
 	set(value):
 		attack_1_in_cooldown = value
 		if value:
+			directionate_attack(attack_1_area)
+			is_attack_1_animation_playing = true
 			attack_1_cooldown_timer.start()
+		else:
+			directionate_attack(attack_1_area,true)
 var attack_2_in_cooldown: bool = false:
 	set(value):
 		attack_2_in_cooldown = value
 		if value:
+			directionate_attack(attack_2_area)
+			is_attack_2_animation_playing = true
 			attack_2_cooldown_timer.start()
+		else:
+			directionate_attack(attack_2_area,true)
 var attack_3_in_cooldown: bool = false:
 	set(value):
 		attack_3_in_cooldown = value
 		if value:
+			directionate_attack(attack_3_area)
+			is_attack_3_animation_playing = true
 			attack_3_cooldown_timer.start()
+		else:
+			directionate_attack(attack_3_area,true)
+
 var attack_1_combo_in_cooldown: bool = false:
 	set(value):
 		attack_1_combo_in_cooldown = value
@@ -46,22 +59,60 @@ var attack_2_combo_in_cooldown: bool = false:
 			attack_2_combo_timer.start()
 @onready var player_animation: Node2D = %PlayerAnimation
 
+@onready var player_hit_box_area: Area2D = %player_hit_box_area
+@onready var attack_1_area: Area2D = %attack_1_area
+@onready var attack_2_area: Area2D = %attack_2_area
+@onready var attack_3_area: Area2D = %attack_3_area
+
 @onready var attack_1_cooldown_timer: Timer = %Attack1CooldownTimer
 @onready var attack_2_cooldown_timer: Timer = %Attack2CooldownTimer
 @onready var attack_3_cooldown_timer: Timer = %Attack3CooldownTimer
 @onready var attack_1_combo_timer: Timer = %Attack1ComboTimer
 @onready var attack_2_combo_timer: Timer = %Attack2ComboTimer
 
+var is_attack_1_animation_playing: bool = false:
+	set(value):
+		is_attack_1_animation_playing = value
+		if value:
+			await get_tree().create_timer(attack_1_duration).timeout
+			is_attack_1_animation_playing = false
+var is_attack_2_animation_playing: bool = false:
+	set(value):
+		is_attack_2_animation_playing = value
+		if value:
+			await get_tree().create_timer(attack_2_duration).timeout
+			is_attack_2_animation_playing = false
+var is_attack_3_animation_playing: bool = false:
+	set(value):
+		is_attack_3_animation_playing = value
+		if value:
+			await get_tree().create_timer(attack_3_duration).timeout
+			is_attack_3_animation_playing = false
+
+func is_attack_animation_playing():
+	print(is_holding)
+	if is_attack_1_animation_playing or is_attack_2_animation_playing or is_attack_3_animation_playing or is_holding:
+		return true
+	else:
+		return false
+
 @onready var charged_attack_1_charge_timer: Timer = %ChargedAttack1ChargeTimer
 @onready var charged_attack_1_cooldown_timer: Timer = %ChargedAttack1CooldownTimer
 
 
 func attack_keep_pressed():
-	pass
-		
+	if current_combo == 0:
+		is_attacking = true
+		is_holding = true
+		current_combo = -1
+		charged_attack_1_charge_timer.start()
+		player_animation.state = 'start_charge_attack_1'
+		await get_tree().create_timer(0.2).timeout
+		is_holding_long_enought = true
 
 func attack_pressed():
 	
+	if is_attacking: return
 	is_attacking = true
 	is_holding = true
 	if current_combo == 0:
@@ -71,6 +122,7 @@ func attack_pressed():
 		is_holding_long_enought = true
 		
 func attack_released():
+	print('RELEASED')
 	charged_attack_1_charge_timer.stop()
 	if attack_1_in_cooldown or attack_2_in_cooldown or attack_3_in_cooldown:
 		return
@@ -78,40 +130,64 @@ func attack_released():
 		charged_attack_1_cooldown_timer.start()
 		player_animation.state = 'charged_attack_1'
 		charged_attack_1_is_charged = false
-		is_holding_long_enought = false
 		is_holding = false
 		return
 		
 	match current_combo:
+		-1:
+			attack_1_in_cooldown = true
+			attack_1_combo_in_cooldown = true
+			current_combo = 1
+			is_holding_long_enought = true
 		0:
 			attack_1_in_cooldown = true
 			attack_1_combo_in_cooldown = true
 			current_combo = 1
+			is_holding_long_enought = true
 		1:
 			attack_2_in_cooldown = true
 			attack_2_combo_in_cooldown = true
 			current_combo = 2
+			is_holding_long_enought = true
 		2:
 			attack_3_in_cooldown = true
 			current_combo = 3
+			is_holding_long_enought = true
 	player_animation.state = 'attack_'+str(current_combo)
 	is_holding = false
-	is_holding_long_enought = false
 
+func directionate_attack(attack_area, reset:bool = false):
+	if reset:
+		attack_area.visible = false
+		for hit_box in attack_area.get_children():
+			hit_box.disabled = true
+		return
+	#attack_area.visible = true
+	match owner.direction:
+		'up':
+			attack_area.get_node("up").disabled = false
+		'down':
+			attack_area.get_node("down").disabled = false
+		'left':
+			attack_area.get_node("left").disabled = false
+		'right':
+			attack_area.get_node("right").disabled = false
+		
 
 
 func _on_attack_1_cooldown_timer_timeout() -> void:
 	attack_1_in_cooldown = false
-
+	is_holding_long_enought = false
 
 func _on_attack_2_cooldown_timer_timeout() -> void:
 	attack_2_in_cooldown = false
+	is_holding_long_enought = false
 
 
 func _on_attack_3_cooldown_timer_timeout() -> void:
 	attack_3_in_cooldown = false
+	is_holding_long_enought = false
 	current_combo = 0
-	is_attacking = false
 
 
 func _on_attack_1_combo_timer_timeout() -> void:
@@ -134,4 +210,24 @@ func _on_charged_attack_1_charge_timer_timeout() -> void:
 
 
 func _on_charged_attack_1_cooldown_timer_timeout() -> void:
+	current_combo = 0
 	is_attacking = false
+	is_holding_long_enought = false
+
+
+func _on_attack_1_area_area_entered(area: Area2D) -> void:
+	if area is PlayerHitBoxArea:
+		if area == player_hit_box_area: return
+		owner.hit_player(area.owner)
+
+
+func _on_attack_2_area_area_entered(area: Area2D) -> void:
+	if area is PlayerHitBoxArea:
+		if area == player_hit_box_area: return
+		owner.hit_player(area.owner, 1.1)
+
+
+func _on_attack_3_area_area_entered(area: Area2D) -> void:
+	if area is PlayerHitBoxArea:
+		if area == player_hit_box_area: return
+		owner.hit_player(area.owner, 3)
