@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="jeu-trop-koul"
-run/main_scene="res://scenes/game.tscn"
+run/main_scene="uid://bnnkapk2jefsc"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -24,6 +24,7 @@ GlobalPlayerMgmt="*res://scripts/global_scripts/GlobalPlayerMgmt.gd"
 Popups="*res://scenes/popups.tscn"
 GameController="*res://scripts/global_scripts/GameController.gd"
 SignalBus="*res://scripts/global_scripts/SignalBus.gd"
+GameManager="*res://scripts/game_managing/game_manager.gd"
 
 [display]
 

@@ -51,9 +51,10 @@ func _physics_process(delta: float) -> void:
 			direction = Vector2(
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_X),
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_Y),
-			).normalized()
+			)
 			if direction.length() <= 0.3:
 				direction = Vector2.ZERO
+			direction = direction.normalized()
 		if attack_manager.charged_attack_1_is_charged:
 			direction /= 4
 		if direction:

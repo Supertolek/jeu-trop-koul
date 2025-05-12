@@ -1,3 +1,4 @@
+class_name GameMaster
 extends Node2D
 
 
@@ -6,10 +7,12 @@ extends Node2D
 #@onready var health_bar_0: HealthBar = %HealthBar0
 #@onready var health_bar_1: HealthBar = %HealthBar1
 
-@export var map_data: MapData
+@export var map_data: MapData = load("res://maps/output.tres")
 
 @export var players: Array[Player]
 var running: bool = false
+
+var delay_before_start: int = -1
 
 func load_game(players_list: Array[Player], round_duration_s: float):
 	%GameFinishTimer.wait_time = round_duration_s
@@ -50,7 +53,12 @@ func save_map_data() -> MapData:
 func _input(event: InputEvent) -> void:
 	if event.as_text() == "Left Mouse Button":
 		ResourceSaver.save(save_map_data(), "res://maps/output.tres")
-#
+
+func _ready() -> void:
+	if delay_before_start >= 0:
+		%GameStartDelay.connect("timeout", start_game)
+		%GameStartDelay.start(delay_before_start)
+
 #func open_close_inventory(_player:Player):
 	#var player_id = Global.players.find(_player)
 	#if _player.is_inventory_open:

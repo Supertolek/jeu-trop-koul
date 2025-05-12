@@ -11,7 +11,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_lapbl")
 
-[node name="Button" type="Button" parent="."]
+[node name="PlayButton" type="Button" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -25,3 +26,5 @@ offset_bottom = 15.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Jouer"
+
+[connection signal="pressed" from="PlayButton" to="." method="launch_game"]

@@ -186,7 +186,7 @@ offset_left = -3000.0
 offset_top = -3000.0
 offset_right = -3000.0
 offset_bottom = -3000.0
-players = [NodePath("../Player"), NodePath("../Player2")]
+players = [NodePath("../Player"), NodePath("../Player2"), NodePath("../Player3")]
 
 [node name="Player" parent="." instance=ExtResource("9_0tnpc")]
 position = Vector2(191, 451)
@@ -194,7 +194,14 @@ device_id = -2
 
 [node name="Player2" parent="." instance=ExtResource("9_0tnpc")]
 position = Vector2(1053, 314)
-device_id = -2
 
-[node name="GameFinishTimer" type="Timer" parent="."]
+[node name="Player3" parent="." instance=ExtResource("9_0tnpc")]
+device_id = 1
+
+[node name="Timers" type="Node" parent="."]
+
+[node name="GameFinishTimer" type="Timer" parent="Timers"]
+unique_name_in_owner = true
+
+[node name="GameStartDelay" type="Timer" parent="Timers"]
 unique_name_in_owner = true
