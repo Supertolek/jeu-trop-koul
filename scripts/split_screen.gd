@@ -33,6 +33,9 @@ func place_viewports(force: bool = false):
 	var childrens := get_children()
 	# Check if the reload is needed
 	if len(childrens) != len(players) or force:
+		# Replace the background
+		$ColorRect.global_position = global_position
+		$ColorRect.size = get_window().get_viewport().size
 		# Remove the viewports
 		for child in childrens:
 			if child is SubViewportContainer:
