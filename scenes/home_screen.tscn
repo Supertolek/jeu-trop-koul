@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnnkapk2jefsc"]
+
+[ext_resource type="Script" uid="uid://bjxn72k54g4nt" path="res://scripts/ui/home_screen.gd" id="1_lapbl"]
+
+[node name="HomeScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lapbl")
+
+[node name="PlayButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.5
+offset_top = -15.5
+offset_right = 24.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Jouer"
+
+[node name="PlayButton2" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.5
+offset_top = 24.5
+offset_right = 24.5
+offset_bottom = 55.5
+grow_horizontal = 2
+grow_vertical = 2
+disabled = true
+text = "Paramètres (Arrive avec la version 2.3)"
+
+[connection signal="pressed" from="PlayButton" to="." method="launch_game"]
+[connection signal="pressed" from="PlayButton2" to="." method="launch_game"]

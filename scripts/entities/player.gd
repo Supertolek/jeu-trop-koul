@@ -32,6 +32,12 @@ var enemy: Player
 
 var hold_actions:Array[String] = []
 
+@export var frozen: bool = false
+
+@onready var linked_camera: Camera2D = $RoomCamera
+
+func get_camera() -> Camera2D:
+	return $RoomCamera
 
 
 func _ready() -> void:
@@ -40,7 +46,6 @@ func _ready() -> void:
 	
 	
 func _physics_process(delta: float) -> void:
-	
 	if device_id  == -2:
 		direction = Vector2(
 			Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
@@ -60,7 +65,6 @@ func _physics_process(delta: float) -> void:
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_X),
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_Y),
 			)
-		
 	# Gestion de la direction regardée par le joueur
 	if direction.is_zero_approx():
 		direction = Vector2.ZERO
@@ -97,7 +101,6 @@ func get_facing_direction(_direction = Vector2.ZERO):
 	else:
 		memory_facing_direction = _facing_direction
 		return facing_direction
-
 
 func _process(_delta: float) -> void:
 	pass
