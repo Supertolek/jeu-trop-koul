@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 Global="*res://scripts/global_scripts/global.gd"
 GlobalItemsMgmt="*res://scripts/global_scripts/GlobalItemsMgmt.gd"
 GlobalObjectsMgmt="*res://scripts/global_scripts/GlobalObjectsMgmt.gd"
+GlobalPlayerMgmt="*res://scripts/global_scripts/GlobalPlayerMgmt.gd"
 Popups="*res://scenes/popups.tscn"
 GameController="*res://scripts/global_scripts/GameController.gd"
 SignalBus="*res://scripts/global_scripts/SignalBus.gd"
@@ -27,7 +28,12 @@ SignalBus="*res://scripts/global_scripts/SignalBus.gd"
 [display]
 
 window/size/viewport_height=640
+window/size/always_on_top=true
 window/stretch/mode="viewport"
+
+[editor]
+
+movie_writer/movie_file="C:/Users/Bastien/Documents/club_informatique/jeu-trop-koul/records/record.avi"
 
 [input]
 
@@ -58,16 +64,19 @@ move_down={
 attack={
 "deadzone": 0.2,
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(202, 25),"global_position":Vector2(211, 73),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":2,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
 left_click={
 "deadzone": 0.2,
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(355, 12),"global_position":Vector2(364, 60),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":2,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
 right_click={
 "deadzone": 0.2,
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":2,"position":Vector2(169, 16),"global_position":Vector2(178, 64),"factor":1.0,"button_index":2,"canceled":false,"pressed":true,"double_click":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":1,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
 shift={
@@ -88,8 +97,15 @@ move_ui_right={
 open_inventory={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":73,"key_label":0,"unicode":105,"location":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":20,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
+
+[layer_names]
+
+2d_physics/layer_1="Wall"
+2d_physics/layer_2="Player"
+2d_physics/layer_3="Attacks"
 
 [rendering]
 
