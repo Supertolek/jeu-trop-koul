@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dqj16xg0bllwj" path="res://scripts/room_camera.gd" id="2_fjrip"]
 [ext_resource type="Texture2D" uid="uid://di16o7owigvc3" path="res://assets/Player/Blue/blue_player_animation.png" id="2_qlg0r"]
 [ext_resource type="Script" uid="uid://joqox6ucrsxk" path="res://Player/scripts/sprite.gd" id="3_qlg0r"]
-[ext_resource type="Script" uid="uid://cqohgdxcvdpea" path="res://Player/scripts/player_animation_tree.gd" id="4_qlg0r"]
+[ext_resource type="Script" uid="uid://cqohgdxcvdpea" path="res://Player/scripts/player_state_machine.gd" id="4_qlg0r"]
 [ext_resource type="Script" uid="uid://dfhps0n71514o" path="res://Player/scripts/attack_manager.gd" id="5_qlg0r"]
 [ext_resource type="Script" uid="uid://7466sm4n7pi5" path="res://Player/scripts/player_hit_box_area.gd" id="6_tuyoq"]
 
@@ -970,10 +970,9 @@ libraries = {
 }
 autoplay = "idle_down"
 
-[node name="PlayerAnimation" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+[node name="PlayerStateMachine" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_qlg0r")
-player = NodePath("..")
 
 [node name="AttackManager" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -994,11 +993,11 @@ unique_name_in_owner = true
 wait_time = 0.7
 one_shot = true
 
-[node name="Attack1ComboTimer" type="Timer" parent="AttackManager"]
+[node name="ComboTimer" type="Timer" parent="AttackManager"]
 unique_name_in_owner = true
 one_shot = true
 
-[node name="Attack2ComboTimer" type="Timer" parent="AttackManager"]
+[node name="AnimationTimer" type="Timer" parent="AttackManager"]
 unique_name_in_owner = true
 wait_time = 0.8
 one_shot = true
@@ -1120,8 +1119,8 @@ autostart = true
 [connection signal="timeout" from="AttackManager/Attack1CooldownTimer" to="AttackManager" method="_on_attack_1_cooldown_timer_timeout"]
 [connection signal="timeout" from="AttackManager/Attack2CooldownTimer" to="AttackManager" method="_on_attack_2_cooldown_timer_timeout"]
 [connection signal="timeout" from="AttackManager/Attack3CooldownTimer" to="AttackManager" method="_on_attack_3_cooldown_timer_timeout"]
-[connection signal="timeout" from="AttackManager/Attack1ComboTimer" to="AttackManager" method="_on_attack_1_combo_timer_timeout"]
-[connection signal="timeout" from="AttackManager/Attack2ComboTimer" to="AttackManager" method="_on_attack_2_combo_timer_timeout"]
+[connection signal="timeout" from="AttackManager/ComboTimer" to="AttackManager" method="_on_combo_timer_timeout"]
+[connection signal="timeout" from="AttackManager/AnimationTimer" to="AttackManager" method="_on_animation_timer_timeout"]
 [connection signal="timeout" from="AttackManager/ChargedAttack1ChargeTimer" to="AttackManager" method="_on_charged_attack_1_charge_timer_timeout"]
 [connection signal="timeout" from="AttackManager/ChargedAttack1CooldownTimer" to="AttackManager" method="_on_charged_attack_1_cooldown_timer_timeout"]
 [connection signal="area_entered" from="AttackManager/attack_1_area" to="AttackManager" method="_on_attack_1_area_area_entered"]

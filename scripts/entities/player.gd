@@ -1,23 +1,29 @@
-
 class_name Player
 extends Character 
 
 var max_speed: int = 45 * player_scale
 var acceleration: int = 7 * player_scale
 var friction: int = 10 * player_scale
+
 var is_moving: bool = false
-@export var device_id: int
+
+var device_id: int
+
+
 @onready var sprite: Sprite2D = %Sprite
-@onready var attack_manager: Node2D = %AttackManager
-@onready var player_animation: Node2D = %PlayerAnimation
+@onready var attack_manager: AttackManager = %AttackManager
+@onready var player_state_machine: PlayerStateMachine = %PlayerStateMachine
 
-
-var direction: String = 'down':
+var direction: Vector2
+var facing_direction: GlobalPlayerMgmt.PLAYER_DIRECTION = GlobalPlayerMgmt.PLAYER_DIRECTION.DOWN:
 	set(value):
-		if value != direction:
-			var actual_time = player_animation.animation_player.current_animation_position
-			direction = value
-			player_animation.play(player_animation.state,actual_time)
+		if value != facing_direction:
+			var actual_time = player_state_machine.animation_player.current_animation_position
+			facing_direction = value
+			if !attack_manager.is_attack_animation_played:
+				player_state_machine.play(player_state_machine.state,actual_time)
+var memory_facing_direction: GlobalPlayerMgmt.PLAYER_DIRECTION = facing_direction
+
 
 @onready var health_regeneration_timer: Timer = %HealthRegenerationTimer
 
@@ -40,36 +46,66 @@ func _ready() -> void:
 	
 	
 func _physics_process(delta: float) -> void:
-	if not frozen:
-		var direction: Vector2
-		if device_id == -2:
+	if device_id  == -2:
+		direction = Vector2(
+			Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
+			Input.get_action_strength("move_down") - Input.get_action_strength("move_up"),
+		).normalized()
+	elif device_id >= 0:
+		if Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_UP) or \
+		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_DOWN) or \
+		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_RIGHT) or \
+		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_LEFT):
 			direction = Vector2(
-				Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
-				Input.get_action_strength("move_down") - Input.get_action_strength("move_up"),
+				int(Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_RIGHT)) - int(Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_LEFT)),
+				int(Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_DOWN)) - int(Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_UP)),
 			).normalized()
-		elif device_id >= 0:
+		else:
 			direction = Vector2(
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_X),
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_Y),
 			)
-			if direction.length() <= 0.3:
-				direction = Vector2.ZERO
-			direction = direction.normalized()
-		if attack_manager.charged_attack_1_is_charged:
-			direction /= 4
-		if direction:
-			is_moving = true
-		else:
-			is_moving = false
-		
-		var lerp_weight = delta * (acceleration if direction else friction)
-		velocity = lerp(velocity, max_speed * direction, lerp_weight)
-		
-		move_and_slide()
+	# Gestion de la direction regardée par le joueur
+	if direction.is_zero_approx():
+		direction = Vector2.ZERO
+	else:
+		get_facing_direction()
+				
+	#if attack_manager.charged_attack_1_is_charged:
+		#direction /= 4
+	
+	var lerp_weight = delta * (acceleration if direction else friction)
+	velocity = lerp(velocity, max_speed * direction, lerp_weight)
+	move_and_slide()
+	
+	is_moving = !velocity.length() <= 0.3
+
+func get_facing_direction(_direction = Vector2.ZERO):
+	if _direction == Vector2.ZERO: _direction = direction
+	if _direction.length() <= 0.2: return facing_direction
+	var _facing_direction
+	var angle = _direction.rotated(PI/4).angle()
+	if 0 <= angle and angle < PI/2:
+		_facing_direction = GlobalPlayerMgmt.PLAYER_DIRECTION.RIGHT
+	elif PI/2 <= angle and angle < PI:
+		_facing_direction = GlobalPlayerMgmt.PLAYER_DIRECTION.DOWN
+	elif -PI <= angle and angle < -PI/2:
+		_facing_direction = GlobalPlayerMgmt.PLAYER_DIRECTION.LEFT
+	elif -PI/2 <= angle and angle < 0:
+		_facing_direction = GlobalPlayerMgmt.PLAYER_DIRECTION.UP
+	else:
+		_facing_direction = facing_direction
+	if !attack_manager.is_attack_animation_played:
+		facing_direction = _facing_direction
+		return facing_direction
+	else:
+		memory_facing_direction = _facing_direction
+		return facing_direction
 
 func _process(_delta: float) -> void:
-	if "attack" in hold_actions:
-		attack_manager.attack_keep_pressed()
+	pass
+	#if "lock_attack_direction" in hold_actions:
+		#attack_manager.attack_keep_pressed()
 		
 		
 func _input(event: InputEvent) -> void:
@@ -85,14 +121,19 @@ func _input(event: InputEvent) -> void:
 		attack_manager.attack_pressed()
 	if event.is_action_released("attack"):
 		hold_actions.erase("attack")
-		#hit_player(enemy)
 		attack_manager.attack_released()
 	if event.is_action_pressed("right_click"):
 		hit(-1)
+	if event.is_action_pressed("lock_attack_direction"):
+		attack_manager.lock_attack_direction()
+	if event.is_action_released("lock_attack_direction"):
+		attack_manager.unlock_attack_direction()
+		
 		
 		
 			
 		
+
 
 
 
