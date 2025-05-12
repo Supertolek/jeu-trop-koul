@@ -1,14 +1,20 @@
 extends Camera2D
 class_name RoomCamera
 
-@onready var screen_size: Vector2 = get_viewport_rect().size / zoom 
+@onready var screen_size: Vector2 = get_window().get_viewport().get_visible_rect().size / zoom
 #@export var player_node: CharacterBody2D
-var player_node: CharacterBody2D 
+@export var player_node: Player:
+	get:
+		return player_node
+	set(value):
+		player_node = value
+		if value:
+			value.linked_camera = self
 @export var offset_size: int = 96 
 @export var time_taken = 0.5
 
 func _ready() -> void:
-	player_node = Global.players[0]
+	#player_node = Global.players[0]
 	print(player_node)
 	set_screen_position()
 	#Wait until next frame

@@ -1,6 +1,7 @@
-[gd_scene load_steps=55 format=3 uid="uid://d0wegsgalj7fw"]
+[gd_scene load_steps=56 format=3 uid="uid://d0wegsgalj7fw"]
 
 [ext_resource type="Script" uid="uid://b71jm1s376ygx" path="res://scripts/entities/player.gd" id="1_qhqgy"]
+[ext_resource type="Script" uid="uid://dqj16xg0bllwj" path="res://scripts/room_camera.gd" id="2_fjrip"]
 [ext_resource type="Texture2D" uid="uid://di16o7owigvc3" path="res://assets/Player/Blue/blue_player_animation.png" id="2_qlg0r"]
 [ext_resource type="Script" uid="uid://joqox6ucrsxk" path="res://Player/scripts/sprite.gd" id="3_qlg0r"]
 [ext_resource type="Script" uid="uid://cqohgdxcvdpea" path="res://Player/scripts/player_animation_tree.gd" id="4_qlg0r"]
@@ -929,8 +930,11 @@ size = Vector2(28, 37)
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_qhqgy")
-color = null
-health = null
+
+[node name="RoomCamera" type="Camera2D" parent="." node_paths=PackedStringArray("player_node")]
+script = ExtResource("2_fjrip")
+player_node = NodePath("..")
+metadata/_custom_type_script = "uid://dqj16xg0bllwj"
 
 [node name="SpriteReflexion" type="Sprite2D" parent="."]
 unique_name_in_owner = true

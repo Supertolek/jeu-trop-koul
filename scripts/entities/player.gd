@@ -6,7 +6,7 @@ var max_speed: int = 45 * player_scale
 var acceleration: int = 7 * player_scale
 var friction: int = 10 * player_scale
 var is_moving: bool = false
-var device_id: int
+@export var device_id: int
 @onready var sprite: Sprite2D = %Sprite
 @onready var attack_manager: Node2D = %AttackManager
 @onready var player_animation: Node2D = %PlayerAnimation
@@ -26,6 +26,12 @@ var enemy: Player
 
 var hold_actions:Array[String] = []
 
+@export var frozen: bool = false
+
+@onready var linked_camera: Camera2D = $RoomCamera
+
+func get_camera() -> Camera2D:
+	return $RoomCamera
 
 
 func _ready() -> void:
@@ -34,30 +40,31 @@ func _ready() -> void:
 	
 	
 func _physics_process(delta: float) -> void:
-	var direction: Vector2
-	if device_id  == -2:
-		direction = Vector2(
-			Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
-			Input.get_action_strength("move_down") - Input.get_action_strength("move_up"),
-		).normalized()
-	elif device_id >= 0:
-		direction = Vector2(
-			Input.get_joy_axis(device_id, JOY_AXIS_LEFT_X),
-			Input.get_joy_axis(device_id, JOY_AXIS_LEFT_Y),
-		).normalized()
-		if direction.length() <= 0.3:
-			direction = Vector2.ZERO
-	if attack_manager.charged_attack_1_is_charged:
-		direction /= 4
-	if direction:
-		is_moving = true
-	else:
-		is_moving = false
-	
-	var lerp_weight = delta * (acceleration if direction else friction)
-	velocity = lerp(velocity, max_speed * direction, lerp_weight)
-	
-	move_and_slide()
+	if not frozen:
+		var direction: Vector2
+		if device_id == -2:
+			direction = Vector2(
+				Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
+				Input.get_action_strength("move_down") - Input.get_action_strength("move_up"),
+			).normalized()
+		elif device_id >= 0:
+			direction = Vector2(
+				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_X),
+				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_Y),
+			).normalized()
+			if direction.length() <= 0.3:
+				direction = Vector2.ZERO
+		if attack_manager.charged_attack_1_is_charged:
+			direction /= 4
+		if direction:
+			is_moving = true
+		else:
+			is_moving = false
+		
+		var lerp_weight = delta * (acceleration if direction else friction)
+		velocity = lerp(velocity, max_speed * direction, lerp_weight)
+		
+		move_and_slide()
 
 func _process(_delta: float) -> void:
 	if "attack" in hold_actions:

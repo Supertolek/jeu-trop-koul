@@ -13,9 +13,9 @@ func _ready() -> void:
 	
 	
 	
-	for _player in Global.players:
-		player = _player
-		add_child(player)
+	#for _player in Global.players:
+		#player = _player
+		#add_child(player)
 
 
 	
@@ -32,5 +32,5 @@ func _ready() -> void:
 
 func actualise_health_bar(_player: Player):
 	var player_id = Global.players.find(_player)
-	get("health_bar_"+str(player_id)).max_health = _player.player_stats.stat_max_health
-	get("health_bar_"+str(player_id)).health = _player.player_stats.stat_effective_health
+	#get("health_bar_"+str(player_id)).max_health = _player.player_stats.stat_max_health
+	#get("health_bar_"+str(player_id)).health = _player.player_stats.stat_effective_health
