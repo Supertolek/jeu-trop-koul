@@ -1,7 +1,6 @@
 extends Node
 
 
-
 func health_change(player:Player):
 	SignalBus.emit_signal("health_change", player)
 
