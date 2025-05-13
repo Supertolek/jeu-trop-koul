@@ -1,7 +1,7 @@
 extends Control
 
 # If the stat popup need to show stat that don't change (with a bonus of +0 or *1)
-var display_zero: bool = true
+var display_zero: bool = false
 const POPUP_STAT_LINE = preload("res://scenes/popup_stat_line.tscn")
 
 @onready var item_popup: PanelContainer = %ItemPopup
@@ -12,10 +12,13 @@ const POPUP_STAT_LINE = preload("res://scenes/popup_stat_line.tscn")
 var in_shift:bool = false
 var current_slot
 var current_item
-
-
-func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("shift"):
+var device_id:int = 0
+func _input(event: InputEvent) -> void:
+	if (!(event is InputEventKey or event is InputEventMouse) and device_id == -2) or\
+	 ((event is InputEventKey or event is InputEventMouse) and device_id >=0) or\
+	(device_id >= 0 and event.device != device_id): return
+	
+	if event.is_action_pressed("shift"):
 		if item_popup.visible:
 			in_shift = true
 			var local_current_slot = current_slot
@@ -23,14 +26,35 @@ func _process(_delta: float) -> void:
 			HideItemPopup()
 			await get_tree().process_frame
 			ItemPopup(local_current_slot,local_current_item)
-	elif  Input.is_action_just_released("shift"):
+	elif event.is_action_released("shift"):
 		if item_popup.visible:
 			in_shift = false
 			var local_current_slot = current_slot
 			var local_current_item = current_item
 			HideItemPopup()
 			await get_tree().process_frame
+			if !local_current_item: return
 			ItemPopup(local_current_slot,local_current_item)
+
+
+func _process(_delta: float) -> void:
+	pass
+	#if Input.is_action_just_pressed("shift"):
+		#if item_popup.visible:
+			#in_shift = true
+			#var local_current_slot = current_slot
+			#var local_current_item = current_item
+			#HideItemPopup()
+			#await get_tree().process_frame
+			#ItemPopup(local_current_slot,local_current_item)
+	#elif  Input.is_action_just_released("shift"):
+		#if item_popup.visible:
+			#in_shift = false
+			#var local_current_slot = current_slot
+			#var local_current_item = current_item
+			#HideItemPopup()
+			#await get_tree().process_frame
+			#ItemPopup(local_current_slot,local_current_item)
 
 func ItemPopup(slot:Rect2, item):
 	current_slot = slot
@@ -51,7 +75,11 @@ func ItemPopup(slot:Rect2, item):
 		stats_container_title.text = "Stats:"
 		
 	# Some Calculation for displaying correctly the popup beside the slot
-	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	var mouse_pos: Vector2
+	if device_id == -2:
+		mouse_pos = get_viewport().get_mouse_position()
+	else:
+		mouse_pos = slot.get_center()
 	var padding: int = 15
 	var correction: Vector2 = Vector2.ZERO
 	
