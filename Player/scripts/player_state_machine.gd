@@ -33,7 +33,10 @@ func get_attack_direction():
 		if attack_manager.is_attack_direction_locked: 
 			return attack_manager.locked_attack_direction
 		return player.get_facing_direction()
-	var mouse_coord:= get_global_mouse_position()-player.global_position
+	# Calculate attack direction
+	var mouse_coord := ((get_global_mouse_position() - player.linked_viewport_container.global_position)
+		/ (player.linked_viewport_container.scale)) - player.global_position
+	print(mouse_coord)
 	var angle = mouse_coord.rotated(PI/4).angle()
 	if 0 <= angle and angle < PI/2:
 		return GlobalPlayerMgmt.PLAYER_DIRECTION.RIGHT

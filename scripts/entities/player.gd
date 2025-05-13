@@ -34,8 +34,10 @@ var hold_actions:Array[String] = []
 
 @export var frozen: bool = false
 
+# Linked nodes
 @onready var linked_camera: Camera2D = $RoomCamera
 var linked_health_bar: HealthBar
+var linked_viewport_container: SubViewportContainer
 
 func get_camera() -> Camera2D:
 	return $RoomCamera
@@ -129,13 +131,6 @@ func _input(event: InputEvent) -> void:
 		attack_manager.lock_attack_direction()
 	if event.is_action_released("lock_attack_direction"):
 		attack_manager.unlock_attack_direction()
-		
-		
-		
-			
-		
-
-
 
 
 func hit(damage: float, damage_mult:float = 1):

@@ -23,6 +23,7 @@ func place_viewport_at(relative_position: Vector2, relative_size: float, player:
 	viewport_container.stretch = true
 	viewport_to_place.handle_input_locally = false
 	viewport_to_place.world_2d = get_window().world_2d
+	player.linked_viewport_container = viewport_container
 	# Place health bar
 	var player_health_bar_packed_scene: PackedScene = load("res://Player/scenes/health_bar.tscn")
 	var player_health_bar: HealthBar = player_health_bar_packed_scene.instantiate()

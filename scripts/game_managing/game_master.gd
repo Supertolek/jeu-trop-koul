@@ -54,7 +54,8 @@ func start_round(round_number: int, round_duration: int):
 	pass
 
 func end_round():
-	get_tree().root.queue_free()
+	#get_tree().root.queue_free()
+	pass
 
 func start_game(rounds: int, rounds_duration: int):
 	%GameFinishTimer.start()
