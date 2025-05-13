@@ -1,12 +1,10 @@
-[gd_scene load_steps=10 format=4 uid="uid://b5y5loopfw4he"]
+[gd_scene load_steps=8 format=4 uid="uid://b5y5loopfw4he"]
 
 [ext_resource type="Script" uid="uid://bgg6fu1qeeca3" path="res://scripts/game_managing/game_master.gd" id="1_p57ef"]
 [ext_resource type="TileSet" uid="uid://bqk3xv1gvt423" path="res://Resources/TileSets/TileSet.tres" id="4_p57ef"]
 [ext_resource type="Texture2D" uid="uid://crd3wwemufnt5" path="res://assets/TileMaps/collision_tilemap.png" id="5_gee14"]
 [ext_resource type="PackedScene" uid="uid://b7qmhhnly8h3a" path="res://scenes/inventory.tscn" id="5_iywne"]
-[ext_resource type="PackedScene" uid="uid://kfumkorx1jpo" path="res://Player/scenes/health_bar.tscn" id="7_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://c8ouq2yetioxw" path="res://scenes/split_screen.tscn" id="8_gee14"]
-[ext_resource type="PackedScene" uid="uid://d0wegsgalj7fw" path="res://scenes/player.tscn" id="9_0tnpc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0tnpc"]
 texture = ExtResource("5_gee14")
@@ -167,36 +165,12 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
-[node name="HealthBar0" parent="UI" instance=ExtResource("7_u5sy4")]
+[node name="SplitScreen" parent="." instance=ExtResource("8_gee14")]
 unique_name_in_owner = true
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 16.0
-offset_bottom = 16.0
-
-[node name="HealthBar1" parent="UI" instance=ExtResource("7_u5sy4")]
-unique_name_in_owner = true
-offset_left = 672.0
-offset_top = 16.0
-offset_right = 672.0
-offset_bottom = 16.0
-
-[node name="SplitScreen" parent="." node_paths=PackedStringArray("players") instance=ExtResource("8_gee14")]
 offset_left = -3000.0
 offset_top = -3000.0
 offset_right = -3000.0
 offset_bottom = -3000.0
-players = [NodePath("../Player"), NodePath("../Player2"), NodePath("../Player3")]
-
-[node name="Player" parent="." instance=ExtResource("9_0tnpc")]
-position = Vector2(191, 451)
-device_id = -2
-
-[node name="Player2" parent="." instance=ExtResource("9_0tnpc")]
-position = Vector2(1053, 314)
-
-[node name="Player3" parent="." instance=ExtResource("9_0tnpc")]
-device_id = 1
 
 [node name="Timers" type="Node" parent="."]
 

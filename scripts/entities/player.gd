@@ -35,6 +35,7 @@ var hold_actions:Array[String] = []
 @export var frozen: bool = false
 
 @onready var linked_camera: Camera2D = $RoomCamera
+var linked_health_bar: HealthBar
 
 func get_camera() -> Camera2D:
 	return $RoomCamera

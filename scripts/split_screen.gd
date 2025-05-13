@@ -23,9 +23,14 @@ func place_viewport_at(relative_position: Vector2, relative_size: float, player:
 	viewport_container.stretch = true
 	viewport_to_place.handle_input_locally = false
 	viewport_to_place.world_2d = get_window().world_2d
+	# Place health bar
+	var player_health_bar_packed_scene: PackedScene = load("res://Player/scenes/health_bar.tscn")
+	var player_health_bar: HealthBar = player_health_bar_packed_scene.instantiate()
+	player_health_bar.position = Vector2.ZERO
+	player_health_bar.scale = Vector2(relative_size, relative_size) * 8
+	player.linked_health_bar = player_health_bar
+	viewport_container.add_child(player_health_bar)
 	# Link to player's camera
-	#player.get_camera().effective_zoom = player.get_camera().zoom
-	#player.get_camera().visual_zoom = Vector2(relative_size, relative_size)
 	player.get_camera().custom_viewport = viewport_to_place
 	player.get_camera().make_current()
 

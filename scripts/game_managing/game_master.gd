@@ -15,25 +15,33 @@ var running: bool = false
 var delay_before_start: int = -1
 
 func load_game(players_list: Array[Player], round_duration_s: float):
-	%GameFinishTimer.wait_time = round_duration_s
-	# Load the map
-	$TileMaps/WaterBackground.tile_map_data = map_data.water_background
-	$TileMaps/VoidBackGround.tile_map_data = map_data.void_background
-	$TileMaps/WaterSideLayer.tile_map_data = map_data.water_side_layer
-	$TileMaps/LowerGroundLayer.tile_map_data = map_data.lower_ground_layer
-	$TileMaps/WallLayer.tile_map_data = map_data.wall_layer
-	$TileMaps/ObjectLayer1.tile_map_data = map_data.object_layer_1
-	$TileMaps/ObjectLayer2.tile_map_data = map_data.object_layer_2
-	$TileMaps/ObjectLayer3.tile_map_data = map_data.object_layer_3
-	$TileMaps/CollisionLayer.tile_map_data = map_data.collision_layer
 	# Load the players
 	players = players_list
-	if len(players) <= len(map_data.players_spawns):
-		for player_index in len(players):
+	%SplitScreen.players = players_list
+	# Add them to the scene tree
+	for player_index in len(players):
 			var player = players[player_index]
 			add_child(player)
 			player.frozen = true
-			player.position = map_data.players_spawns[player_index]
+			player.device_id = player_index - 1
+	players[0].device_id = -2
+
+func load_map(map: MapData):
+	# Load the map
+	$TileMaps/WaterBackground.tile_map_data = map.water_background
+	$TileMaps/VoidBackGround.tile_map_data = map.void_background
+	$TileMaps/WaterSideLayer.tile_map_data = map.water_side_layer
+	$TileMaps/LowerGroundLayer.tile_map_data = map.lower_ground_layer
+	$TileMaps/WallLayer.tile_map_data = map.wall_layer
+	$TileMaps/ObjectLayer1.tile_map_data = map.object_layer_1
+	$TileMaps/ObjectLayer2.tile_map_data = map.object_layer_2
+	$TileMaps/ObjectLayer3.tile_map_data = map.object_layer_3
+	$TileMaps/CollisionLayer.tile_map_data = map.collision_layer
+	# Load the players
+	if len(players) <= len(map.players_spawns):
+		for player_index in len(players):
+			var player = players[player_index]
+			player.position = map.players_spawns[player_index]
 
 func start_round(round_number: int, round_duration: int):
 	# Séquence début de round incroyable que Hadrien va gentillement faire
@@ -50,8 +58,9 @@ func end_round():
 
 func start_game(rounds: int, rounds_duration: int):
 	%GameFinishTimer.start()
-	for round in rounds:
-		start_round(round, rounds_duration)
+	load_map(map_data)
+	for game_round in rounds:
+		start_round(game_round, rounds_duration)
 
 func set_players_frozen_state(frozen_state: bool):
 	for player in players:
