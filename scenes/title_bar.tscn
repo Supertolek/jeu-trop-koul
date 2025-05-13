@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://4hbk4cn07rjf"]
+
+[ext_resource type="Script" uid="uid://c7pq3l0epefqg" path="res://scripts/title_bar.gd" id="1_tff0j"]
+
+[sub_resource type="Gradient" id="Gradient_tff0j"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="TitleBar" type="Node2D"]
+script = ExtResource("1_tff0j")
+
+[node name="Underline" type="Line2D" parent="."]
+unique_name_in_owner = true
+points = PackedVector2Array(0, 15, 10, 25, 50, 25, 60, 15)
+gradient = SubResource("Gradient_tff0j")
+
+[node name="TitleLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 10.0
+offset_right = 50.0
+offset_bottom = 23.0
+rotation = -6.28319
+text = "Title"

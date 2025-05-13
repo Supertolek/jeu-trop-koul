@@ -32,10 +32,30 @@ func load_game(players_list: Array[Player], round_duration_s: float):
 		for player_index in len(players):
 			var player = players[player_index]
 			add_child(player)
+			player.frozen = true
 			player.position = map_data.players_spawns[player_index]
 
-func start_game():
+func start_round(round_number: int, round_duration: int):
+	# Séquence début de round incroyable que Hadrien va gentillement faire
+	# Connection des signaux
+	# Démarer le timer
+	%GameFinishTimer.connect("timeout", end_round)
+	%GameFinishTimer.start(round_duration)
+	# Unfreeze players
+	set_players_frozen_state(false)
+	pass
+
+func end_round():
+	get_tree().root.queue_free()
+
+func start_game(rounds: int, rounds_duration: int):
 	%GameFinishTimer.start()
+	for round in rounds:
+		start_round(round, rounds_duration)
+
+func set_players_frozen_state(frozen_state: bool):
+	for player in players:
+		player.frozen = frozen_state
 
 func save_map_data() -> MapData:
 	var saved_map_data := MapData.new()
@@ -50,14 +70,14 @@ func save_map_data() -> MapData:
 	saved_map_data.collision_layer = $TileMaps/CollisionLayer.tile_map_data
 	return saved_map_data
 
-func _input(event: InputEvent) -> void:
-	if event.as_text() == "Left Mouse Button":
-		ResourceSaver.save(save_map_data(), "res://maps/output.tres")
-
-func _ready() -> void:
-	if delay_before_start >= 0:
-		%GameStartDelay.connect("timeout", start_game)
-		%GameStartDelay.start(delay_before_start)
+#func _input(event: InputEvent) -> void:
+	#if event.as_text() == "Left Mouse Button":
+		#ResourceSaver.save(save_map_data(), "res://maps/output.tres")
+#
+#func _ready() -> void:
+	#if delay_before_start >= 0:
+		#%GameStartDelay.connect("timeout", start_game)
+		#%GameStartDelay.start(delay_before_start)
 
 #func open_close_inventory(_player:Player):
 	#var player_id = Global.players.find(_player)

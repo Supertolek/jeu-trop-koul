@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8ouq2yetioxw"]
+[gd_scene load_steps=3 format=3 uid="uid://c8ouq2yetioxw"]
 
 [ext_resource type="Script" uid="uid://dh4ndv8ma1x0b" path="res://scripts/split_screen.gd" id="1_ahfsy"]
+[ext_resource type="PackedScene" uid="uid://kfumkorx1jpo" path="res://Player/scenes/health_bar.tscn" id="2_c5m37"]
 
 [node name="SplitScreen" type="Control"]
 layout_mode = 3
@@ -22,3 +23,5 @@ color = Color(0, 0, 0, 1)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
+
+[node name="HealthBar" parent="." instance=ExtResource("2_c5m37")]

@@ -1,3 +1,4 @@
+@tool
 @icon("res://assets/Nodes Icons/bar.svg")
 extends Control
 
@@ -27,9 +28,9 @@ var health_tween: Tween
 var damage_tween: Tween
 
 
-var max_health: float = 200
-var min_health: float = 0
-var health: float = 200:
+@export var max_health: float = 200
+@export var min_health: float = 0
+@export var health: float = 200:
 	set(value):
 		value = min(value,max_health)
 		value = max(value,min_health)

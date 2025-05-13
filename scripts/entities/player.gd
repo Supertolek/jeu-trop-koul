@@ -7,7 +7,7 @@ var friction: int = 10 * player_scale
 
 var is_moving: bool = false
 
-var device_id: int
+@export var device_id: int
 
 
 @onready var sprite: Sprite2D = %Sprite
