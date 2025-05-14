@@ -6,12 +6,17 @@ class_name InventorySlot
 signal slot_pressed
 signal slot_released
 
+signal slot_focused
+#signal slot_selected
+#signal slot_diselected
+
 enum  SLOT_TYPE {
 	IN_INVENTORY,
 	IN_PREVIEW,
 }
-@onready var item_texture: TextureRect = %ItemTexture
 
+var device_id: int 
+@onready var item_texture: TextureRect = %ItemTexture
 var texture:
 	set(value):
 		texture = value
@@ -77,11 +82,38 @@ func _on_gui_input(event: InputEvent) -> void:
 
 
 func _on_mouse_entered() -> void:
+	#if device_id >= 0: return
 	if item == null: return
 	Popups.ItemPopup(Rect2(global_position,size),item)
-	#pass
 
 
 func _on_mouse_exited() -> void:
+	#if device_id >= 0: return
 	Popups.HideItemPopup()
-	#pass
+	
+	
+@onready var selected: Panel = %Selected
+@onready var focus_display: Panel = %Focus
+
+
+func _on_focus_entered() -> void:
+	if device_id == -2: return
+	slot_focused.emit(self)
+	focus_display.visible = true
+
+
+func _on_focus_exited() -> void:
+	if device_id == -2: return
+	focus_display.visible = false
+	
+func select():
+	if device_id == -2: return
+	selected.visible = true
+	#slot_selected.emit(self)
+	
+func diselect():
+	if device_id == -2: return
+	selected.visible = false
+	#slot_diselected.emit(self)
+
+	

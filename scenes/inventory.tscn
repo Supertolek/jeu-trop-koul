@@ -77,6 +77,7 @@ offset_left = -50.0
 offset_top = -50.0
 offset_right = 50.0
 offset_bottom = 50.0
+focus_neighbor_bottom = NodePath("../../EquipedWeaponContainer/EquipedWeaponSlot")
 slot_type = 1
 
 [node name="EquipedWeaponContainer" type="Control" parent="VBoxContainer/InventoryBody/EquipedItemsMarginContainer/EquipedItemSpliter"]
@@ -96,6 +97,7 @@ offset_left = -50.0
 offset_top = -50.0
 offset_right = 50.0
 offset_bottom = 50.0
+focus_neighbor_top = NodePath("../../EquipedArmorContainer/EquipedArmorSlot")
 slot_type = 1
 
 [node name="MainInventoryMarginContainer" type="MarginContainer" parent="VBoxContainer/InventoryBody"]
@@ -345,6 +347,8 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../../../ItemForgeModifiedItemContainer/VBoxContainer/ModifiedItemInventorySlot")
+focus_neighbor_right = NodePath("../../SecondItemModifierContainer/SecondItemModifierInventorySlot")
 slot_type = 1
 
 [node name="SecondItemModifierContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer"]
@@ -357,6 +361,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+focus_neighbor_left = NodePath("../../FirstItemModifierContainer/FirstItemModifierInventorySlot")
+focus_neighbor_top = NodePath("../../../../ItemForgeModifiedItemContainer/VBoxContainer/ModifiedItemInventorySlot")
+focus_neighbor_right = NodePath("../../ThirdItemModifierContainer/ThirdItemModifierInventorySlot")
 slot_type = 1
 
 [node name="ThirdItemModifierContainer" type="VBoxContainer" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer/ItemForgeItemModifierHContainer"]
@@ -368,6 +375,8 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+focus_neighbor_left = NodePath("../../SecondItemModifierContainer/SecondItemModifierInventorySlot")
+focus_neighbor_top = NodePath("../../../../ItemForgeModifiedItemContainer/VBoxContainer/ModifiedItemInventorySlot")
 slot_type = 1
 
 [node name="ItemForgeItemModifierMarginControl" type="Control" parent="VBoxContainer/InventoryBody/ItemForgeMarginContainer/VBoxContainer/ItemForgeItemModifierTabContainer"]
