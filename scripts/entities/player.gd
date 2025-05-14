@@ -140,7 +140,8 @@ func hit(damage: float, damage_mult:float = 1):
 		damage_reduction = (player_stats.stat_defense * damage) / (player_stats.stat_defense + 50)
 	var effective_damage = snappedf(damage - damage_reduction,0.1)
 	player_stats.stat_effective_health = clamp(player_stats.stat_effective_health - effective_damage, 0, player_stats.stat_max_health)
-
+	if player_stats.stat_effective_health == 0:
+		SignalBus.player_died.emit(self)
 	GameController.health_change(self)
 	
 func hit_player(target_player: Player, damage_mult:float = 1):
