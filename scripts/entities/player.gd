@@ -68,6 +68,8 @@ func _physics_process(delta: float) -> void:
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_X),
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_Y),
 			)
+		if direction.length() <= 0.2:
+			direction = Vector2.ZERO
 	# Gestion de la direction regardée par le joueur
 	if direction.is_zero_approx():
 		direction = Vector2.ZERO
@@ -112,6 +114,9 @@ func _process(_delta: float) -> void:
 		
 		
 func _input(event: InputEvent) -> void:
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		print(Input.get_joy_name(event.device))
+		print(Input.get_joy_guid(event.device))
 	# Gros if statement pour séparer les inputs des joueurs
 	if (!(event is InputEventKey or event is InputEventMouse) and device_id == -2) or\
 	 ((event is InputEventKey or event is InputEventMouse) and device_id >=0) or\
