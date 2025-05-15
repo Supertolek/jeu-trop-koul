@@ -1,10 +1,13 @@
 extends Control
 
+const player_health_bar_packed_scene: PackedScene = preload("res://Player/scenes/health_bar.tscn")
+
 @export var players: Array[Player]:
 	set(value):
 		players = value
 		if value and get_window():
 			place_viewports()
+
 
 func place_viewport_at(relative_position: Vector2, relative_size: float, player: Player):
 	# Create viewport object
@@ -25,7 +28,6 @@ func place_viewport_at(relative_position: Vector2, relative_size: float, player:
 	viewport_to_place.world_2d = get_window().world_2d
 	player.linked_viewport_container = viewport_container
 	# Place health bar
-	var player_health_bar_packed_scene: PackedScene = load("res://Player/scenes/health_bar.tscn")
 	var player_health_bar: HealthBar = player_health_bar_packed_scene.instantiate()
 	player_health_bar.position = Vector2.ZERO
 	player_health_bar.scale = Vector2(relative_size, relative_size) * 8

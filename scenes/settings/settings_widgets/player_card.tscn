@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://de0u2rjw2l2fe"]
+
+[ext_resource type="PackedScene" uid="uid://dfbpwxowp3npd" path="res://scenes/settings/settings_widgets/animated_player.tscn" id="1_nh7ay"]
+
+[node name="PlayerCard" type="ColorRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0705882, 0.305882, 0.537255, 1)
+
+[node name="AnimatedPlayer" parent="." instance=ExtResource("1_nh7ay")]
+position = Vector2(551, 346)
+scale = Vector2(7.5, 7.5)

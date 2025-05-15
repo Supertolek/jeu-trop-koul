@@ -1,6 +1,9 @@
 class_name Player
 extends Character 
 
+func get_id() -> int:
+	return Global.players.find(self)
+
 var max_speed: int = 45 * player_scale
 var acceleration: int = 7 * player_scale
 var friction: int = 10 * player_scale
@@ -55,6 +58,7 @@ func _physics_process(delta: float) -> void:
 			Input.get_action_strength("move_down") - Input.get_action_strength("move_up"),
 		).normalized()
 	elif device_id >= 0:
+		#print(Global.get_joypad_brand(device_id))
 		if Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_UP) or \
 		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_DOWN) or \
 		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_RIGHT) or \

@@ -1,0 +1,164 @@
+extends Control
+
+const animated_player_packed_scene: PackedScene = preload("res://scenes/settings/settings_widgets/animated_player.tscn")
+const controller_icon_packed_scene: PackedScene = preload("res://scenes/settings/settings_widgets/controller_icon.tscn")
+
+@export_group("Controllers nav settings")
+@export var controllers_echo_delay_msec: int = 500
+@export var controllers_dead_zone: float = 0.2
+
+var player_colors: Dictionary[String, Color] = {
+	"Blue": Color8(18, 78, 137),
+	"Green": Color8(58, 109, 83),
+	"Black": Color8(70, 77, 107),
+	"Red": Color8(125, 44, 50),
+}
+var player_cards: Array[ColorRect] ## 0: top left, 1: top right, 2: bottom left, 3: bottom_right
+var players_linked_player_card: Dictionary[int, int] = {}
+
+var controllers_cursor: Dictionary[int, ControllerIcon] = {}
+var controllers_cursor_position: Dictionary[int, int] = {} ## controller_id:player_card_id
+var controllers_last_action: Dictionary[int, int] = {}
+var recognized_controllers: Array[int] = []
+var offset: int = 4
+
+func place_player_card(relative_position: Vector2, relative_size: float, player: Player, corner: int = -1):
+	# Create viewport object
+	var player_card := ColorRect.new()
+	add_child(player_card)
+	player_cards.append(player_card)
+	# Place player card
+	var current_viewport_rect := get_window().get_viewport().get_visible_rect()
+	#1152 × 640
+	var desired_size := current_viewport_rect.size * relative_size
+	player_card.size = desired_size
+	player_card.position = current_viewport_rect.size * relative_position - player_card.size/2
+	player_card.set_meta("linked_player", player.get_id())
+	player_card.set_meta("position_id", corner)
+	players_linked_player_card[Global.players.find(player)] = corner
+	player_card.color = Color.BLACK
+	player_card.name = "Opa gangnam style-" + str(corner)
+	# Add the right backgrouond color to the card
+	var player_card_background := ColorRect.new()
+	player_card_background.color = player_colors[player.color]
+	player_card_background.name = "You lost the game"
+	match corner:
+		0:
+			player_card_background.position = Vector2(offset, offset)
+			player_card_background.size = player_card.size - Vector2(offset*1.5, offset*1.5)
+		1:
+			player_card_background.position = Vector2(offset/2, offset)
+			player_card_background.size = player_card.size - Vector2(offset*1.5, offset*1.5)
+		2:
+			player_card_background.position = Vector2(offset, offset/2)
+			player_card_background.size = player_card.size - Vector2(offset*1.5, offset*1.5)
+		3:
+			player_card_background.position = Vector2(offset/2, offset/2)
+			player_card_background.size = player_card.size - Vector2(offset*1.5, offset*1.5)
+		_:
+			player_card_background.position = Vector2(offset/2, offset/2)
+			player_card_background.size = player_card.size - Vector2(offset, offset)
+	player_card.add_child(player_card_background)
+	# Place player sprite
+	var animated_player_sprite: AnimatedSprite2D = animated_player_packed_scene.instantiate()
+	animated_player_sprite.scale = Vector2(relative_size, relative_size) * 8
+	animated_player_sprite.position = player_card.size/2
+	animated_player_sprite.play("Idle")
+	player_card.add_child(animated_player_sprite)
+	# Add the cursors display
+	var cursors_container: Control = Control.new()
+	player_card_background.add_child(cursors_container)
+	cursors_container.name = "UwU That's so banger! CURSORS!!!"
+
+func place_player_cards():
+	place_player_card(Vector2(0.25, 0.25), 0.5, Global.players[0], 0)
+	place_player_card(Vector2(0.75, 0.25), 0.5, Global.players[1], 1)
+	place_player_card(Vector2(0.25, 0.75), 0.5, Global.players[2], 2)
+	place_player_card(Vector2(0.75, 0.75), 0.5, Global.players[3], 3)
+
+func update_controller_cursor_position(controller_id: int, new_position: int):
+	select_player(controller_id, 0)
+	var new_player_card := player_cards[new_position]
+	var new_player_card_cursor_container := new_player_card.get_child(0).get_child(0)
+	if controllers_cursor[controller_id].get_parent():
+		controllers_cursor[controller_id].reparent(new_player_card_cursor_container)
+		controllers_cursor[controller_id].position.x = (controllers_cursor[controller_id].get_parent().get_child_count()-1)*68
+		controllers_cursor[controller_id].position.y = 0
+	else:
+		new_player_card_cursor_container.add_child(controllers_cursor[controller_id])
+		controllers_cursor[controller_id].position.x = (controllers_cursor[controller_id].get_parent().get_child_count()-1)*68
+		controllers_cursor[controller_id].position.y = 0
+	controllers_cursor_position[controller_id] = new_position
+
+func select_player(controller_id: int, state: int = -1):
+	var current_card = player_cards[controllers_cursor_position[controller_id]]
+	var selected_player_id = current_card.get_meta("linked_player")
+	var selected_player = Global.players[selected_player_id]
+	if ((not controllers_cursor[controller_id].active) or state == 1) and state != 0:
+		if selected_player.device_id != controller_id or state == -1:
+			if selected_player.device_id in recognized_controllers:
+				controllers_cursor[selected_player.device_id].active = false
+			selected_player.device_id = controller_id
+			controllers_cursor[controller_id].active = true
+		else:
+			selected_player.device_id = -2
+			controllers_cursor[controller_id].active = false
+	else:
+		selected_player.device_id = -2
+		controllers_cursor[controller_id].active = false
+
+func _ready() -> void:
+	place_player_cards()
+	for controller_id in Input.get_connected_joypads():
+		if len(recognized_controllers) < 4:
+			var controller_info := Input.get_joy_info(controller_id)
+			if "vendor_id" in controller_info:
+				var controller_brand := Global.get_joypad_brand(controller_id)
+				if controller_brand != Global.CONTROLLERS_BRANDS.XBOX:
+					recognized_controllers.append(controller_id)
+					var controller_icon: ControllerIcon = controller_icon_packed_scene.instantiate()
+					controller_icon.controller_brand = Global.get_joypad_brand(controller_id)
+					controller_icon.name = "Hêtre, ou ne pas hêtre... euh non, l'hêtre c'est un arbre-" + str(controller_id)
+					controller_icon.position = Vector2.ZERO
+					controller_icon.active = true
+					controllers_cursor[controller_id] = controller_icon
+					controllers_last_action[controller_id] = Time.get_ticks_msec()
+					print(controller_id)
+					controllers_cursor_position[controller_id] = 0
+					update_controller_cursor_position(controller_id, len(recognized_controllers)-1)
+					player_cards[controllers_cursor_position[controller_id]].set_meta("linked_player", controller_id)
+		else:
+			break
+
+func _process(delta: float) -> void:
+	for recognized_controller in recognized_controllers:
+		if controllers_last_action[recognized_controller] + controllers_echo_delay_msec < Time.get_ticks_msec():
+			var moved := false
+			var controller_x_axis: float = abs(Input.get_joy_axis(recognized_controller, JOY_AXIS_RIGHT_X))
+			if controller_x_axis <= controllers_dead_zone: controller_x_axis = 0
+			var controller_y_axis: float = abs(Input.get_joy_axis(recognized_controller, JOY_AXIS_RIGHT_Y))
+			if controller_y_axis <= controllers_dead_zone: controller_y_axis = 0
+			if controller_x_axis >= controller_y_axis and controller_x_axis != 0:
+				if controllers_cursor_position[recognized_controller] % 2 == 0:
+					update_controller_cursor_position(recognized_controller, controllers_cursor_position[recognized_controller] + 1)
+				else:
+					update_controller_cursor_position(recognized_controller, controllers_cursor_position[recognized_controller] - 1)
+				moved = true
+			if controller_y_axis >= controller_x_axis and controller_y_axis != 0:
+				update_controller_cursor_position(recognized_controller, (controllers_cursor_position[recognized_controller]+2) % 4)
+				moved = true
+			if not moved:
+				continue
+			print(controllers_cursor_position[recognized_controller])
+			print(Time.get_ticks_msec() - controllers_last_action[recognized_controller])
+			controllers_last_action[recognized_controller] = Time.get_ticks_msec()
+
+func _input(event: InputEvent) -> void:
+	if event.device in recognized_controllers:
+		if event is InputEventJoypadMotion:
+			if abs(Input.get_joy_axis(event.device, JOY_AXIS_RIGHT_X)) <= controllers_dead_zone and \
+			   abs(Input.get_joy_axis(event.device, JOY_AXIS_RIGHT_Y)) <= controllers_dead_zone:
+				controllers_last_action[event.device] = 0
+		elif event is InputEventJoypadButton:
+			if event.button_index == JOY_BUTTON_A and event.pressed:
+				select_player(event.device)
