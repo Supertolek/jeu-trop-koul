@@ -77,6 +77,8 @@ func end_round():
 		start_round()
 
 func start_game(rounds: int, rounds_duration: int):
+	for controller in Input.get_connected_joypads():
+		Input.start_joy_vibration(controller, 1, 1, 5)
 	load_map(map_data)
 	round_duration = rounds_duration
 	round_count = rounds
