@@ -1,6 +1,9 @@
 class_name Player
 extends Character 
 
+func get_id() -> int:
+	return Global.players.find(self)
+
 var max_speed: int = 45 * player_scale
 var acceleration: int = 7 * player_scale
 var friction: int = 10 * player_scale
@@ -57,6 +60,7 @@ func _physics_process(delta: float) -> void:
 			Input.get_action_strength("move_down") - Input.get_action_strength("move_up"),
 		).normalized()
 	elif device_id >= 0:
+		#print(Global.get_joypad_brand(device_id))
 		if Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_UP) or \
 		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_DOWN) or \
 		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_RIGHT) or \
@@ -70,6 +74,8 @@ func _physics_process(delta: float) -> void:
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_X),
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_Y),
 			)
+		if direction.length() <= 0.2:
+			direction = Vector2.ZERO
 	# Gestion de la direction regardée par le joueur
 	if direction.is_zero_approx():
 		direction = Vector2.ZERO
@@ -114,6 +120,9 @@ func _process(_delta: float) -> void:
 		
 		
 func _input(event: InputEvent) -> void:
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		print(Input.get_joy_name(event.device))
+		print(Input.get_joy_guid(event.device))
 	# Gros if statement pour séparer les inputs des joueurs
 	if (!(event is InputEventKey or event is InputEventMouse) and device_id == -2) or\
 	 ((event is InputEventKey or event is InputEventMouse) and device_id >=0) or\
@@ -153,8 +162,11 @@ func hit(damage: float, damage_mult:float = 1):
 		damage_reduction = (player_stats.stat_defense * damage) / (player_stats.stat_defense + 50)
 	var effective_damage = snappedf(damage - damage_reduction,0.1)
 	player_stats.stat_effective_health = clamp(player_stats.stat_effective_health - effective_damage, 0, player_stats.stat_max_health)
+  
 	linked_health_bar.health = player_stats.stat_effective_health
 
+	if player_stats.stat_effective_health == 0:
+		SignalBus.player_died.emit(self)
 	GameController.health_change(self)
 	
 func hit_player(target_player: Player, damage_mult:float = 1):

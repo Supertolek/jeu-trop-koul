@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://djh18x2mdpnb0"]
+
+[ext_resource type="Script" uid="uid://dx68o17xhonp8" path="res://scripts/controller_icon.gd" id="1_fi133"]
+[ext_resource type="Texture2D" uid="uid://c5uv0o6gvn8n4" path="res://assets/controllers/xbox_64px.png" id="1_o450x"]
+[ext_resource type="Shader" uid="uid://hjl2ingd6ml4" path="res://scripts/shaders/outline.gdshader" id="2_jnr1u"]
+[ext_resource type="Script" uid="uid://cpl0wokh0oeoj" path="res://scripts/controller_icon_icon.gd" id="4_vmbqf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jnr1u"]
+resource_local_to_scene = true
+shader = ExtResource("2_jnr1u")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 0.0
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+
+[node name="ControllerIcon" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 64.0
+offset_bottom = 64.0
+script = ExtResource("1_fi133")
+controller_brand = 0
+
+[node name="Icon" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_jnr1u")
+texture = ExtResource("1_o450x")
+centered = false
+script = ExtResource("4_vmbqf")

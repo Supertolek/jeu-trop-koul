@@ -2,29 +2,35 @@ class_name GameMaster
 extends Node2D
 
 
-#@onready var inventory_UI_0: InventoryUI = %Inventory_0
-#@onready var inventory_UI_1: InventoryUI = %Inventory_1
-#@onready var health_bar_0: HealthBar = %HealthBar0
-#@onready var health_bar_1: HealthBar = %HealthBar1
-
 @export var map_data: MapData = load("res://maps/output.tres")
 
 @export var players: Array[Player]
+var alive_players: int
+var players_scores: Array[int]
+
+var round_count: int
+var current_round: int
+var round_duration: int
+
+var players_devices_ids = [0, 1, 2, 3]
+
 var running: bool = false
 
-var delay_before_start: int = -1
-
-func load_game(players_list: Array[Player], round_duration_s: float):
+func load_game(players_list: Array[Player]):
 	# Load the players
 	players = players_list
+	alive_players = len(players_list)
+	players_scores = []
 	%SplitScreen.players = players_list
 	# Add them to the scene tree
 	for player_index in len(players):
-			var player = players[player_index]
-			add_child(player)
-			player.frozen = true
-			player.device_id = player_index - 1
-	players[0].device_id = -2
+		var player = players[player_index]
+		add_child(player)
+		players_scores.append(0)
+		player.frozen = true
+		player.device_id = players_devices_ids[player_index]
+		#player.device_id = player_index - 1
+	#players[0].device_id = -2
 
 func load_map(map: MapData):
 	# Load the map
@@ -43,29 +49,62 @@ func load_map(map: MapData):
 			var player = players[player_index]
 			player.position = map.players_spawns[player_index]
 
-func start_round(round_number: int, round_duration: int):
+func start_round():
+	print(current_round)
 	# Séquence début de round incroyable que Hadrien va gentillement faire
 	# Connection des signaux
-	# Démarer le timer
+	SignalBus.player_died.connect(handle_killed_player)
+	# Start timer
 	%GameFinishTimer.connect("timeout", end_round)
 	%GameFinishTimer.start(round_duration)
 	# Unfreeze players
 	set_players_frozen_state(false)
-	pass
 
 func end_round():
-	#get_tree().root.queue_free()
-	pass
+	# Stop timmer
+	%GameFinishTimer.stop()
+	# Freeze players
+	set_players_frozen_state(true)
+	# Disconnect signals
+	SignalBus.player_died.disconnect(handle_killed_player)
+	# Update scores
+	var winners = find_winners()
+	for winner in winners:
+		players_scores[winner] += 1
+	# Check if a new round have to start
+	if current_round < round_count:
+		current_round += 1
+		start_round()
 
 func start_game(rounds: int, rounds_duration: int):
-	%GameFinishTimer.start()
+	for controller in Input.get_connected_joypads():
+		Input.start_joy_vibration(controller, 1, 1, 5)
 	load_map(map_data)
-	for game_round in rounds:
-		start_round(game_round, rounds_duration)
+	round_duration = rounds_duration
+	round_count = rounds
+	current_round = 1
+	start_round()
+
+func find_winners() -> Array[int]:
+	var current_winners_ids: Array[int] = []
+	var highest_health: int = 0
+	for player_index in len(players):
+		var player_health: int = players[player_index].player_stats.stat_effective_health
+		if player_health > highest_health:
+			highest_health = player_health
+			current_winners_ids = [player_index]
+		elif player_health == highest_health:
+			current_winners_ids.append(player_index)
+	return current_winners_ids
 
 func set_players_frozen_state(frozen_state: bool):
 	for player in players:
 		player.frozen = frozen_state
+
+func handle_killed_player(player:Player):
+	alive_players -= 1
+	if alive_players == 1:
+		end_round()
 
 func save_map_data() -> MapData:
 	var saved_map_data := MapData.new()
