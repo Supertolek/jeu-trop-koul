@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3 uid="uid://b6a4fo38edh21"]
+
+[ext_resource type="FontFile" uid="uid://eruvc81au5m0" path="res://assets/fonts/MinecraftRegular-Bmg3.otf" id="1_daium"]
+[ext_resource type="Script" uid="uid://bx7rg4u64365l" path="res://scripts/ui/item_popups.gd" id="1_jita6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jita6"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.215686, 0.215686, 0.215686, 0.615686)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.243137)
+shadow_size = 2
+shadow_offset = Vector2(1, 1)
+
+[node name="ItemPopups" type="PanelContainer"]
+z_index = 20
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_jita6")
+script = ExtResource("1_jita6")
+
+[node name="InnerText" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ItemName" type="Label" parent="InnerText"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_daium")
+theme_override_font_sizes/font_size = 40
+text = "Item Name"
+
+[node name="StatsContainer" type="Label" parent="InnerText"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_daium")
+theme_override_font_sizes/font_size = 30
+text = "Stats:"

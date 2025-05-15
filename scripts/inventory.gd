@@ -2,11 +2,11 @@ extends Control
 
 class_name InventoryUI
 #var a: Dictionary
-var device_id: int = 0
+var device_id: int
 
 var inventory_data: Dictionary = {
-	"equiped_weapon": null,
-	"equiped_armor": null,
+	"equiped_weapon": preload("res://Resources/Items/Weapon/test_sword.tres").duplicate(),
+	"equiped_armor": preload("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
 	"inventory": [
 		preload("res://Resources/Items/Items_Modifiers/ham.tres").duplicate(),
 		preload("res://Resources/Items/Items_Modifiers/attack_of_some.tres").duplicate(),
@@ -22,14 +22,6 @@ var inventory_data: Dictionary = {
 		preload("res://Resources/Items/Items_Modifiers/ham.tres").duplicate(),
 		preload("res://Resources/Items/Items_Modifiers/attack_of_some.tres").duplicate(),
 		preload("res://Resources/Items/Items_Modifiers/bread.tres").duplicate(),
-		preload("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
-		preload("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
-		preload("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
-		preload("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
-		preload("res://Resources/Items/Weapon/test_sword.tres").duplicate(),
-		preload("res://Resources/Items/Weapon/test_sword.tres").duplicate(),
-		preload("res://Resources/Items/Weapon/test_sword.tres").duplicate(),
-		preload("res://Resources/Items/Weapon/test_sword.tres").duplicate(),
 	]
 }
 
@@ -46,7 +38,7 @@ var focused_inventory_slot: InventorySlot = null:
 		elif focused_inventory_slot:
 			focused_inventory_slot._on_mouse_exited()
 		focused_inventory_slot = value
-		#Popups.device_id = device_id
+		item_popups.device_id = device_id
 var selected_inventory_slot: InventorySlot = null:
 	set(value):
 		if value:
@@ -81,6 +73,7 @@ var selected_inventory_slot: InventorySlot = null:
 @onready var item_modifier_inventory_container: GridContainer = %ItemModifierInventoryContainer
 
 @onready var dragged_item_texture_rect: TextureRect = %DraggedItem
+@onready var item_popups: ItemPopups = %ItemPopups
 
 
 func _ready() -> void:
@@ -88,42 +81,12 @@ func _ready() -> void:
 	update_inventory_tabContainer()
 	_resize_TabContainer()
 	
-	modified_item_inventory_slot.slot_pressed.connect(start_dragging)
-	modified_item_inventory_slot.slot_released.connect(stop_dragging)
-	modified_item_inventory_slot.slot_focused.connect(change_focus)
-	modified_item_inventory_slot.device_id = device_id
-	#modified_item_inventory_slot.slot_selected.connect(select_inventory_slot)
-	#modified_item_inventory_slot.slot_diselected.connect(diselect_inventory_slot)
-	first_item_modifier_inventory_slot.slot_pressed.connect(start_dragging)
-	first_item_modifier_inventory_slot.slot_released.connect(stop_dragging)
-	first_item_modifier_inventory_slot.slot_focused.connect(change_focus)
-	first_item_modifier_inventory_slot.device_id = device_id
-	#first_item_modifier_inventory_slot.slot_selected.connect(select_inventory_slot)
-	#first_item_modifier_inventory_slot.slot_diselected.connect(diselect_inventory_slot)
-	second_item_modifier_inventory_slot.slot_pressed.connect(start_dragging)
-	second_item_modifier_inventory_slot.slot_released.connect(stop_dragging)
-	second_item_modifier_inventory_slot.slot_focused.connect(change_focus)
-	second_item_modifier_inventory_slot.device_id = device_id
-	#second_item_modifier_inventory_slot.slot_selected.connect(select_inventory_slot)
-	#second_item_modifier_inventory_slot.slot_diselected.connect(diselect_inventory_slot)
-	third_item_modifier_inventory_slot.slot_pressed.connect(start_dragging)
-	third_item_modifier_inventory_slot.slot_released.connect(stop_dragging)
-	third_item_modifier_inventory_slot.slot_focused.connect(change_focus)
-	third_item_modifier_inventory_slot.device_id = device_id
-	#third_item_modifier_inventory_slot.slot_selected.connect(select_inventory_slot)
-	#third_item_modifier_inventory_slot.slot_diselected.connect(diselect_inventory_slot)
-	equiped_armor_inventory_slot.slot_pressed.connect(start_dragging)
-	equiped_armor_inventory_slot.slot_released.connect(stop_dragging)
-	equiped_armor_inventory_slot.slot_focused.connect(change_focus)
-	equiped_armor_inventory_slot.device_id = device_id
-	#equiped_armor_inventory_slot.slot_selected.connect(select_inventory_slot)
-	#equiped_armor_inventory_slot.slot_diselected.connect(diselect_inventory_slot)
-	equiped_weapon_inventory_slot.slot_pressed.connect(start_dragging)
-	equiped_weapon_inventory_slot.slot_released.connect(stop_dragging)
-	equiped_weapon_inventory_slot.slot_focused.connect(change_focus)
-	equiped_weapon_inventory_slot.device_id = device_id
-	#equiped_weapon_inventory_slot.slot_selected.connect(select_inventory_slot)
-	#equiped_weapon_inventory_slot.slot_diselected.connect(diselect_inventory_slot)
+	modified_item_inventory_slot.link_to_inventory(self)
+	first_item_modifier_inventory_slot.link_to_inventory(self)
+	second_item_modifier_inventory_slot.link_to_inventory(self)
+	third_item_modifier_inventory_slot.link_to_inventory(self)
+	equiped_armor_inventory_slot.link_to_inventory(self)
+	equiped_weapon_inventory_slot.link_to_inventory(self)
 
 func _process(_delta: float) -> void:
 	# Dragging item system
@@ -385,6 +348,8 @@ func _input(event:InputEvent) -> void:
 	if event.is_action_pressed("attack"):
 		print('hi1')
 		select_inventory_slot()
+	#if event.is_action_pressed("forge_grab_focus"):
+		#modified_item_inventory_slot.grab_focus()
 
 func _on_all_item_category_button_pressed() -> void:
 	inventory_tab_index = 0
@@ -452,14 +417,9 @@ func display_items():
 					var item_slot: InventorySlot = inventorySlot.instantiate()
 					item_slot.item = inventory_data['inventory'][item_index]
 					
-					item_slot.slot_pressed.connect(start_dragging)
-					item_slot.slot_released.connect(stop_dragging)
-					item_slot.slot_focused.connect(change_focus)
-					
-					item_slot.device_id = device_id
-					#item_slot.slot_selected.connect(select_inventory_slot)
-					#item_slot.slot_diselected.connect(diselect_inventory_slot)
+					item_slot.link_to_inventory(self)
 					targeted_container.add_child(item_slot)
+					
 				
 			TAB_CONTAINER_PARTS.WEAPON:
 				for item_index in inventory_data['inventory'].size():
@@ -468,12 +428,7 @@ func display_items():
 						var item_slot: InventorySlot = inventorySlot.instantiate()
 						item_slot.item = item
 						
-						item_slot.slot_pressed.connect(start_dragging)
-						item_slot.slot_released.connect(stop_dragging)
-						item_slot.slot_focused.connect(change_focus)
-						item_slot.device_id = device_id
-						#item_slot.slot_selected.connect(select_inventory_slot)
-						#item_slot.slot_diselected.connect(diselect_inventory_slot)
+						item_slot.link_to_inventory(self)
 						targeted_container.add_child(item_slot)
 						
 			TAB_CONTAINER_PARTS.ARMOR:
@@ -483,12 +438,7 @@ func display_items():
 						var item_slot: InventorySlot = inventorySlot.instantiate()
 						item_slot.item = item
 						
-						item_slot.slot_pressed.connect(start_dragging)
-						item_slot.slot_released.connect(stop_dragging)
-						item_slot.slot_focused.connect(change_focus)
-						item_slot.device_id = device_id
-						#item_slot.slot_selected.connect(select_inventory_slot)
-						#item_slot.slot_diselected.connect(diselect_inventory_slot)
+						item_slot.link_to_inventory(self)
 						targeted_container.add_child(item_slot)
 						
 			TAB_CONTAINER_PARTS.ITEM_MODIFIER:
@@ -498,13 +448,31 @@ func display_items():
 						var item_slot: InventorySlot = inventorySlot.instantiate()
 						item_slot.item = item
 						
-						item_slot.slot_pressed.connect(start_dragging)
-						item_slot.slot_released.connect(stop_dragging)
-						item_slot.slot_focused.connect(change_focus)
-						item_slot.device_id = device_id
-						#item_slot.slot_selected.connect(select_inventory_slot)
-						#item_slot.slot_diselected.connect(diselect_inventory_slot)
+						item_slot.link_to_inventory(self)
 						targeted_container.add_child(item_slot)
+						
+		var number_of_columns: int = tab_container.get_child(inventory_tab_index).columns
+		print(number_of_columns)
+		for item_slot_index:int in targeted_container.get_child_count():
+			var inventory_slot: InventorySlot = targeted_container.get_child(item_slot_index)
+			#if !fmod(item_slot_index,number_of_columns) == 0:
+				#inventory_slot.focus_neighbor_left = targeted_container.get_child(item_slot_index-1).get_path()
+			#else:
+				#inventory_slot.focus_neighbor_left = NodePath("")
+			#if !fmod(item_slot_index,number_of_columns) == number_of_columns-1 and !item_slot_index == targeted_container.get_child_count()-1:
+				#inventory_slot.focus_neighbor_right = targeted_container.get_child(item_slot_index+1).get_path()
+			#else:
+				#inventory_slot.focus_neighbor_right = NodePath("")
+			#if !item_slot_index < number_of_columns:
+				#inventory_slot.focus_neighbor_top = targeted_container.get_child(item_slot_index-number_of_columns).get_path()
+			#else:
+				#inventory_slot.focus_neighbor_top = inventory_slot.get_path()
+				#
+			#if !item_slot_index + number_of_columns >= targeted_container.get_child_count():
+				#inventory_slot.focus_neighbor_bottom = targeted_container.get_child(item_slot_index+number_of_columns).get_path()
+			#else:
+				#inventory_slot.focus_neighbor_bottom = inventory_slot.get_path()
+				
 
 
 

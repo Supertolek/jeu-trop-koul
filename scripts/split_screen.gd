@@ -33,6 +33,12 @@ func place_viewport_at(relative_position: Vector2, relative_size: float, player:
 	player_health_bar.scale = Vector2(relative_size, relative_size) * 8
 	player.linked_health_bar = player_health_bar
 	viewport_container.add_child(player_health_bar)
+	var player_inventory_packed_scene: PackedScene = load("res://Scenes/inventory.tscn")
+	var player_inventory: InventoryUI = player_inventory_packed_scene.instantiate()
+	player_inventory.position = Vector2.ZERO
+	player_inventory.device_id = player.device_id
+	player.linked_inventory = player_inventory
+	viewport_container.add_child(player_inventory)
 	# Link to player's camera
 	player.get_camera().custom_viewport = viewport_to_place
 	player.get_camera().make_current()
