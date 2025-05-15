@@ -12,7 +12,7 @@ var round_count: int
 var current_round: int
 var round_duration: int
 
-var players_devices_ids = [0, 1, 2, 3]
+var players_devices_ids = [-2, 0, 1, 2]
 
 var running: bool = false
 

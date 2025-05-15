@@ -84,12 +84,13 @@ func _on_gui_input(event: InputEvent) -> void:
 func _on_mouse_entered() -> void:
 	#if device_id >= 0: return
 	if item == null: return
-	Popups.ItemPopup(Rect2(global_position,size),item)
+	#Popups.ItemPopup(Rect2(global_position,size),item)
 
 
 func _on_mouse_exited() -> void:
 	#if device_id >= 0: return
-	Popups.HideItemPopup()
+	#Popups.HideItemPopup()
+	pass
 	
 	
 @onready var selected: Panel = %Selected

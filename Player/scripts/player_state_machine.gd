@@ -19,6 +19,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void: 
+	if player.is_hurt or player.is_dead: return
 	if attack_manager.is_attack_animation_played or attack_manager.is_holding: 
 		return
 	if player.is_moving:
@@ -56,9 +57,9 @@ func play(animation:GlobalPlayerMgmt.PLAYER_STATE, start_time=-1):
 		GlobalPlayerMgmt.PLAYER_STATE.RUNNING:
 			animation_player.play_section("run_" + facing_direction_string, start_time)
 		GlobalPlayerMgmt.PLAYER_STATE.HURT:
-			pass
+			animation_player.play_section("hit_" + facing_direction_string, start_time)
 		GlobalPlayerMgmt.PLAYER_STATE.DIE:
-			pass
+			animation_player.play_section("die_" + facing_direction_string, start_time)
 		GlobalPlayerMgmt.PLAYER_STATE.FALLING:
 			animation_player.play("falling")
 		GlobalPlayerMgmt.PLAYER_STATE.STANDBY:

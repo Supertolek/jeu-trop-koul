@@ -46,7 +46,7 @@ var focused_inventory_slot: InventorySlot = null:
 		elif focused_inventory_slot:
 			focused_inventory_slot._on_mouse_exited()
 		focused_inventory_slot = value
-		Popups.device_id = device_id
+		#Popups.device_id = device_id
 var selected_inventory_slot: InventorySlot = null:
 	set(value):
 		if value:
