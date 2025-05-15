@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b7qmhhnly8h3a"]
+[gd_scene load_steps=13 format=3 uid="uid://b7qmhhnly8h3a"]
 
 [ext_resource type="Script" uid="uid://bc3m2pk8xfink" path="res://scripts/inventory.gd" id="1_td2ew"]
 [ext_resource type="Texture2D" uid="uid://cfa3dfpr1gxx" path="res://assets/UI/inventory_bg.png" id="1_uae8j"]
@@ -11,8 +11,10 @@
 [ext_resource type="FontFile" uid="uid://n86h3178836i" path="res://assets/fonts/MinecraftItalic-R8Mo.otf" id="8_td2ew"]
 [ext_resource type="FontFile" uid="uid://dkqsygkyiswkm" path="res://assets/fonts/MinecraftBoldItalic-1y1e.otf" id="9_ylenm"]
 [ext_resource type="FontFile" uid="uid://7blsmj3oxjxo" path="res://assets/fonts/MinecraftBold-nMK1.otf" id="10_0df5h"]
+[ext_resource type="PackedScene" uid="uid://b6a4fo38edh21" path="res://scenes/item_popups.tscn" id="12_ylenm"]
 
 [node name="Inventory" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -396,6 +398,10 @@ visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="ItemPopups" parent="." instance=ExtResource("12_ylenm")]
+unique_name_in_owner = true
+layout_mode = 0
 
 [connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="pressed" from="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer/AllItemCategoryButton" to="." method="_on_all_item_category_button_pressed"]

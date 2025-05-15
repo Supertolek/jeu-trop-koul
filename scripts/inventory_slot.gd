@@ -16,6 +16,8 @@ enum  SLOT_TYPE {
 }
 
 var device_id: int 
+var item_popup: ItemPopups
+
 @onready var item_texture: TextureRect = %ItemTexture
 var texture:
 	set(value):
@@ -28,6 +30,16 @@ var item:
 	set(value):
 		item = value
 		refresh_item()
+		
+func link_to_inventory(inventory:InventoryUI):
+	slot_pressed.connect(inventory.start_dragging)
+	slot_released.connect(inventory.stop_dragging)
+	slot_focused.connect(inventory.change_focus)
+	item_popup = inventory.item_popups
+	device_id = inventory.device_id
+
+
+		
 		
 func refresh_item():
 		if item:
@@ -84,12 +96,12 @@ func _on_gui_input(event: InputEvent) -> void:
 func _on_mouse_entered() -> void:
 	#if device_id >= 0: return
 	if item == null: return
-	Popups.ItemPopup(Rect2(global_position,size),item)
+	item_popup.ItemPopup(self)
 
 
 func _on_mouse_exited() -> void:
 	#if device_id >= 0: return
-	Popups.HideItemPopup()
+	item_popup.HideItemPopup()
 	
 	
 @onready var selected: Panel = %Selected

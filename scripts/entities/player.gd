@@ -40,6 +40,7 @@ var hold_actions:Array[String] = []
 # Linked nodes
 @onready var linked_camera: Camera2D = $RoomCamera
 var linked_health_bar: HealthBar
+var linked_inventory: InventoryUI
 var linked_viewport_container: SubViewportContainer
 
 func get_camera() -> Camera2D:
@@ -52,6 +53,7 @@ func _ready() -> void:
 	
 	
 func _physics_process(delta: float) -> void:
+	if linked_inventory.visible: return
 	if device_id  == -2:
 		direction = Vector2(
 			Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
@@ -127,6 +129,10 @@ func _input(event: InputEvent) -> void:
 	(device_id >= 0 and event.device != device_id): return
 	
 	# Mettre les Inputs ici
+	if linked_inventory.visible: return
+	
+	if event is InputEventJoypadButton:
+		print(Input.get_joy_info(event.device))
 	
 	if event.is_action_pressed("attack"):
 		hold_actions.append("attack")
@@ -140,6 +146,13 @@ func _input(event: InputEvent) -> void:
 		attack_manager.lock_attack_direction()
 	if event.is_action_released("lock_attack_direction"):
 		attack_manager.unlock_attack_direction()
+		
+	if event.is_action_pressed("open_inventory"):
+		if !linked_inventory.visible:
+			linked_inventory.display_ui(inventory_storage)
+		else:
+			inventory_storage = linked_inventory.hide_ui()
+			
 
 
 func hit(damage: float, damage_mult:float = 1):
@@ -149,6 +162,9 @@ func hit(damage: float, damage_mult:float = 1):
 		damage_reduction = (player_stats.stat_defense * damage) / (player_stats.stat_defense + 50)
 	var effective_damage = snappedf(damage - damage_reduction,0.1)
 	player_stats.stat_effective_health = clamp(player_stats.stat_effective_health - effective_damage, 0, player_stats.stat_max_health)
+  
+	linked_health_bar.health = player_stats.stat_effective_health
+
 	if player_stats.stat_effective_health == 0:
 		SignalBus.player_died.emit(self)
 	GameController.health_change(self)
@@ -224,6 +240,7 @@ func calculate_all_stats(display_in_console:bool = false):
 	apply_stat()
 
 func apply_stat():
+	linked_health_bar.init_bar(0,player_stats.stat_max_health,player_stats.stat_effective_health)
 	health_regeneration_timer.wait_time = -log(clamp(player_stats.stat_health_regeneration,0,100))/3 + 2
 	print(health_regeneration_timer.wait_time)
 
