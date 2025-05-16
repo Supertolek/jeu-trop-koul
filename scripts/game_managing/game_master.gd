@@ -1,12 +1,14 @@
 class_name GameMaster
 extends Node2D
 
+const end_scene_packed_scene: PackedScene = preload("res://scenes/finish_screen.tscn")
 
 @export var map_data: MapData = load("res://maps/output.tres")
 
 @export var players: Array[Player]
 var alive_players: int
 var players_scores: Array[int]
+var winners: Array[Player] = []
 
 var round_count: int
 var current_round: int
@@ -56,7 +58,7 @@ func start_round():
 	SignalBus.player_died.connect(handle_killed_player)
 	# Start timer
 	%GameFinishTimer.connect("timeout", end_round)
-	%GameFinishTimer.start(round_duration)
+	%GameFinishTimer.start(10)#round_duration)
 	# Unfreeze players
 	set_players_frozen_state(false)
 
@@ -69,13 +71,31 @@ func end_round():
 	# Disconnect signals
 	SignalBus.player_died.disconnect(handle_killed_player)
 	# Update scores
-	var winners = find_winners()
-	for winner in winners:
-		players_scores[winner] += 1
+	var winners_ids := find_winners()
+	winners = []
+	for winner_id in winners_ids:
+		players_scores[winner_id] += 1
+		var winner = Global.players[winner_id]
+		winners.append(winner)
+	%GameDisplayEndScreenDelay.connect("timeout", display_end_screen_and_stuff)
+	%GameDisplayEndScreenDelay.start(3)
+
+func display_end_screen_and_stuff():
+	%GameDisplayEndScreenDelay.stop()
+	%GameDisplayEndScreenDelay.disconnect("timeout", display_end_screen_and_stuff)
+	var end_scene = end_scene_packed_scene.instantiate()
+	%SplitScreen.add_child(end_scene)
+	end_scene.display_winners(winners)
+	end_scene.position = Vector2.ZERO
+	await get_tree().create_timer(5).timeout
+	end_scene.queue_free()
+	for player in players:
+		player.linked_inventory.display_ui(player.inventory_storage)
 	# Check if a new round have to start
 	if current_round < round_count:
 		current_round += 1
-		start_round()
+		#start_round()
+	
 
 func start_game(rounds: int, rounds_duration: int):
 	#for controller in Input.get_connected_joypads():

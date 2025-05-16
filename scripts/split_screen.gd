@@ -20,9 +20,10 @@ func place_viewport_at(relative_position: Vector2, relative_size: float, player:
 	#1152 × 640
 	var desired_size := current_viewport_rect.size * relative_size
 	viewport_to_place.size = desired_size
+	viewport_to_place.size -= Vector2i(8, 8)
 	viewport_container.size = current_viewport_rect.size
 	viewport_container.scale = Vector2(relative_size, relative_size)
-	viewport_container.position = current_viewport_rect.size * relative_position - viewport_container.size/4
+	viewport_container.position = current_viewport_rect.size * relative_position - viewport_container.size/4 + Vector2(4, 4)
 	viewport_container.stretch = true
 	viewport_to_place.handle_input_locally = false
 	viewport_to_place.world_2d = get_window().world_2d

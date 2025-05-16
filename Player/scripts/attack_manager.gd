@@ -78,9 +78,12 @@ func _process(_delta: float) -> void:
 			charged_attack_1_charge_timer.start()
 		
 func attack_pressed():
+	if player.frozen:
+		return
 	is_holding = true
 
 func attack_released():
+	if player.frozen: return
 	if player.is_hurt: return
 	is_holding = false
 	if !attack_posible: return

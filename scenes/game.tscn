@@ -177,3 +177,6 @@ unique_name_in_owner = true
 
 [node name="GameStartDelay" type="Timer" parent="Timers"]
 unique_name_in_owner = true
+
+[node name="GameDisplayEndScreenDelay" type="Timer" parent="Timers"]
+unique_name_in_owner = true

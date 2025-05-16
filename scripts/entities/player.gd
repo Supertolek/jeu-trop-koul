@@ -183,6 +183,7 @@ func _input(event: InputEvent) -> void:
 
 
 func hit(damage: float, damage_mult:float = 1):
+	if is_dead: return
 	var damage_reduction: float = 0
 	damage *= damage_mult
 
@@ -211,6 +212,7 @@ func hit(damage: float, damage_mult:float = 1):
 	GameController.health_change(self)
 	
 func hit_player(target_player: Player, damage_mult:float = 1):
+	if frozen: return
 	target_player.hit(GlobalItemsMgmt.calculate_damage(player_stats), damage_mult)
 
 
@@ -293,5 +295,5 @@ func apply_stat():
 	print(health_regeneration_timer.wait_time)
 
 func _on_health_regeneration_timer_timeout() -> void:
-	if is_dead: return
+	if is_dead or frozen: return
 	hit(-player_stats.stat_max_health/50)
