@@ -57,11 +57,9 @@ func _ready() -> void:
 	player_2.global_position = Vector2(200,400)
 	player_2.color = "Green"
 	players.append(player_2)
-	#player_1.enemy = player_2
-	#player_2.enemy = player_1
 	var player_3 = PLAYER.instantiate()
 	player_3.device_id = 1
-	player_3.global_position = Vector2(500,500)
+	player_3.global_position = Vector2(400,500)
 	player_3.color = "Black"
 	players.append(player_3)
 	var player_4 = PLAYER.instantiate()

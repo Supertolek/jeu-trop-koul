@@ -30,6 +30,13 @@ var memory_facing_direction: GlobalPlayerMgmt.PLAYER_DIRECTION = facing_directio
 
 
 @onready var health_regeneration_timer: Timer = %HealthRegenerationTimer
+@onready var hurt_timer: Timer = %HurtTimer
+@onready var die_timer: Timer = %DieTimer
+@onready var invulnerably_frames: Timer = %InvulnerablyFrames
+
+var is_hurt:bool = false
+var is_dead:bool = false
+var is_invulnerable: bool = false
 
 @export_enum('Blue','Green','Black','Red') var color: String = 'Blue'
 var enemy: Player
@@ -49,6 +56,7 @@ func get_camera() -> Camera2D:
 
 
 func _ready() -> void:
+	sprite.set_sprite_texture(load("res://assets/Player/"+color+"/"+color.to_lower()+"_player_animation.png"))
 	calculate_all_stats(false)
 	player_stats.stat_effective_health = player_stats.stat_max_health
 	
@@ -92,8 +100,8 @@ func _physics_process(delta: float) -> void:
 					Input.get_joy_axis(xinput_id, JOY_AXIS_LEFT_Y),
 				)
 			direction = direction.normalized()
-		if direction.length() <= 0.2:
-			direction = Vector2.ZERO
+	if direction.length() <= 0.3 or is_dead:
+		direction = Vector2.ZERO
 	# Gestion de la direction regardée par le joueur
 	if direction.is_zero_approx():
 		direction = Vector2.ZERO
@@ -146,6 +154,7 @@ func _input(event: InputEvent) -> void:
 	 ((event is InputEventKey or event is InputEventMouse) and device_id >=0) or\
 	(device_id >= 0 and event.device != device_id): return
 	
+	if is_dead: return
 	# Mettre les Inputs ici
 	if linked_inventory.visible: return
 	
@@ -159,7 +168,7 @@ func _input(event: InputEvent) -> void:
 		hold_actions.erase("attack")
 		attack_manager.attack_released()
 	if event.is_action_pressed("right_click"):
-		hit(-1)
+		pass
 	if event.is_action_pressed("lock_attack_direction"):
 		attack_manager.lock_attack_direction()
 	if event.is_action_released("lock_attack_direction"):
@@ -176,7 +185,10 @@ func _input(event: InputEvent) -> void:
 func hit(damage: float, damage_mult:float = 1):
 	var damage_reduction: float = 0
 	damage *= damage_mult
+
 	if damage > 0:
+		if is_invulnerable:
+			return
 		damage_reduction = (player_stats.stat_defense * damage) / (player_stats.stat_defense + 50)
 	var effective_damage = snappedf(damage - damage_reduction,0.1)
 	player_stats.stat_effective_health = clamp(player_stats.stat_effective_health - effective_damage, 0, player_stats.stat_max_health)
@@ -185,14 +197,32 @@ func hit(damage: float, damage_mult:float = 1):
 
 	if player_stats.stat_effective_health == 0:
 		SignalBus.player_died.emit(self)
+		player_state_machine.state = GlobalPlayerMgmt.PLAYER_STATE.DIE
+		is_dead = true
+		die_timer.start()
+	else:
+		if damage > 0:
+			player_state_machine.state = GlobalPlayerMgmt.PLAYER_STATE.HURT
+			is_hurt = true
+			hurt_timer.start()
+			is_invulnerable = false
+			invulnerably_frames.start()
+	linked_health_bar.health = player_stats.stat_effective_health
 	GameController.health_change(self)
 	
 func hit_player(target_player: Player, damage_mult:float = 1):
 	target_player.hit(GlobalItemsMgmt.calculate_damage(player_stats), damage_mult)
 
 
+func _on_hurt_timer_timeout() -> void:
+	is_hurt = false
+
+func _on_die_timer_timeout() -> void:
+	pass
 
 
+func _on_invulnerably_frames_timeout() -> void:
+	is_invulnerable = false
 
 
 
@@ -263,4 +293,5 @@ func apply_stat():
 	print(health_regeneration_timer.wait_time)
 
 func _on_health_regeneration_timer_timeout() -> void:
+	if is_dead: return
 	hit(-player_stats.stat_max_health/50)
