@@ -11,6 +11,7 @@ class_name AttackManager
 @onready var attack_1_area: Area2D = %attack_1_area
 @onready var attack_2_area: Area2D = %attack_2_area
 @onready var attack_3_area: Area2D = %attack_3_area
+@onready var charged_attack_area: Area2D = %charged_attack_area
 
 # Basic Attack Timer
 @onready var attack_1_cooldown_timer: Timer = %Attack1CooldownTimer
@@ -25,6 +26,7 @@ class_name AttackManager
 var attack_1_animation_duration: float = 0.8
 var attack_2_animation_duration: float = 0.5
 var attack_3_animation_duration: float = 0.8
+var charged_attack_animation_duration: float = 1.1
 	
 var attack_1_duration_cooldown: float = 0.5:
 	set(value):
@@ -41,6 +43,7 @@ var attack_3_duration_cooldown: float = 0.7:
 var combo_1_time_window:float = 0.5
 var combo_2_time_window:float = 0.5
 
+var can_special:bool = false
 
 
 func _ready() -> void:
@@ -60,11 +63,17 @@ var saved_direction: GlobalPlayerMgmt.PLAYER_DIRECTION
 var is_attack_direction_locked:bool = false
 var locked_attack_direction: GlobalPlayerMgmt.PLAYER_DIRECTION
 
+func stop_attack():
+	combo_points =3
+
 
 func _process(_delta: float) -> void:
+	if player.is_hurt:
+		attack_released()
 	if is_holding:
 		if !is_attack_animation_played and\
-		 player_state_machine.state != GlobalPlayerMgmt.PLAYER_STATE.CHARGE_ATTACK:
+		 player_state_machine.state != GlobalPlayerMgmt.PLAYER_STATE.CHARGE_ATTACK and\
+		 player_state_machine.state != GlobalPlayerMgmt.PLAYER_STATE.CAST_CHARGED_ATTACK:
 			player_state_machine.state = GlobalPlayerMgmt.PLAYER_STATE.CHARGE_ATTACK
 			charged_attack_1_charge_timer.start()
 		
@@ -72,26 +81,35 @@ func attack_pressed():
 	is_holding = true
 
 func attack_released():
+	if player.is_hurt: return
 	is_holding = false
 	if !attack_posible: return
 	disble_attack()
+	charged_attack_1_charge_timer.stop()
 	is_attack_animation_played = true
+	if can_special:
+		player_state_machine.state = GlobalPlayerMgmt.PLAYER_STATE.CAST_CHARGED_ATTACK
+		charged_attack_1_cooldown_timer.start()
+		animation_timer.start(charged_attack_animation_duration)
+		can_special = false
+		return
+		
 	match combo_points:
 		3:
 			player_state_machine.state = GlobalPlayerMgmt.PLAYER_STATE.ATTACK_1
-			directionate_attack(attack_1_area)
+			#directionate_attack(attack_1_area)
 			attack_1_cooldown_timer.start()
 			combo_timer.start(attack_1_duration_cooldown + combo_1_time_window)
 			animation_timer.start(attack_1_animation_duration)
 		2:
 			player_state_machine.state = GlobalPlayerMgmt.PLAYER_STATE.ATTACK_2
-			directionate_attack(attack_2_area)
+			#directionate_attack(attack_2_area)
 			attack_2_cooldown_timer.start()
 			combo_timer.start(attack_2_duration_cooldown + combo_2_time_window)
 			animation_timer.start(attack_2_animation_duration)
 		1:
 			player_state_machine.state = GlobalPlayerMgmt.PLAYER_STATE.ATTACK_3
-			directionate_attack(attack_3_area)
+			#directionate_attack(attack_3_area)
 			attack_3_cooldown_timer.start()
 			animation_timer.start(attack_3_animation_duration)
 	
@@ -146,16 +164,19 @@ func _on_animation_timer_timeout() -> void:
 		player.facing_direction = saved_direction
 	
 func _on_charged_attack_1_charge_timer_timeout() -> void:
-	pass
+	can_special = true
 
 func _on_charged_attack_1_cooldown_timer_timeout() -> void:
-	pass
+	combo_points = 3
+	enable_attack()
 
 
 
 
 		
 func directionate_attack(attack_area, reset:bool = false):
+	if attack_area is int:
+		attack_area = get_child(-4+attack_area)
 	if reset:
 		attack_area.visible = false
 		for hit_box in attack_area.get_children():
@@ -165,6 +186,9 @@ func directionate_attack(attack_area, reset:bool = false):
 	saved_direction = player_state_machine.get_attack_direction()
 	if player.device_id >= 0 and is_attack_direction_locked: 
 		saved_direction = locked_attack_direction
+	if attack_area == charged_attack_area:
+		attack_area.get_node("collision").disabled = false
+		return	
 	match saved_direction:
 		GlobalPlayerMgmt.PLAYER_DIRECTION.UP:
 			attack_area.get_node("up").disabled = false
@@ -193,4 +217,10 @@ func _on_attack_2_area_area_entered(area: Area2D) -> void:
 func _on_attack_3_area_area_entered(area: Area2D) -> void:
 	if area is PlayerHitBoxArea:
 		if area == player_hit_box_area: return
-		owner.hit_player(area.owner, 3)
+		owner.hit_player(area.owner, 1.3)
+
+
+func _on_charged_attack_area_area_entered(area: Area2D) -> void:
+	if area is PlayerHitBoxArea:
+		if area == player_hit_box_area: return
+		owner.hit_player(area.owner, 1.3)
