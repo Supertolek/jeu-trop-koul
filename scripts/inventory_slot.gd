@@ -15,6 +15,11 @@ enum  SLOT_TYPE {
 	IN_PREVIEW,
 }
 
+var focus_left: InventorySlot
+var focus_up: InventorySlot
+var focus_right: InventorySlot
+var focus_down: InventorySlot
+
 var device_id: int 
 var item_popup: ItemPopups
 
@@ -109,13 +114,15 @@ func _on_mouse_exited() -> void:
 
 
 func _on_focus_entered() -> void:
-	if device_id == -2: return
-	slot_focused.emit(self)
-	focus_display.visible = true
+	pass
+	#if device_id == -2: return
+	#slot_focused.emit(self)
+	#focus_display.visible = true
 
 
 func _on_focus_exited() -> void:
-	if device_id == -2: return
+	#if device_id == -2: return
+	pass
 	focus_display.visible = false
 	
 func select():
@@ -128,4 +135,9 @@ func diselect():
 	selected.visible = false
 	#slot_diselected.emit(self)
 
+func grab_artificial_focus():
+	slot_focused.emit(self)
+	focus_display.visible = true
 	
+func lose_artificial_focus():
+	focus_display.visible = false

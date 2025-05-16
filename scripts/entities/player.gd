@@ -245,6 +245,10 @@ var inventory_storage: Dictionary = {
 	"equiped_armor":null,# load("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
 	"inventory": [
 		preload("res://Resources/Items/Items_Modifiers/ham.tres").duplicate(),
+		preload("res://Resources/Items/Weapon/la_faux_fouche.tres").duplicate(),
+		preload("res://Resources/Items/Weapon/test_sword.tres").duplicate(),
+		preload("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
+		preload("res://Resources/Items/Armor/t-shirt.tres").duplicate(),
 		preload("res://Resources/Items/Items_Modifiers/attack_of_some.tres").duplicate(),
 		preload("res://Resources/Items/Items_Modifiers/bread.tres").duplicate(),
 		preload("res://Resources/Items/Items_Modifiers/attack_of_some.tres").duplicate(),

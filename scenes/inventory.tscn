@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b7qmhhnly8h3a"]
+[gd_scene load_steps=15 format=3 uid="uid://b7qmhhnly8h3a"]
 
 [ext_resource type="Script" uid="uid://bc3m2pk8xfink" path="res://scripts/inventory.gd" id="1_td2ew"]
 [ext_resource type="Texture2D" uid="uid://cfa3dfpr1gxx" path="res://assets/UI/inventory_bg.png" id="1_uae8j"]
@@ -12,6 +12,11 @@
 [ext_resource type="FontFile" uid="uid://dkqsygkyiswkm" path="res://assets/fonts/MinecraftBoldItalic-1y1e.otf" id="9_ylenm"]
 [ext_resource type="FontFile" uid="uid://7blsmj3oxjxo" path="res://assets/fonts/MinecraftBold-nMK1.otf" id="10_0df5h"]
 [ext_resource type="PackedScene" uid="uid://b6a4fo38edh21" path="res://scenes/item_popups.tscn" id="12_ylenm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ylenm"]
+bg_color = Color(0, 0, 0, 0.529412)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0df5h"]
 
 [node name="Inventory" type="Control"]
 visible = false
@@ -42,9 +47,33 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="InventoryHeader" type="HBoxContainer" parent="VBoxContainer"]
+[node name="InventoryHeader" type="TabContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_vertical = 3
+tab_alignment = 1
+current_tab = 0
+tabs_visible = false
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/InventoryHeader"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ylenm")
+metadata/_tab_index = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/InventoryHeader/PanelContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("10_0df5h")
+theme_override_font_sizes/font_size = 50
+text = "Ready"
+horizontal_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/InventoryHeader"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0df5h")
+metadata/_tab_index = 1
 
 [node name="InventoryBody" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -401,7 +430,9 @@ offset_bottom = 40.0
 
 [node name="ItemPopups" parent="." instance=ExtResource("12_ylenm")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
+mouse_filter = 2
 
 [connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="pressed" from="VBoxContainer/InventoryBody/MainInventoryMarginContainer/VBoxContainer/CategoryTabContainer/AllItemCategoryButton" to="." method="_on_all_item_category_button_pressed"]

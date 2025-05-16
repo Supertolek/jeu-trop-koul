@@ -58,7 +58,7 @@ func start_round():
 	SignalBus.player_died.connect(handle_killed_player)
 	# Start timer
 	%GameFinishTimer.connect("timeout", end_round)
-	%GameFinishTimer.start(10)#round_duration)
+	%GameFinishTimer.start(1)#round_duration)
 	# Unfreeze players
 	set_players_frozen_state(false)
 
@@ -87,7 +87,7 @@ func display_end_screen_and_stuff():
 	%SplitScreen.add_child(end_scene)
 	end_scene.display_winners(winners)
 	end_scene.position = Vector2.ZERO
-	await get_tree().create_timer(5).timeout
+	await get_tree().create_timer(1).timeout
 	end_scene.queue_free()
 	for player in players:
 		player.linked_inventory.display_ui(player.inventory_storage)
