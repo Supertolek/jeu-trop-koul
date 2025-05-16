@@ -10,7 +10,8 @@ var friction: int = 10 * player_scale
 
 var is_moving: bool = false
 
-@export var device_id: int
+@export var device_id: int = -2
+@export var xinput_id: int = -3
 
 
 @onready var sprite: Sprite2D = %Sprite
@@ -53,7 +54,8 @@ func _ready() -> void:
 	
 	
 func _physics_process(delta: float) -> void:
-	if linked_inventory.visible: return
+	if linked_inventory.visible or \
+	   frozen: return
 	if device_id  == -2:
 		direction = Vector2(
 			Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
@@ -64,16 +66,32 @@ func _physics_process(delta: float) -> void:
 		if Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_UP) or \
 		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_DOWN) or \
 		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_RIGHT) or \
-		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_LEFT):
+		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_LEFT) or \
+		   Input.is_joy_button_pressed(xinput_id,JOY_BUTTON_DPAD_UP) or \
+		   Input.is_joy_button_pressed(xinput_id,JOY_BUTTON_DPAD_DOWN) or \
+		   Input.is_joy_button_pressed(xinput_id,JOY_BUTTON_DPAD_RIGHT) or \
+		   Input.is_joy_button_pressed(xinput_id,JOY_BUTTON_DPAD_LEFT):
 			direction = Vector2(
 				int(Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_RIGHT)) - int(Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_LEFT)),
 				int(Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_DOWN)) - int(Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_UP)),
-			).normalized()
+			)
+			if xinput_id != -3:
+				direction += Vector2(
+					int(Input.is_joy_button_pressed(xinput_id,JOY_BUTTON_DPAD_RIGHT)) - int(Input.is_joy_button_pressed(xinput_id,JOY_BUTTON_DPAD_LEFT)),
+					int(Input.is_joy_button_pressed(xinput_id,JOY_BUTTON_DPAD_DOWN)) - int(Input.is_joy_button_pressed(xinput_id,JOY_BUTTON_DPAD_UP)),
+				)
+			direction = direction.normalized()
 		else:
 			direction = Vector2(
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_X),
 				Input.get_joy_axis(device_id, JOY_AXIS_LEFT_Y),
 			)
+			if xinput_id != -3:
+				direction += Vector2(
+					Input.get_joy_axis(xinput_id, JOY_AXIS_LEFT_X),
+					Input.get_joy_axis(xinput_id, JOY_AXIS_LEFT_Y),
+				)
+			direction = direction.normalized()
 		if direction.length() <= 0.2:
 			direction = Vector2.ZERO
 	# Gestion de la direction regardée par le joueur
@@ -120,9 +138,9 @@ func _process(_delta: float) -> void:
 		
 		
 func _input(event: InputEvent) -> void:
-	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
-		print(Input.get_joy_name(event.device))
-		print(Input.get_joy_guid(event.device))
+	#if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		#print(Input.get_joy_name(event.device))
+		#print(Input.get_joy_guid(event.device))
 	# Gros if statement pour séparer les inputs des joueurs
 	if (!(event is InputEventKey or event is InputEventMouse) and device_id == -2) or\
 	 ((event is InputEventKey or event is InputEventMouse) and device_id >=0) or\

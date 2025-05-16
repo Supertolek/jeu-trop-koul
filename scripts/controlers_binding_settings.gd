@@ -20,6 +20,7 @@ var controllers_cursor: Dictionary[int, ControllerIcon] = {}
 var controllers_cursor_position: Dictionary[int, int] = {} ## controller_id:player_card_id
 var controllers_last_action: Dictionary[int, int] = {}
 var recognized_controllers: Array[int] = []
+var controllers_xinput: Dictionary[int, int] = {}
 var offset: int = 4
 
 func place_player_card(relative_position: Vector2, relative_size: float, player: Player, corner: int = -1):
@@ -99,22 +100,39 @@ func select_player(controller_id: int, state: int = -1):
 			if selected_player.device_id in recognized_controllers:
 				controllers_cursor[selected_player.device_id].active = false
 			selected_player.device_id = controller_id
+			selected_player.xinput_id = controllers_xinput[controller_id]
 			controllers_cursor[controller_id].active = true
 		else:
-			selected_player.device_id = -2
+			selected_player.device_id = -3
+			selected_player.xinput_id = -3
 			controllers_cursor[controller_id].active = false
 	else:
-		selected_player.device_id = -2
+		selected_player.device_id = -3
+		selected_player.xinput_id = -3
 		controllers_cursor[controller_id].active = false
 
+func _joy_connection_changed(device_id: int, connected: bool):
+	if connected:
+		print(
+			"Device with id {device_id} ({brand} controller) connected.".format(
+				{
+					"device_id": device_id,
+					"brand": Global.controllers_brand_names[Global.get_joypad_brand(device_id)]
+				}))
+	else:
+		print("Device with id {device_id} disconnected.".format({"device_id": device_id}))
+
 func _ready() -> void:
+	Input.connect("joy_connection_changed", _joy_connection_changed)
 	place_player_cards()
 	for controller_id in Input.get_connected_joypads():
+		print("Controller name: ", Input.get_joy_name(controller_id))
 		if len(recognized_controllers) < 4:
 			var controller_info := Input.get_joy_info(controller_id)
+			print("Controller info: ", Input.get_joy_info(controller_id))
 			if "vendor_id" in controller_info:
 				var controller_brand := Global.get_joypad_brand(controller_id)
-				if controller_brand != Global.CONTROLLERS_BRANDS.XBOX:
+				if controller_brand != Global.CONTROLLERS_BRANDS.MISSING:
 					recognized_controllers.append(controller_id)
 					var controller_icon: ControllerIcon = controller_icon_packed_scene.instantiate()
 					controller_icon.controller_brand = Global.get_joypad_brand(controller_id)
@@ -123,10 +141,13 @@ func _ready() -> void:
 					controller_icon.active = true
 					controllers_cursor[controller_id] = controller_icon
 					controllers_last_action[controller_id] = Time.get_ticks_msec()
-					print(controller_id)
 					controllers_cursor_position[controller_id] = 0
+					controllers_xinput[controller_id] = -3
 					update_controller_cursor_position(controller_id, len(recognized_controllers)-1)
 					player_cards[controllers_cursor_position[controller_id]].set_meta("linked_player", controller_id)
+			elif "xinput_index" in controller_info:
+				if controller_info["xinput_index"] in recognized_controllers:
+					controllers_xinput[controller_info["xinput_index"]] = controller_id
 		else:
 			break
 
@@ -134,11 +155,19 @@ func _process(delta: float) -> void:
 	for recognized_controller in recognized_controllers:
 		if controllers_last_action[recognized_controller] + controllers_echo_delay_msec < Time.get_ticks_msec():
 			var moved := false
-			var controller_x_axis: float = abs(Input.get_joy_axis(recognized_controller, JOY_AXIS_RIGHT_X))
+			# X axis
+			var controller_x_axis: float = Input.get_joy_axis(recognized_controller, JOY_AXIS_RIGHT_X)
+			if controllers_xinput[recognized_controller] >= 0:
+				controller_x_axis += Input.get_joy_axis(controllers_xinput[recognized_controller], JOY_AXIS_RIGHT_X)
+			var controller_x_axis_abs: float = clamp(abs(controller_x_axis), 0, 1)
 			if controller_x_axis <= controllers_dead_zone: controller_x_axis = 0
-			var controller_y_axis: float = abs(Input.get_joy_axis(recognized_controller, JOY_AXIS_RIGHT_Y))
+			# Y axis
+			var controller_y_axis: float = Input.get_joy_axis(recognized_controller, JOY_AXIS_RIGHT_Y)
+			if controllers_xinput[recognized_controller] >= 0:
+				controller_y_axis += Input.get_joy_axis(controllers_xinput[recognized_controller], JOY_AXIS_RIGHT_Y)
+			var controller_y_axis_abs: float = clamp(abs(controller_y_axis), 0, 1)
 			if controller_y_axis <= controllers_dead_zone: controller_y_axis = 0
-			if controller_x_axis >= controller_y_axis and controller_x_axis != 0:
+			if controller_x_axis_abs >= controller_y_axis_abs and controller_x_axis_abs != 0:
 				if controllers_cursor_position[recognized_controller] % 2 == 0:
 					update_controller_cursor_position(recognized_controller, controllers_cursor_position[recognized_controller] + 1)
 				else:
@@ -149,8 +178,8 @@ func _process(delta: float) -> void:
 				moved = true
 			if not moved:
 				continue
-			print(controllers_cursor_position[recognized_controller])
-			print(Time.get_ticks_msec() - controllers_last_action[recognized_controller])
+			#print(controllers_cursor_position[recognized_controller])
+			#print(Time.get_ticks_msec() - controllers_last_action[recognized_controller])
 			controllers_last_action[recognized_controller] = Time.get_ticks_msec()
 
 func _input(event: InputEvent) -> void:

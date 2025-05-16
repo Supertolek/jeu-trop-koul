@@ -38,18 +38,16 @@ func get_joypad_brand(device_id: int) -> CONTROLLERS_BRANDS:
 	if device_id in Input.get_connected_joypads():
 		if "vendor_id" in Input.get_joy_info(device_id):
 			var joy_vendor_id = Input.get_joy_info(device_id)["vendor_id"]
-			print(joy_vendor_id)
 			if joy_vendor_id in vendors_ids:
 				return vendors_ids[joy_vendor_id]
 			else:
 				return CONTROLLERS_BRANDS.GENERIC
 		else:
-			return CONTROLLERS_BRANDS.GENERIC
+			return CONTROLLERS_BRANDS.MISSING
 	else:
 		return CONTROLLERS_BRANDS.MISSING
 
 func _ready() -> void:
-	pass
 	var player_1 = PLAYER.instantiate()
 	player_1.device_id = -2
 	player_1.global_position = Vector2(500,400)
@@ -67,7 +65,7 @@ func _ready() -> void:
 	player_3.color = "Black"
 	players.append(player_3)
 	var player_4 = PLAYER.instantiate()
-	player_4.device_id = 1
+	player_4.device_id = 2
 	player_4.global_position = Vector2(500,500)
 	player_4.color = "Red"
 	players.append(player_4)

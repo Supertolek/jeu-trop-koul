@@ -12,7 +12,6 @@ var round_count: int
 var current_round: int
 var round_duration: int
 
-var players_devices_ids = [0, 1, 2, 3]
 
 var running: bool = false
 
@@ -28,7 +27,7 @@ func load_game(players_list: Array[Player]):
 		add_child(player)
 		players_scores.append(0)
 		player.frozen = true
-		player.device_id = players_devices_ids[player_index]
+		#player.device_id = players_devices_ids[player_index]
 		#player.device_id = player_index - 1
 	#players[0].device_id = -2
 
@@ -61,6 +60,7 @@ func start_round():
 	set_players_frozen_state(false)
 
 func end_round():
+	print("finish")
 	# Stop timmer
 	%GameFinishTimer.stop()
 	# Freeze players
@@ -77,8 +77,8 @@ func end_round():
 		start_round()
 
 func start_game(rounds: int, rounds_duration: int):
-	for controller in Input.get_connected_joypads():
-		Input.start_joy_vibration(controller, 1, 1, 5)
+	#for controller in Input.get_connected_joypads():
+		#Input.start_joy_vibration(controller, 1, 1, 5)
 	load_map(map_data)
 	round_duration = rounds_duration
 	round_count = rounds

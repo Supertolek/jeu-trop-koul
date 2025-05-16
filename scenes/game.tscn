@@ -159,11 +159,9 @@ metadata/_edit_lock_ = true
 
 [node name="Inventory_0" parent="UI" instance=ExtResource("5_iywne")]
 unique_name_in_owner = true
-visible = false
 
 [node name="Inventory_1" parent="UI" instance=ExtResource("5_iywne")]
 unique_name_in_owner = true
-visible = false
 
 [node name="SplitScreen" parent="." instance=ExtResource("8_gee14")]
 unique_name_in_owner = true
