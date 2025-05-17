@@ -1,4 +1,7 @@
+class_name ControllersBinding
 extends Control
+
+signal players_ready
 
 const animated_player_packed_scene: PackedScene = preload("res://scenes/settings/settings_widgets/animated_player.tscn")
 const controller_icon_packed_scene: PackedScene = preload("res://scenes/settings/settings_widgets/controller_icon.tscn")
@@ -21,6 +24,7 @@ var controllers_cursor_position: Dictionary[int, int] = {} ## controller_id:play
 var controllers_last_action: Dictionary[int, int] = {}
 var recognized_controllers: Array[int] = []
 var controllers_xinput: Dictionary[int, int] = {}
+var ready_controllers: Array[int] = []
 var offset: int = 4
 
 func place_player_card(relative_position: Vector2, relative_size: float, player: Player, corner: int = -1):
@@ -126,11 +130,12 @@ func _ready() -> void:
 	Input.connect("joy_connection_changed", _joy_connection_changed)
 	place_player_cards()
 	for controller_id in Input.get_connected_joypads():
-		print("Controller name: ", Input.get_joy_name(controller_id))
+		#print("Controller name: ", Input.get_joy_name(controller_id))
 		if len(recognized_controllers) < 4:
 			var controller_info := Input.get_joy_info(controller_id)
-			print("Controller info: ", Input.get_joy_info(controller_id))
+			#print("Controller info: ", Input.get_joy_info(controller_id))
 			if "vendor_id" in controller_info:
+				if "xinput_index" in controller_info and controller_info["xinput_index"] != controller_id: continue
 				var controller_brand := Global.get_joypad_brand(controller_id)
 				if controller_brand != Global.CONTROLLERS_BRANDS.MISSING:
 					recognized_controllers.append(controller_id)
@@ -145,9 +150,9 @@ func _ready() -> void:
 					controllers_xinput[controller_id] = -3
 					update_controller_cursor_position(controller_id, len(recognized_controllers)-1)
 					player_cards[controllers_cursor_position[controller_id]].set_meta("linked_player", controller_id)
-			elif "xinput_index" in controller_info:
-				if controller_info["xinput_index"] in recognized_controllers:
-					controllers_xinput[controller_info["xinput_index"]] = controller_id
+			#elif "xinput_index" in controller_info:
+				#if controller_info["xinput_index"] in recognized_controllers:
+					#controllers_xinput[controller_info["xinput_index"]] = controller_id
 		else:
 			break
 
@@ -157,23 +162,23 @@ func _process(delta: float) -> void:
 			var moved := false
 			# X axis
 			var controller_x_axis: float = Input.get_joy_axis(recognized_controller, JOY_AXIS_RIGHT_X)
-			if controllers_xinput[recognized_controller] >= 0:
-				controller_x_axis += Input.get_joy_axis(controllers_xinput[recognized_controller], JOY_AXIS_RIGHT_X)
+			#if controllers_xinput[recognized_controller] >= 0:
+				#controller_x_axis += Input.get_joy_axis(controllers_xinput[recognized_controller], JOY_AXIS_RIGHT_X)
 			var controller_x_axis_abs: float = clamp(abs(controller_x_axis), 0, 1)
-			if controller_x_axis <= controllers_dead_zone: controller_x_axis = 0
+			if controller_x_axis_abs <= controllers_dead_zone: controller_x_axis_abs = 0
 			# Y axis
 			var controller_y_axis: float = Input.get_joy_axis(recognized_controller, JOY_AXIS_RIGHT_Y)
-			if controllers_xinput[recognized_controller] >= 0:
-				controller_y_axis += Input.get_joy_axis(controllers_xinput[recognized_controller], JOY_AXIS_RIGHT_Y)
+			#if controllers_xinput[recognized_controller] >= 0:
+				#controller_y_axis += Input.get_joy_axis(controllers_xinput[recognized_controller], JOY_AXIS_RIGHT_Y)
 			var controller_y_axis_abs: float = clamp(abs(controller_y_axis), 0, 1)
-			if controller_y_axis <= controllers_dead_zone: controller_y_axis = 0
+			if controller_y_axis_abs <= controllers_dead_zone: controller_y_axis_abs = 0
 			if controller_x_axis_abs >= controller_y_axis_abs and controller_x_axis_abs != 0:
 				if controllers_cursor_position[recognized_controller] % 2 == 0:
 					update_controller_cursor_position(recognized_controller, controllers_cursor_position[recognized_controller] + 1)
 				else:
 					update_controller_cursor_position(recognized_controller, controllers_cursor_position[recognized_controller] - 1)
 				moved = true
-			if controller_y_axis >= controller_x_axis and controller_y_axis != 0:
+			if controller_y_axis_abs >= controller_x_axis_abs and controller_y_axis_abs != 0:
 				update_controller_cursor_position(recognized_controller, (controllers_cursor_position[recognized_controller]+2) % 4)
 				moved = true
 			if not moved:
@@ -182,12 +187,36 @@ func _process(delta: float) -> void:
 			#print(Time.get_ticks_msec() - controllers_last_action[recognized_controller])
 			controllers_last_action[recognized_controller] = Time.get_ticks_msec()
 
+func refresh_players_list():
+	var new_player_list: Array[Player] = []
+	var abandonned_players: Array[Player] = []
+	for recognized_controller in recognized_controllers:
+		if controllers_cursor[recognized_controller].active:
+			new_player_list.append(
+				Global.players[player_cards[controllers_cursor_position[recognized_controller]].get_meta("linked_player")]
+			)
+		else:
+			abandonned_players.append(
+				Global.players[player_cards[controllers_cursor_position[recognized_controller]].get_meta("linked_player")]
+			)
+	Global.players = new_player_list
+	Global.spare_players = abandonned_players
+
 func _input(event: InputEvent) -> void:
 	if event.device in recognized_controllers:
 		if event is InputEventJoypadMotion:
-			if abs(Input.get_joy_axis(event.device, JOY_AXIS_RIGHT_X)) <= controllers_dead_zone and \
-			   abs(Input.get_joy_axis(event.device, JOY_AXIS_RIGHT_Y)) <= controllers_dead_zone:
-				controllers_last_action[event.device] = 0
+			#if abs(Input.get_joy_axis(event.device, JOY_AXIS_RIGHT_X)) <= controllers_dead_zone and \
+			   #abs(Input.get_joy_axis(event.device, JOY_AXIS_RIGHT_Y)) <= controllers_dead_zone:
+				#controllers_last_action[event.device] = 0
+			pass
 		elif event is InputEventJoypadButton:
 			if event.button_index == JOY_BUTTON_A and event.pressed:
 				select_player(event.device)
+			elif event.button_index == JOY_BUTTON_START and event.pressed:
+				if event.device in ready_controllers:
+					ready_controllers.remove_at(ready_controllers.find(event.device))
+				else:
+					ready_controllers.append(event.device)
+					if len(ready_controllers) >= len(recognized_controllers):
+						refresh_players_list()
+						players_ready.emit()

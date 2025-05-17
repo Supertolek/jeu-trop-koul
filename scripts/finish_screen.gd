@@ -1,3 +1,4 @@
+class_name FinishScreen
 extends Control
 
 func _ready() -> void:
@@ -19,7 +20,4 @@ func display_winners(winners: Array[Player]):
 				%WinnerLabel.text += " and "
 		%WinnerLabel.text += "."
 	%WinnerLabel.set("theme_override_font_sizes/font_size", 1)
-	#await get_tree().process_frame
-	#print(%GoodTitle.size.x)
-	#print(%WinnerLabel.size.x)
 	%WinnerLabel.set("theme_override_font_sizes/font_size", min(%GoodTitle.size.x / %WinnerLabel.size.x, 50))
