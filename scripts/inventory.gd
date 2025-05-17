@@ -3,7 +3,7 @@ extends Control
 class_name InventoryUI
 #var a: Dictionary
 var device_id: int
-
+var split_screen
 var inventory_data: Dictionary = {
 	"equiped_weapon": preload("res://Resources/Items/Weapon/test_sword.tres").duplicate(),
 	"equiped_armor": preload("res://Resources/Items/Armor/a_cool_chestplate.tres").duplicate(),
@@ -33,12 +33,15 @@ var focused_inventory_slot: InventorySlot = null:
 		if value:
 			if focused_inventory_slot:
 				focused_inventory_slot._on_mouse_exited()
+				focused_inventory_slot.lose_artificial_focus()
 				await get_tree().process_frame
 			value._on_mouse_entered()
 		elif focused_inventory_slot:
 			focused_inventory_slot._on_mouse_exited()
+			focused_inventory_slot.lose_artificial_focus()
 		focused_inventory_slot = value
 		item_popups.device_id = device_id
+		
 var selected_inventory_slot: InventorySlot = null:
 	set(value):
 		if value:
@@ -48,6 +51,7 @@ var selected_inventory_slot: InventorySlot = null:
 		else:
 			selected_inventory_slot.diselect()
 		selected_inventory_slot = value
+		
 
 
 @onready var modified_item_name: RichTextLabel = %ModifiedItemName
@@ -74,12 +78,14 @@ var selected_inventory_slot: InventorySlot = null:
 
 @onready var dragged_item_texture_rect: TextureRect = %DraggedItem
 @onready var item_popups: ItemPopups = %ItemPopups
+@onready var inventory_header: TabContainer = %InventoryHeader
 
 
 func _ready() -> void:
-	display_items()
+	#print(split_screen.name)
 	update_inventory_tabContainer()
 	_resize_TabContainer()
+	display_items()
 	
 	modified_item_inventory_slot.link_to_inventory(self)
 	first_item_modifier_inventory_slot.link_to_inventory(self)
@@ -87,6 +93,11 @@ func _ready() -> void:
 	third_item_modifier_inventory_slot.link_to_inventory(self)
 	equiped_armor_inventory_slot.link_to_inventory(self)
 	equiped_weapon_inventory_slot.link_to_inventory(self)
+	
+	equiped_armor_inventory_slot.focus_down = equiped_weapon_inventory_slot
+	equiped_weapon_inventory_slot.focus_up = equiped_armor_inventory_slot
+	
+	
 
 func _process(_delta: float) -> void:
 	# Dragging item system
@@ -102,9 +113,9 @@ func display_ui(_inventory_data):
 	inventory_data = _inventory_data
 	equiped_armor_inventory_slot.item = inventory_data['equiped_armor']
 	equiped_weapon_inventory_slot.item = inventory_data['equiped_weapon']
-	display_items()
 	_resize_TabContainer()
 	update_inventory_tabContainer()
+	display_items()
 
 func hide_ui():
 	visible = false
@@ -117,17 +128,20 @@ func hide_ui():
 
 # CONTROLLER MOVEMENT
 
+
 func change_focus(to:InventorySlot):
-	if device_id == -2: return
+	#if device_id == -2: return
+	
 	focused_inventory_slot = to
 
 func select_inventory_slot():
-	if device_id == -2: return
+	#if device_id == -2: return
 	if selected_inventory_slot == focused_inventory_slot:
 		selected_inventory_slot = null
 	elif selected_inventory_slot == null:
 		selected_inventory_slot = focused_inventory_slot
 	elif focused_inventory_slot.slot_type == InventorySlot.SLOT_TYPE.IN_INVENTORY:
+		if selected_inventory_slot.item == null: return
 		print('to_inv')
 		dragged_slot = selected_inventory_slot
 		dragged_item = dragged_slot.item
@@ -135,14 +149,15 @@ func select_inventory_slot():
 		selected_inventory_slot = null
 		await get_tree().process_frame
 		if tab_container.get_child(inventory_tab_index).get_child_count() == 0: return
-		tab_container.get_child(inventory_tab_index).get_child(0).grab_focus()
+		tab_container.get_child(inventory_tab_index).get_child(0).grab_artificial_focus()
 	else:
+		if selected_inventory_slot.item == null: return
 		print('to_sw_else')
 		dragged_slot = selected_inventory_slot
 		dragged_item = dragged_slot.item
 		stop_dragging(selected_inventory_slot, focused_inventory_slot)
 		selected_inventory_slot = null
-		focused_inventory_slot = focused_inventory_slot
+		focused_inventory_slot.grab_artificial_focus()
 		
 	
 func diselect_inventory_slot():
@@ -196,8 +211,8 @@ func stop_dragging(initial_slot: InventorySlot, collider = null):
 				match dragging_colliders.find(initial_slot):
 					1: # Si il vient de modified_item_inventory_slot
 						inventory_data['inventory'].append(dragged_item) # On ajoute d'abord l'item à l'inventaire
-						display_items() # Et on réaffiche les items 
 						reset_forge_modified_item() # Finalement on le retire de la forge.
+						display_items() # Et on réaffiche les items 
 						
 					# Le fonctionement des 3 item_modifier est le meme pour chacun.
 					2: #Si l'objet vient de first_item_modifier_slot
@@ -223,20 +238,20 @@ func stop_dragging(initial_slot: InventorySlot, collider = null):
 						
 					5: # Si l'objet vient de equiped_armor_inventory_slot
 						inventory_data['inventory'].append(dragged_item) # On ajoute l'armure à l'inventaire
-						display_items() # On réaffiche les items de l'inventaire
 						reset_equiped_armor_item() # Et on désélectionne l'amure équipée.
+						display_items() # On réaffiche les items de l'inventaire
 						
 					6: # Si l'objet vient de equiped_weapon_inventory_slot
 						inventory_data['inventory'].append(dragged_item) # On ajoute l'arme à l'inventaire
-						display_items() # On réaffiche les items de l'inventaire
 						reset_equiped_weapon_item() # Et on désélectionne l'arme équipée.
+						display_items() # On réaffiche les items de l'inventaire
 		
 		1: # Maintenant, si le collider sur lequel l'item est laché est modified_item_inventory_slot (donc l'item forgé)
 			if collider.item == null: # On vérifie qu'il n'y a pas deja un item en train d'être forgé.
 				if initial_slot.slot_type == InventorySlot.SLOT_TYPE.IN_INVENTORY: # Si l'item qui a été laché vient de l'inventaire.
 					inventory_data['inventory'].erase(dragged_item) # Alors on supprime l'item de l'inventaire
-					display_items() # On réaffiche les items de l'inventaire 
 					set_forge_modified_item(dragged_slot) # Et on met a jour l'item forgé avec l'item qui a été drag&drop
+					display_items() # On réaffiche les items de l'inventaire 
 				
 				# Cependant si l'item vient directement des Objets Equipés alors les instructions sont différentes
 				match dragging_colliders.find(initial_slot):
@@ -340,16 +355,31 @@ func _input(event:InputEvent) -> void:
 	 ((event is InputEventKey or event is InputEventMouse) and device_id >=0) or\
 	(device_id >= 0 and event.device != device_id): return
 	
+	if !visible: return
+	
 	# Inventory Container Managment
 	var menu_dir = int(Input.get_axis("move_ui_left","move_ui_right"))
 	if Input.is_action_just_pressed("move_ui_left") or Input.is_action_just_pressed("move_ui_right"):
 		inventory_tab_index = posmod(inventory_tab_index + menu_dir, category_tab_container.get_child_count())
 		update_inventory_tabContainer()
 	if event.is_action_pressed("attack"):
-		print('hi1')
 		select_inventory_slot()
-	#if event.is_action_pressed("forge_grab_focus"):
-		#modified_item_inventory_slot.grab_focus()
+	if event.is_action_pressed("forge_grab_focus"):
+		modified_item_inventory_slot.grab_artificial_focus()
+	if event.is_action_pressed("inventory_down"):
+		if focused_inventory_slot.focus_down:
+			focused_inventory_slot.focus_down.grab_artificial_focus()
+	if event.is_action_pressed("inventory_up"):
+		if focused_inventory_slot.focus_up:
+			focused_inventory_slot.focus_up.grab_artificial_focus()
+	if event.is_action_pressed("inventory_left"):
+		if focused_inventory_slot.focus_left:
+			focused_inventory_slot.focus_left.grab_artificial_focus()
+	if event.is_action_pressed("inventory_right"):
+		if focused_inventory_slot.focus_right:
+			focused_inventory_slot.focus_right.grab_artificial_focus()
+	if event.is_action_pressed("ready"):
+		inventory_header.current_tab = int(!inventory_header.current_tab)
 
 func _on_all_item_category_button_pressed() -> void:
 	inventory_tab_index = 0
@@ -367,7 +397,6 @@ func _on_item_modifier_item_category_button_pressed() -> void:
 func update_inventory_tabContainer():
 	# Set the current tab to the value stored internaly
 	tab_container.current_tab = inventory_tab_index
-	print(tab_container.get_child(inventory_tab_index).name)
 	
 	# Resize the new tab
 	_resize_TabContainer()
@@ -376,6 +405,7 @@ func update_inventory_tabContainer():
 	for child: Button in category_tab_container.get_children():
 		child.modulate.a = 0.25
 	category_tab_container.get_child(inventory_tab_index).modulate.a = 1
+	display_items()
 
 func _resize_TabContainer():
 	await get_tree().create_timer(0.01).timeout
@@ -391,11 +421,16 @@ func _resize_TabContainer():
 	
 	while number_of_columns * (item_slot_size + item_slot_separation) < inventory_scroll_container_size:
 		number_of_columns += 1
-	selected_tab.columns = number_of_columns - 1
-	if device_id == -2: return
-	if focused_inventory_slot and focused_inventory_slot.slot_type == InventorySlot.SLOT_TYPE.IN_PREVIEW: return
-	if tab_container.get_child(inventory_tab_index).get_child_count() == 0: return
-	tab_container.get_child(inventory_tab_index).get_child(0).grab_focus()
+	selected_tab.columns = 3
+	#if device_id == -2: return
+	if focused_inventory_slot and focused_inventory_slot.slot_type == InventorySlot.SLOT_TYPE.IN_PREVIEW: 
+		return
+	#display_items()
+	if tab_container.get_child(inventory_tab_index).get_child_count() == 0: 
+		modified_item_inventory_slot.grab_artificial_focus()
+		return
+	tab_container.get_child(inventory_tab_index).get_child(0).grab_artificial_focus()
+	
 	
 enum TAB_CONTAINER_PARTS {
 	ALL_ITEMS,
@@ -451,27 +486,47 @@ func display_items():
 						item_slot.link_to_inventory(self)
 						targeted_container.add_child(item_slot)
 						
-		var number_of_columns: int = tab_container.get_child(inventory_tab_index).columns
-		print(number_of_columns)
+		#var number_of_columns: int = tab_container.get_child(inventory_tab_index).columns
+		var number_of_columns: int = 3
+
 		for item_slot_index:int in targeted_container.get_child_count():
 			var inventory_slot: InventorySlot = targeted_container.get_child(item_slot_index)
-			#if !fmod(item_slot_index,number_of_columns) == 0:
-				#inventory_slot.focus_neighbor_left = targeted_container.get_child(item_slot_index-1).get_path()
-			#else:
-				#inventory_slot.focus_neighbor_left = NodePath("")
-			#if !fmod(item_slot_index,number_of_columns) == number_of_columns-1 and !item_slot_index == targeted_container.get_child_count()-1:
-				#inventory_slot.focus_neighbor_right = targeted_container.get_child(item_slot_index+1).get_path()
-			#else:
-				#inventory_slot.focus_neighbor_right = NodePath("")
-			#if !item_slot_index < number_of_columns:
-				#inventory_slot.focus_neighbor_top = targeted_container.get_child(item_slot_index-number_of_columns).get_path()
-			#else:
-				#inventory_slot.focus_neighbor_top = inventory_slot.get_path()
-				#
-			#if !item_slot_index + number_of_columns >= targeted_container.get_child_count():
-				#inventory_slot.focus_neighbor_bottom = targeted_container.get_child(item_slot_index+number_of_columns).get_path()
-			#else:
-				#inventory_slot.focus_neighbor_bottom = inventory_slot.get_path()
+			inventory_slot.focus_left = null
+			inventory_slot.focus_right = null
+			inventory_slot.focus_up = null
+			inventory_slot.focus_down = null
+			if Global.mod(item_slot_index+1,number_of_columns) != 0:
+				inventory_slot.focus_left = targeted_container.get_child(item_slot_index-1)
+				
+			else:
+				if targeted_container.get_child_count() <3:
+					inventory_slot.focus_left = equiped_armor_inventory_slot
+				elif item_slot_index/targeted_container.get_child_count()-1 <= 0.5:
+					inventory_slot.focus_left = equiped_armor_inventory_slot
+				else:
+					inventory_slot.focus_left = equiped_weapon_inventory_slot
+					
+			if Global.mod(item_slot_index+1,number_of_columns) != number_of_columns-1 and item_slot_index != targeted_container.get_child_count()-1:
+				inventory_slot.focus_right = targeted_container.get_child(item_slot_index+1)
+				
+			else:
+				inventory_slot.focus_right = modified_item_inventory_slot
+			if !item_slot_index < number_of_columns:
+				inventory_slot.focus_up = targeted_container.get_child(item_slot_index-number_of_columns)
+			else:
+				inventory_slot.focus_up = inventory_slot
+				
+			if !item_slot_index + number_of_columns >= targeted_container.get_child_count():
+				inventory_slot.focus_down = targeted_container.get_child(item_slot_index+number_of_columns)
+			else:
+				inventory_slot.focus_down = inventory_slot
+	#var current_tab = tab_container.get_child(inventory_tab_index)
+	#print(current_tab.name)
+	#print(current_tab.get_child_count()/2)
+	await get_tree().create_timer(0.5).timeout
+	equiped_armor_inventory_slot.focus_right = tab_container.get_child(inventory_tab_index).get_child(0)
+	equiped_weapon_inventory_slot.focus_right = tab_container.get_child(inventory_tab_index).get_child(0)
+	modified_item_inventory_slot.focus_left = tab_container.get_child(inventory_tab_index).get_child(0)
 				
 
 
@@ -485,9 +540,10 @@ func reset_forge_modified_item():
 	modified_item_description.text = ""
 	item_forge_item_modifier_tab_container.current_tab = 1
 	modified_item_inventory_slot.item = null
-	modified_item_inventory_slot.focus_neighbor_left = NodePath("")
-	modified_item_inventory_slot.focus_neighbor_bottom = NodePath("")
-	modified_item_inventory_slot.focus_neighbor_right = NodePath("")
+	modified_item_inventory_slot.focus_down = null
+	first_item_modifier_inventory_slot.focus_right = null
+	second_item_modifier_inventory_slot.focus_left = null
+	third_item_modifier_inventory_slot.focus_left = null
 	
 func set_forge_modified_item(slot: InventorySlot):
 	"""Set the selected Item in the Main Inventory Slot of the Forgery to the item contain in the slot gived as a parameter."""
@@ -506,9 +562,14 @@ func set_forge_modified_item(slot: InventorySlot):
 				var item_modifier_slot = item_forge_item_modifier_h_container.get_child(item_modifier_container_index).get_child(0)
 				item_modifier_slot.item = item_modifiers[item_modifier_container_index]
 			item_forge_item_modifier_tab_container.current_tab = 0
-			modified_item_inventory_slot.focus_neighbor_left= first_item_modifier_inventory_slot.get_path()
-			modified_item_inventory_slot.focus_neighbor_bottom = second_item_modifier_inventory_slot.get_path()
-			modified_item_inventory_slot.focus_neighbor_right = third_item_modifier_inventory_slot.get_path()
+			first_item_modifier_inventory_slot.focus_right = second_item_modifier_inventory_slot
+			first_item_modifier_inventory_slot.focus_up = modified_item_inventory_slot
+			second_item_modifier_inventory_slot.focus_left = first_item_modifier_inventory_slot
+			second_item_modifier_inventory_slot.focus_right = third_item_modifier_inventory_slot
+			second_item_modifier_inventory_slot.focus_up = modified_item_inventory_slot
+			third_item_modifier_inventory_slot.focus_left = second_item_modifier_inventory_slot
+			third_item_modifier_inventory_slot.focus_up = modified_item_inventory_slot
+			modified_item_inventory_slot.focus_down = second_item_modifier_inventory_slot
 			
 		GlobalItemsMgmt.TYPE_OF_ITEMS.WEAPON:
 			var item_modifiers: Array[ItemModifier] = new_item.get_item_modifiers(true)
@@ -516,15 +577,18 @@ func set_forge_modified_item(slot: InventorySlot):
 				var item_modifier_slot = item_forge_item_modifier_h_container.get_child(item_modifier_container_index).get_child(0)
 				item_modifier_slot.item = item_modifiers[item_modifier_container_index]
 			item_forge_item_modifier_tab_container.current_tab = 0
-			modified_item_inventory_slot.focus_neighbor_left= first_item_modifier_inventory_slot.get_path()
-			modified_item_inventory_slot.focus_neighbor_bottom = second_item_modifier_inventory_slot.get_path()
-			modified_item_inventory_slot.focus_neighbor_right = third_item_modifier_inventory_slot.get_path()
+			first_item_modifier_inventory_slot.focus_right = second_item_modifier_inventory_slot
+			first_item_modifier_inventory_slot.focus_up = modified_item_inventory_slot
+			second_item_modifier_inventory_slot.focus_left = first_item_modifier_inventory_slot
+			second_item_modifier_inventory_slot.focus_right = third_item_modifier_inventory_slot
+			second_item_modifier_inventory_slot.focus_up = modified_item_inventory_slot
+			third_item_modifier_inventory_slot.focus_left = second_item_modifier_inventory_slot
+			third_item_modifier_inventory_slot.focus_up = modified_item_inventory_slot
+			modified_item_inventory_slot.focus_down = second_item_modifier_inventory_slot
 			
 		GlobalItemsMgmt.TYPE_OF_ITEMS.ITEM_MODIFIER:
 			item_forge_item_modifier_tab_container.current_tab = 1
-			modified_item_inventory_slot.focus_neighbor_left = NodePath("")
-			modified_item_inventory_slot.focus_neighbor_bottom = NodePath("")
-			modified_item_inventory_slot.focus_neighbor_right = NodePath("")
+			modified_item_inventory_slot.focus_down = null
 			
 				
 # ITEM EQUIPER

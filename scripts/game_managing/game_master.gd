@@ -65,7 +65,7 @@ func start_round():
 	SignalBus.player_died.connect(handle_killed_player)
 	# Start timer
 	%GameFinishTimer.connect("timeout", end_round)
-	%GameFinishTimer.start(10)#round_duration)
+	%GameFinishTimer.start(1000)#round_duration)
 	# Unfreeze players
 	set_players_frozen_state(false)
 

@@ -38,7 +38,9 @@ func place_viewport_at(relative_position: Vector2, relative_size: float, player:
 	var player_inventory: InventoryUI = player_inventory_packed_scene.instantiate()
 	player_inventory.position = Vector2.ZERO
 	player_inventory.device_id = player.device_id
+	player_inventory.split_screen = viewport_to_place
 	player.linked_inventory = player_inventory
+	
 	viewport_container.add_child(player_inventory)
 	# Link to player's camera
 	player.get_camera().custom_viewport = viewport_to_place
