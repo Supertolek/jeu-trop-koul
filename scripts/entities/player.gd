@@ -70,7 +70,6 @@ func _physics_process(delta: float) -> void:
 			Input.get_action_strength("move_down") - Input.get_action_strength("move_up"),
 		).normalized()
 	elif device_id >= 0:
-		#print(Global.get_joypad_brand(device_id))
 		if Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_UP) or \
 		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_DOWN) or \
 		   Input.is_joy_button_pressed(device_id,JOY_BUTTON_DPAD_RIGHT) or \
@@ -147,8 +146,6 @@ func _process(_delta: float) -> void:
 		
 func _input(event: InputEvent) -> void:
 	#if event is InputEventJoypadButton or event is InputEventJoypadMotion:
-		#print(Input.get_joy_name(event.device))
-		#print(Input.get_joy_guid(event.device))
 	# Gros if statement pour séparer les inputs des joueurs
 	if (!(event is InputEventKey or event is InputEventMouse) and device_id == -2) or\
 	 ((event is InputEventKey or event is InputEventMouse) and device_id >=0) or\
@@ -158,8 +155,8 @@ func _input(event: InputEvent) -> void:
 	# Mettre les Inputs ici
 	if linked_inventory.visible: return
 	
-	if event is InputEventJoypadButton:
-		print(Input.get_joy_info(event.device))
+	#if event is InputEventJoypadButton:
+		#print(Input.get_joy_info(event.device))
 	
 	if event.is_action_pressed("attack"):
 		hold_actions.append("attack")

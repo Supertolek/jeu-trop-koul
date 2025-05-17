@@ -10,6 +10,7 @@ enum PLAYER_COUNT {
 const PLAYER = preload("res://scenes/player.tscn")
 
 var players: Array[Player] = []
+var spare_players: Array[Player] = []
 
 enum CONTROLLERS_BRANDS {
 	XBOX,
