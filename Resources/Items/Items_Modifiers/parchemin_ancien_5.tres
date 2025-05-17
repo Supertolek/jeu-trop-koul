@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ItemModifier" load_steps=5 format=3 uid="uid://dmepxtbd13niu"]
+
+[ext_resource type="Texture2D" uid="uid://dknkaspv5xk1d" path="res://assets/Items/Item_modifiers/parchemin_ancien_5.png" id="1_pdlcn"]
+[ext_resource type="Script" uid="uid://qtr7q26kgqb7" path="res://Resources/scripts/item_modifier.gd" id="2_p5pek"]
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://Resources/scripts/stats_sheet.gd" id="3_oqef5"]
+
+[sub_resource type="Resource" id="Resource_rpnxn"]
+script = ExtResource("3_oqef5")
+stat_defense = 0.0
+stat_health_regeneration = 0.0
+stat_max_health = 0.0
+stat_attack = 0.0
+stat_attack_speed = 0.0
+stat_crit_chance = 0.0
+stat_crit_damage = 0.0
+stat_strength = 2.0
+stat_speed = 0.0
+metadata/_custom_type_script = "uid://dhts3bimb3vsb"
+
+[resource]
+script = ExtResource("2_p5pek")
+name = "Parchemin Ancien 5"
+icon = ExtResource("1_pdlcn")
+rarity = 0
+description = "Le dernier d'une série légendaire."
+stats_modifier = SubResource("Resource_rpnxn")
+metadata/_custom_type_script = "uid://qtr7q26kgqb7"

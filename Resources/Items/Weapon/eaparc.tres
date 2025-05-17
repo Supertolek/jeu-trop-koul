@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=5 format=3 uid="uid://dhkeykskx2fw4"]
+
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://Resources/scripts/stats_sheet.gd" id="1_mpahg"]
+[ext_resource type="Texture2D" uid="uid://cbesyuiirum2x" path="res://assets/Items/Weapon/eparc.png" id="2_x2gjt"]
+[ext_resource type="Script" uid="uid://dxcu0te7mf7ou" path="res://Resources/scripts/weapon.gd" id="3_gl6ys"]
+
+[sub_resource type="Resource" id="Resource_xn8e3"]
+script = ExtResource("1_mpahg")
+stat_defense = 0.0
+stat_health_regeneration = 20.0
+stat_max_health = 20.0
+stat_attack = 20.0
+stat_attack_speed = 0.0
+stat_crit_chance = 20.0
+stat_crit_damage = 40.0
+stat_strength = 1.0
+stat_speed = 0.0
+metadata/_custom_type_script = "uid://dhts3bimb3vsb"
+
+[resource]
+script = ExtResource("3_gl6ys")
+name = "Eparc"
+icon = ExtResource("2_x2gjt")
+rarity = 1
+description = "Fusion d'un arc et d'une épée, comme quoi, toute anomalie existe"
+base_stats = SubResource("Resource_xn8e3")
+metadata/_custom_type_script = "uid://dxcu0te7mf7ou"

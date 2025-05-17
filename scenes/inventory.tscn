@@ -53,10 +53,11 @@ self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
-current_tab = 0
+current_tab = 1
 tabs_visible = false
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/InventoryHeader"]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ylenm")
 metadata/_tab_index = 0
@@ -70,7 +71,6 @@ text = "Ready"
 horizontal_alignment = 1
 
 [node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/InventoryHeader"]
-visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_0df5h")
 metadata/_tab_index = 1

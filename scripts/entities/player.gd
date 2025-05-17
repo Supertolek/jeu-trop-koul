@@ -48,7 +48,11 @@ var hold_actions:Array[String] = []
 # Linked nodes
 @onready var linked_camera: Camera2D = $RoomCamera
 var linked_health_bar: HealthBar
-var linked_inventory: InventoryUI
+var linked_inventory: InventoryUI:
+	set(value):
+		linked_inventory = value
+		if value:
+			linked_inventory.linked_player = self
 var linked_viewport_container: SubViewportContainer
 
 func get_camera() -> Camera2D:
@@ -57,7 +61,6 @@ func get_camera() -> Camera2D:
 
 func _ready() -> void:
 	sprite.set_sprite_texture(load("res://assets/Player/"+color+"/"+color.to_lower()+"_player_animation.png"))
-	calculate_all_stats(false)
 	player_stats.stat_effective_health = player_stats.stat_max_health
 	
 	
@@ -98,7 +101,8 @@ func _physics_process(delta: float) -> void:
 					Input.get_joy_axis(xinput_id, JOY_AXIS_LEFT_X),
 					Input.get_joy_axis(xinput_id, JOY_AXIS_LEFT_Y),
 				)
-			direction = direction.normalized()
+			#if direction.length() != 0:
+				#direction = direction.normalized()
 	if direction.length() <= 0.3 or is_dead:
 		direction = Vector2.ZERO
 	# Gestion de la direction regardée par le joueur

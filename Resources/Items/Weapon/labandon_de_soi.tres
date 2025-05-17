@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=5 format=3 uid="uid://kje7qk00iynt"]
+
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://Resources/scripts/stats_sheet.gd" id="1_strq3"]
+[ext_resource type="Texture2D" uid="uid://rd4wp1ltbrwf" path="res://assets/Items/Weapon/abandon_de_soi.png" id="2_r7bcf"]
+[ext_resource type="Script" uid="uid://dxcu0te7mf7ou" path="res://Resources/scripts/weapon.gd" id="3_847rk"]
+
+[sub_resource type="Resource" id="Resource_ft35i"]
+script = ExtResource("1_strq3")
+stat_defense = -100.0
+stat_health_regeneration = -100.0
+stat_max_health = -100.0
+stat_attack = 50.0
+stat_attack_speed = 0.0
+stat_crit_chance = 50.0
+stat_crit_damage = 100.0
+stat_strength = 2.0
+stat_speed = 0.0
+metadata/_custom_type_script = "uid://dhts3bimb3vsb"
+
+[resource]
+script = ExtResource("3_847rk")
+name = "L'abandon de Soi"
+icon = ExtResource("2_r7bcf")
+rarity = 4
+description = "Il faut savoir mettre de côté son estime, afin de soumettre ton adversaire."
+base_stats = SubResource("Resource_ft35i")
+metadata/_custom_type_script = "uid://dxcu0te7mf7ou"

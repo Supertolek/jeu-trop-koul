@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="Armor" load_steps=5 format=3 uid="uid://dnuj65qyq3hh"]
+
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://Resources/scripts/stats_sheet.gd" id="1_nho35"]
+[ext_resource type="Texture2D" uid="uid://dhmagxqxf4ya5" path="res://assets/Items/Armor/abandon_de_lautre.png" id="2_aohvm"]
+[ext_resource type="Script" uid="uid://cjx5oiekdpbg3" path="res://Resources/armor.gd" id="3_biumw"]
+
+[sub_resource type="Resource" id="Resource_75185"]
+script = ExtResource("1_nho35")
+stat_defense = 100.0
+stat_health_regeneration = 50.0
+stat_max_health = 40.0
+stat_attack = 0.0
+stat_attack_speed = 0.0
+stat_crit_chance = 0.0
+stat_crit_damage = 0.0
+stat_strength = 1.0
+stat_speed = 0.0
+metadata/_custom_type_script = "uid://dhts3bimb3vsb"
+
+[resource]
+script = ExtResource("3_biumw")
+name = "Abandon de l'autre"
+icon = ExtResource("2_aohvm")
+rarity = 4
+description = "Abandonner vos dégats pour le protection de votre personne."
+base_stats = SubResource("Resource_75185")
+metadata/_custom_type_script = "uid://cjx5oiekdpbg3"

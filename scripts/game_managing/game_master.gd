@@ -12,6 +12,8 @@ var alive_players: int
 var players_scores: Array[int]
 var winners: Array[Player] = []
 
+var players_ready: int = 0
+
 var round_count: int
 var current_round: int
 var round_duration: int
@@ -24,9 +26,13 @@ func load_game(players_list: Array[Player]):
 	# Load the players
 	#players = players_list
 	controllers_binding_scene = controllers_binding_packed_scene.instantiate()
+	%SplitScreen.add_child(controllers_binding_scene)
 	await controllers_binding_scene.players_ready
 	controllers_binding_scene.queue_free()
 	players = Global.players
+	for player in players:
+		print(player.device_id)
+	
 	print("Players: ", players)
 	alive_players = len(players)
 	players_scores = []
@@ -59,15 +65,28 @@ func load_map(map: MapData):
 			player.position = map.players_spawns[player_index]
 
 func start_round():
-	print(current_round)
+	print("current_round", current_round)
+	# Load the map
+	load_map(map_data)
+	# Reload the player
+	%SplitScreen.place_viewports(true)
+	for player in players:
+		print(%SplitScreen)
+		print(player.linked_viewport_container)
+		player.calculate_all_stats(false)
+		player.player_stats.stat_effective_health = player.player_stats.stat_max_health
+		player.linked_health_bar.max_health = player.player_stats.stat_max_health
+		player.linked_health_bar.health = player.player_stats.stat_effective_health
 	# Séquence début de round incroyable que Hadrien va gentillement faire
 	# Connection des signaux
 	SignalBus.player_died.connect(handle_killed_player)
 	# Start timer
 	%GameFinishTimer.connect("timeout", end_round)
-	%GameFinishTimer.start(1000)#round_duration)
+	%GameFinishTimer.start(10)#round_duration)
 	# Unfreeze players
 	set_players_frozen_state(false)
+	#for player in players:
+		#print("player.frozen", player.frozen)
 
 func end_round():
 	print("finish")
@@ -96,19 +115,28 @@ func display_end_screen_and_stuff():
 	end_scene.position = Vector2.ZERO
 	await get_tree().create_timer(5).timeout
 	end_scene.queue_free()
-	for player in players:
-		player.linked_inventory.display_ui(player.inventory_storage)
 	# Check if a new round have to start
 	if current_round < round_count:
+		for player in players:
+			player.linked_inventory.display_ui(player.inventory_storage)
+			player.linked_inventory.player_inventory_ready.connect(player_inventory_pressed_ready)
+			player.linked_inventory.player_inventory_not_ready.connect(player_inventory_pressed_not_ready)
 		current_round += 1
-		#start_round()
-	
+
+func player_inventory_pressed_ready(player: Player):
+	players_ready += 1
+	print("players_ready: ", players_ready)
+	if players_ready >= len(players):
+		for player_ in players:
+			player_.inventory_storage = player_.linked_inventory.hide_ui()
+		start_round()
+
+func player_inventory_pressed_not_ready(player: Player):
+	players_ready -= 1
 
 func start_game(rounds: int, rounds_duration: int):
 	#for controller in Input.get_connected_joypads():
 		#Input.start_joy_vibration(controller, 1, 1, 5)
-	%SplitScreen.add_child(controllers_binding_scene)
-	load_map(map_data)
 	round_duration = rounds_duration
 	round_count = rounds
 	current_round = 1
@@ -129,6 +157,7 @@ func find_winners() -> Array[int]:
 func set_players_frozen_state(frozen_state: bool):
 	for player in players:
 		player.frozen = frozen_state
+		print("player.frozen", player.frozen)
 
 func handle_killed_player(player:Player):
 	alive_players -= 1

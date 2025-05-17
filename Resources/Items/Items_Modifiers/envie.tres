@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ItemModifier" load_steps=5 format=3 uid="uid://bge1yxpa5xqxj"]
+
+[ext_resource type="Texture2D" uid="uid://bcyvhvqhm2jpu" path="res://assets/Items/Item_modifiers/envie.png" id="1_piqqo"]
+[ext_resource type="Script" uid="uid://qtr7q26kgqb7" path="res://Resources/scripts/item_modifier.gd" id="2_qnseu"]
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://Resources/scripts/stats_sheet.gd" id="3_scngd"]
+
+[sub_resource type="Resource" id="Resource_hckms"]
+script = ExtResource("3_scngd")
+stat_defense = 5.0
+stat_health_regeneration = 5.0
+stat_max_health = 5.0
+stat_attack = 5.0
+stat_attack_speed = 0.0
+stat_crit_chance = 5.0
+stat_crit_damage = 10.0
+stat_strength = 1.1
+stat_speed = 0.0
+metadata/_custom_type_script = "uid://dhts3bimb3vsb"
+
+[resource]
+script = ExtResource("2_qnseu")
+name = "Envie"
+icon = ExtResource("1_piqqo")
+rarity = 0
+description = "MON PRECIEUX !!!!"
+stats_modifier = SubResource("Resource_hckms")
+metadata/_custom_type_script = "uid://qtr7q26kgqb7"

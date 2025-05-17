@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ItemModifier" load_steps=5 format=3 uid="uid://bf701gtiecydh"]
+
+[ext_resource type="Texture2D" uid="uid://hf0qj84bfyo2" path="res://assets/Items/Item_modifiers/gourmandise.png" id="1_s7hxr"]
+[ext_resource type="Script" uid="uid://qtr7q26kgqb7" path="res://Resources/scripts/item_modifier.gd" id="2_x8tdn"]
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://Resources/scripts/stats_sheet.gd" id="3_dyxg4"]
+
+[sub_resource type="Resource" id="Resource_x0hra"]
+script = ExtResource("3_dyxg4")
+stat_defense = -30.0
+stat_health_regeneration = 0.0
+stat_max_health = 50.0
+stat_attack = 40.0
+stat_attack_speed = 0.0
+stat_crit_chance = -20.0
+stat_crit_damage = -20.0
+stat_strength = 1.25
+stat_speed = 0.0
+metadata/_custom_type_script = "uid://dhts3bimb3vsb"
+
+[resource]
+script = ExtResource("2_x8tdn")
+name = "Gourmandise"
+icon = ExtResource("1_s7hxr")
+rarity = 0
+description = "Plus j'en ai plus j'en veux!"
+stats_modifier = SubResource("Resource_x0hra")
+metadata/_custom_type_script = "uid://qtr7q26kgqb7"

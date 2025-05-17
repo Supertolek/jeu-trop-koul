@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ItemModifier" load_steps=4 format=3 uid="uid://x4aaaoerp88f"]
+
+[ext_resource type="Script" uid="uid://qtr7q26kgqb7" path="res://Resources/scripts/item_modifier.gd" id="1_ccpm6"]
+[ext_resource type="Script" uid="uid://dhts3bimb3vsb" path="res://Resources/scripts/stats_sheet.gd" id="2_7udbh"]
+
+[sub_resource type="Resource" id="Resource_1cbr1"]
+script = ExtResource("2_7udbh")
+stat_defense = 0.0
+stat_health_regeneration = 0.0
+stat_max_health = 0.0
+stat_attack = 0.0
+stat_attack_speed = 0.0
+stat_crit_chance = 30.0
+stat_crit_damage = 50.0
+stat_strength = 1.0
+stat_speed = 0.0
+metadata/_custom_type_script = "uid://dhts3bimb3vsb"
+
+[resource]
+script = ExtResource("1_ccpm6")
+name = "Parchemin Ancien 4"
+rarity = 0
+description = "Le quatrième d'une série qui ne vas plus durer."
+stats_modifier = SubResource("Resource_1cbr1")
+metadata/_custom_type_script = "uid://qtr7q26kgqb7"

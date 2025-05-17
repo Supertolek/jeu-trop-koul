@@ -1,6 +1,10 @@
 extends Control
 
 class_name InventoryUI
+
+signal player_inventory_ready(player:Player)
+signal player_inventory_not_ready(player:Player)
+
 #var a: Dictionary
 var device_id: int
 var split_screen
@@ -80,6 +84,7 @@ var selected_inventory_slot: InventorySlot = null:
 @onready var item_popups: ItemPopups = %ItemPopups
 @onready var inventory_header: TabContainer = %InventoryHeader
 
+var linked_player: Player
 
 func _ready() -> void:
 	#print(split_screen.name)
@@ -380,6 +385,11 @@ func _input(event:InputEvent) -> void:
 			focused_inventory_slot.focus_right.grab_artificial_focus()
 	if event.is_action_pressed("ready"):
 		inventory_header.current_tab = int(!inventory_header.current_tab)
+		print("inventory_header", inventory_header.current_tab)
+		if inventory_header.current_tab == 0:
+			player_inventory_ready.emit(linked_player)
+		else:
+			player_inventory_not_ready.emit(linked_player)
 
 func _on_all_item_category_button_pressed() -> void:
 	inventory_tab_index = 0
