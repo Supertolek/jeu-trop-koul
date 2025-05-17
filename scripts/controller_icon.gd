@@ -14,9 +14,24 @@ extends Control
 	set(value):
 		active = value
 		if value:
-			%Icon.material.set_shader_parameter("width", 2)
+			%Icon.material.set_shader_parameter("width", 4)
 		else:
-			%Icon.material.set_shader_parameter("width", 0)
+			if not is_ready:
+				%Icon.material.set_shader_parameter("width", 0)
+			else:
+				%Icon.material.set_shader_parameter("width", 1)
+
+@export var is_ready: bool = false:
+	set(value):
+		is_ready = value
+		if value:
+			if not active:
+				%Icon.material.set_shader_parameter("width", 1)
+			%Icon.material.set_shader_parameter("color", Color(0, 1, 0))
+		else:
+			if not active:
+				%Icon.material.set_shader_parameter("width", 0)
+			%Icon.material.set_shader_parameter("color", Color(1, 1, 1))
 
 const brands_controller_icon: Dictionary[Global.CONTROLLERS_BRANDS, Texture2D] = {
 	Global.CONTROLLERS_BRANDS.XBOX: preload("res://assets/controllers/xbox_64px.png"),

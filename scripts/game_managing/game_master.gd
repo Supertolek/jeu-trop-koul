@@ -2,6 +2,7 @@ class_name GameMaster
 extends Node2D
 
 const controllers_binding_packed_scene: PackedScene = preload("res://scenes/settings/controllers_binding_settings.tscn")
+var controllers_binding_scene: ControllersBinding
 const end_scene_packed_scene: PackedScene = preload("res://scenes/finish_screen.tscn")
 
 @export var map_data: MapData = load("res://maps/output.tres")
@@ -22,8 +23,11 @@ var running: bool = false
 func load_game(players_list: Array[Player]):
 	# Load the players
 	#players = players_list
+	controllers_binding_scene = controllers_binding_packed_scene.instantiate()
+	await controllers_binding_scene.players_ready
+	controllers_binding_scene.queue_free()
 	players = Global.players
-	print(players)
+	print("Players: ", players)
 	alive_players = len(players)
 	players_scores = []
 	%SplitScreen.players = players
@@ -103,10 +107,7 @@ func display_end_screen_and_stuff():
 func start_game(rounds: int, rounds_duration: int):
 	#for controller in Input.get_connected_joypads():
 		#Input.start_joy_vibration(controller, 1, 1, 5)
-	var controllers_binding_scene: ControllersBinding = controllers_binding_packed_scene.instantiate()
 	%SplitScreen.add_child(controllers_binding_scene)
-	await controllers_binding_scene.players_ready
-	controllers_binding_scene.queue_free()
 	load_map(map_data)
 	round_duration = rounds_duration
 	round_count = rounds

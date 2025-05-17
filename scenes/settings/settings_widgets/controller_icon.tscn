@@ -22,6 +22,7 @@ offset_right = 64.0
 offset_bottom = 64.0
 script = ExtResource("1_fi133")
 controller_brand = 0
+is_ready = null
 
 [node name="Icon" type="Sprite2D" parent="."]
 unique_name_in_owner = true

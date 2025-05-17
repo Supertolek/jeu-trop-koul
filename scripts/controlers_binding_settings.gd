@@ -205,6 +205,8 @@ func refresh_players_list():
 func _input(event: InputEvent) -> void:
 	if event.device in recognized_controllers:
 		if event is InputEventJoypadMotion:
+			if Global.get_joypad_brand(event.device) == Global.CONTROLLERS_BRANDS.XBOX:
+				print([Input.get_joy_axis(event.device, JOY_AXIS_RIGHT_X), Input.get_joy_axis(event.device, JOY_AXIS_RIGHT_Y)])
 			#if abs(Input.get_joy_axis(event.device, JOY_AXIS_RIGHT_X)) <= controllers_dead_zone and \
 			   #abs(Input.get_joy_axis(event.device, JOY_AXIS_RIGHT_Y)) <= controllers_dead_zone:
 				#controllers_last_action[event.device] = 0
@@ -215,8 +217,10 @@ func _input(event: InputEvent) -> void:
 			elif event.button_index == JOY_BUTTON_START and event.pressed:
 				if event.device in ready_controllers:
 					ready_controllers.remove_at(ready_controllers.find(event.device))
+					controllers_cursor[event.device].is_ready = false
 				else:
 					ready_controllers.append(event.device)
+					controllers_cursor[event.device].is_ready = true
 					if len(ready_controllers) >= len(recognized_controllers):
 						refresh_players_list()
 						players_ready.emit()
