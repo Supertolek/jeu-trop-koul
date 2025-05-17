@@ -14,3 +14,6 @@ func key_collected(key_color: GlobalObjectsMgmt.KEY_COLOR):
 	
 func star_collected(star_color: GlobalObjectsMgmt.STAR_COLOR):
 	SignalBus.emit_signal("star_collected",star_color)
+
+func player_ready(player:Player):
+	SignalBus.emit_signal("player_ready",player)

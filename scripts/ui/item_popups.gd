@@ -4,7 +4,6 @@ class_name ItemPopups
 
 var display_zero: bool = true
 const POPUP_STAT_LINE = preload("res://scenes/popup_stat_line.tscn")
-
 @onready var inner_text: VBoxContainer = %InnerText
 @onready var item_name: Label = %ItemName
 @onready var stats_container: Label = %StatsContainer
@@ -41,17 +40,16 @@ func ItemPopup(slot:InventorySlot):
 	if !slot: return
 	show()
 	
-	var slot_position: Vector2 = slot.get_global_transform_with_canvas().get_origin()
+	var slot_position: Vector2 = slot.get_global_transform_with_canvas().get_origin() + (Vector2(-3000,-3000) - inventory_ui.global_position)
 	var padding: int = 15
 	var correction: Vector2 = Vector2.ZERO
 	
-	if slot_position.x <= inventory_ui.size.x/2:
+	if slot_position.x <= inventory_ui.size.x/4:
 		correction += Vector2(slot.size.x + padding, 0)
 	else:
 		correction += -Vector2(size.x + padding, 0)
-	#correction += -Vector2(0, size.y/2)
-	
-	global_position = slot_position + correction
+	correction -= Vector2(0, size.y/4)
+	position = slot_position*2 + correction
 	
 func HideItemPopup():
 	hide()

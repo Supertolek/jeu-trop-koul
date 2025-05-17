@@ -79,3 +79,7 @@ func _ready() -> void:
 			pass
 		PLAYER_COUNT.THREE:
 			pass
+
+
+func mod(x,y):
+	return x - y * floor(x / y)
